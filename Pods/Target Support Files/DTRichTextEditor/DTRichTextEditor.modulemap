@@ -1,0 +1,6 @@
+framework module DTRichTextEditor {
+  umbrella header "DTRichTextEditor-umbrella.h"
+
+  export *
+  module * { export * }
+}

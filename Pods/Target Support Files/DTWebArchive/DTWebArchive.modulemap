@@ -1,0 +1,6 @@
+framework module DTWebArchive {
+  umbrella header "DTWebArchive-umbrella.h"
+
+  export *
+  module * { export * }
+}

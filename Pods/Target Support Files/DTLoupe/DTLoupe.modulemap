@@ -1,0 +1,6 @@
+framework module DTLoupe {
+  umbrella header "DTLoupe-umbrella.h"
+
+  export *
+  module * { export * }
+}

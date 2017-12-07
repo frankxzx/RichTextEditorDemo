@@ -1,0 +1,466 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 48;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		016CCCBF1FD92905000493F7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 016CCCBE1FD92905000493F7 /* AppDelegate.m */; };
+		016CCCC21FD92905000493F7 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 016CCCC11FD92905000493F7 /* ViewController.m */; };
+		016CCCC51FD92905000493F7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 016CCCC31FD92905000493F7 /* Main.storyboard */; };
+		016CCCC71FD92905000493F7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 016CCCC61FD92905000493F7 /* Assets.xcassets */; };
+		016CCCCA1FD92905000493F7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 016CCCC81FD92905000493F7 /* LaunchScreen.storyboard */; };
+		016CCCCD1FD92905000493F7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 016CCCCC1FD92905000493F7 /* main.m */; };
+		016CCCDF1FD92A7E000493F7 /* QSRichEditorConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 016CCCD51FD92A7E000493F7 /* QSRichEditorConfig.m */; };
+		016CCCE01FD92A7E000493F7 /* QSRichEditorViewController+keyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 016CCCD71FD92A7E000493F7 /* QSRichEditorViewController+keyboard.m */; };
+		016CCCE11FD92A7E000493F7 /* QSRichEditorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 016CCCD91FD92A7E000493F7 /* QSRichEditorViewController.m */; };
+		016CCCE21FD92A7E000493F7 /* RichTextEditor.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 016CCCDA1FD92A7E000493F7 /* RichTextEditor.xcassets */; };
+		016CCCE31FD92A7E000493F7 /* RichTextEditorMoreView.m in Sources */ = {isa = PBXBuildFile; fileRef = 016CCCDC1FD92A7E000493F7 /* RichTextEditorMoreView.m */; };
+		016CCCE41FD92A7E000493F7 /* RichTextEditorToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 016CCCDE1FD92A7E000493F7 /* RichTextEditorToolBar.m */; };
+		84490411E7C9011FDFD429B4 /* Pods_RichTextEditorDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B54ABF0B1BDED20575A5DA49 /* Pods_RichTextEditorDemo.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		016CCCBA1FD92905000493F7 /* RichTextEditorDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RichTextEditorDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		016CCCBD1FD92905000493F7 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		016CCCBE1FD92905000493F7 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		016CCCC01FD92905000493F7 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		016CCCC11FD92905000493F7 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		016CCCC41FD92905000493F7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		016CCCC61FD92905000493F7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		016CCCC91FD92905000493F7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		016CCCCB1FD92905000493F7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		016CCCCC1FD92905000493F7 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		016CCCD41FD92A7E000493F7 /* QSRichEditorConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSRichEditorConfig.h; sourceTree = "<group>"; };
+		016CCCD51FD92A7E000493F7 /* QSRichEditorConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSRichEditorConfig.m; sourceTree = "<group>"; };
+		016CCCD61FD92A7E000493F7 /* QSRichEditorViewController+keyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "QSRichEditorViewController+keyboard.h"; sourceTree = "<group>"; };
+		016CCCD71FD92A7E000493F7 /* QSRichEditorViewController+keyboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "QSRichEditorViewController+keyboard.m"; sourceTree = "<group>"; };
+		016CCCD81FD92A7E000493F7 /* QSRichEditorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSRichEditorViewController.h; sourceTree = "<group>"; };
+		016CCCD91FD92A7E000493F7 /* QSRichEditorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSRichEditorViewController.m; sourceTree = "<group>"; };
+		016CCCDA1FD92A7E000493F7 /* RichTextEditor.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = RichTextEditor.xcassets; sourceTree = "<group>"; };
+		016CCCDB1FD92A7E000493F7 /* RichTextEditorMoreView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RichTextEditorMoreView.h; sourceTree = "<group>"; };
+		016CCCDC1FD92A7E000493F7 /* RichTextEditorMoreView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RichTextEditorMoreView.m; sourceTree = "<group>"; };
+		016CCCDD1FD92A7E000493F7 /* RichTextEditorToolBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RichTextEditorToolBar.h; sourceTree = "<group>"; };
+		016CCCDE1FD92A7E000493F7 /* RichTextEditorToolBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RichTextEditorToolBar.m; sourceTree = "<group>"; };
+		016CCCE51FD92C22000493F7 /* RichTextEditorAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RichTextEditorAction.h; sourceTree = "<group>"; };
+		4295F660BADBD64DB65E20C2 /* Pods-RichTextEditorDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RichTextEditorDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-RichTextEditorDemo/Pods-RichTextEditorDemo.release.xcconfig"; sourceTree = "<group>"; };
+		B54ABF0B1BDED20575A5DA49 /* Pods_RichTextEditorDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RichTextEditorDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DF97F62057F5CFBB40AA3EB3 /* Pods-RichTextEditorDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RichTextEditorDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RichTextEditorDemo/Pods-RichTextEditorDemo.debug.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		016CCCB71FD92905000493F7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				84490411E7C9011FDFD429B4 /* Pods_RichTextEditorDemo.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		016CCCB11FD92905000493F7 = {
+			isa = PBXGroup;
+			children = (
+				016CCCBC1FD92905000493F7 /* RichTextEditorDemo */,
+				016CCCBB1FD92905000493F7 /* Products */,
+				4FE52EF13E21F39E2711D0B8 /* Pods */,
+				D9A4BBC58610098F22851996 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		016CCCBB1FD92905000493F7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				016CCCBA1FD92905000493F7 /* RichTextEditorDemo.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		016CCCBC1FD92905000493F7 /* RichTextEditorDemo */ = {
+			isa = PBXGroup;
+			children = (
+				016CCCD31FD92A7E000493F7 /* demo */,
+				016CCCBD1FD92905000493F7 /* AppDelegate.h */,
+				016CCCBE1FD92905000493F7 /* AppDelegate.m */,
+				016CCCC01FD92905000493F7 /* ViewController.h */,
+				016CCCC11FD92905000493F7 /* ViewController.m */,
+				016CCCC31FD92905000493F7 /* Main.storyboard */,
+				016CCCC61FD92905000493F7 /* Assets.xcassets */,
+				016CCCC81FD92905000493F7 /* LaunchScreen.storyboard */,
+				016CCCCB1FD92905000493F7 /* Info.plist */,
+				016CCCCC1FD92905000493F7 /* main.m */,
+			);
+			path = RichTextEditorDemo;
+			sourceTree = "<group>";
+		};
+		016CCCD31FD92A7E000493F7 /* demo */ = {
+			isa = PBXGroup;
+			children = (
+				016CCCD41FD92A7E000493F7 /* QSRichEditorConfig.h */,
+				016CCCD51FD92A7E000493F7 /* QSRichEditorConfig.m */,
+				016CCCD61FD92A7E000493F7 /* QSRichEditorViewController+keyboard.h */,
+				016CCCD71FD92A7E000493F7 /* QSRichEditorViewController+keyboard.m */,
+				016CCCD81FD92A7E000493F7 /* QSRichEditorViewController.h */,
+				016CCCD91FD92A7E000493F7 /* QSRichEditorViewController.m */,
+				016CCCDA1FD92A7E000493F7 /* RichTextEditor.xcassets */,
+				016CCCDB1FD92A7E000493F7 /* RichTextEditorMoreView.h */,
+				016CCCDC1FD92A7E000493F7 /* RichTextEditorMoreView.m */,
+				016CCCDD1FD92A7E000493F7 /* RichTextEditorToolBar.h */,
+				016CCCDE1FD92A7E000493F7 /* RichTextEditorToolBar.m */,
+				016CCCE51FD92C22000493F7 /* RichTextEditorAction.h */,
+			);
+			path = demo;
+			sourceTree = "<group>";
+		};
+		4FE52EF13E21F39E2711D0B8 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				DF97F62057F5CFBB40AA3EB3 /* Pods-RichTextEditorDemo.debug.xcconfig */,
+				4295F660BADBD64DB65E20C2 /* Pods-RichTextEditorDemo.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		D9A4BBC58610098F22851996 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B54ABF0B1BDED20575A5DA49 /* Pods_RichTextEditorDemo.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		016CCCB91FD92905000493F7 /* RichTextEditorDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 016CCCD01FD92905000493F7 /* Build configuration list for PBXNativeTarget "RichTextEditorDemo" */;
+			buildPhases = (
+				D3CD1D07FE0E9793F3CA3C48 /* [CP] Check Pods Manifest.lock */,
+				016CCCB61FD92905000493F7 /* Sources */,
+				016CCCB71FD92905000493F7 /* Frameworks */,
+				016CCCB81FD92905000493F7 /* Resources */,
+				49FC9A3FE01C79AF704CB6EB /* [CP] Embed Pods Frameworks */,
+				E4DF26AC0A8FC1E2B2EA881C /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RichTextEditorDemo;
+			productName = RichTextEditorDemo;
+			productReference = 016CCCBA1FD92905000493F7 /* RichTextEditorDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		016CCCB21FD92905000493F7 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0920;
+				ORGANIZATIONNAME = frankxzx;
+				TargetAttributes = {
+					016CCCB91FD92905000493F7 = {
+						CreatedOnToolsVersion = 9.2;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 016CCCB51FD92905000493F7 /* Build configuration list for PBXProject "RichTextEditorDemo" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 016CCCB11FD92905000493F7;
+			productRefGroup = 016CCCBB1FD92905000493F7 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				016CCCB91FD92905000493F7 /* RichTextEditorDemo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		016CCCB81FD92905000493F7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				016CCCCA1FD92905000493F7 /* LaunchScreen.storyboard in Resources */,
+				016CCCE21FD92A7E000493F7 /* RichTextEditor.xcassets in Resources */,
+				016CCCC71FD92905000493F7 /* Assets.xcassets in Resources */,
+				016CCCC51FD92905000493F7 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		49FC9A3FE01C79AF704CB6EB /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-RichTextEditorDemo/Pods-RichTextEditorDemo-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/DTCoreText/DTCoreText.framework",
+				"${BUILT_PRODUCTS_DIR}/DTFoundation/DTFoundation.framework",
+				"${BUILT_PRODUCTS_DIR}/DTLoupe/DTLoupe.framework",
+				"${BUILT_PRODUCTS_DIR}/DTRichTextEditor/DTRichTextEditor.framework",
+				"${BUILT_PRODUCTS_DIR}/DTWebArchive/DTWebArchive.framework",
+				"${BUILT_PRODUCTS_DIR}/QMUIKit/QMUIKit.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DTCoreText.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DTFoundation.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DTLoupe.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DTRichTextEditor.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DTWebArchive.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/QMUIKit.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RichTextEditorDemo/Pods-RichTextEditorDemo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D3CD1D07FE0E9793F3CA3C48 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-RichTextEditorDemo-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E4DF26AC0A8FC1E2B2EA881C /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RichTextEditorDemo/Pods-RichTextEditorDemo-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		016CCCB61FD92905000493F7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				016CCCC21FD92905000493F7 /* ViewController.m in Sources */,
+				016CCCE31FD92A7E000493F7 /* RichTextEditorMoreView.m in Sources */,
+				016CCCE11FD92A7E000493F7 /* QSRichEditorViewController.m in Sources */,
+				016CCCE01FD92A7E000493F7 /* QSRichEditorViewController+keyboard.m in Sources */,
+				016CCCCD1FD92905000493F7 /* main.m in Sources */,
+				016CCCDF1FD92A7E000493F7 /* QSRichEditorConfig.m in Sources */,
+				016CCCBF1FD92905000493F7 /* AppDelegate.m in Sources */,
+				016CCCE41FD92A7E000493F7 /* RichTextEditorToolBar.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		016CCCC31FD92905000493F7 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				016CCCC41FD92905000493F7 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		016CCCC81FD92905000493F7 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				016CCCC91FD92905000493F7 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		016CCCCE1FD92905000493F7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		016CCCCF1FD92905000493F7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		016CCCD11FD92905000493F7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = DF97F62057F5CFBB40AA3EB3 /* Pods-RichTextEditorDemo.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JJ6D8L57PH;
+				INFOPLIST_FILE = RichTextEditorDemo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.touchspring.RichTextEditorDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		016CCCD21FD92905000493F7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4295F660BADBD64DB65E20C2 /* Pods-RichTextEditorDemo.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JJ6D8L57PH;
+				INFOPLIST_FILE = RichTextEditorDemo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.touchspring.RichTextEditorDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		016CCCB51FD92905000493F7 /* Build configuration list for PBXProject "RichTextEditorDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				016CCCCE1FD92905000493F7 /* Debug */,
+				016CCCCF1FD92905000493F7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		016CCCD01FD92905000493F7 /* Build configuration list for PBXNativeTarget "RichTextEditorDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				016CCCD11FD92905000493F7 /* Debug */,
+				016CCCD21FD92905000493F7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 016CCCB21FD92905000493F7 /* Project object */;
+}
