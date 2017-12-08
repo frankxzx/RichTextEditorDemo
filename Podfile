@@ -4,4 +4,5 @@ use_frameworks!
 target 'RichTextEditorDemo' do
  pod 'QMUIKit'
  pod 'DTRichTextEditor'
+ pod 'YYText'
 end

@@ -8,9 +8,11 @@
 
 #import "QSRichTextEditorCoverCell.h"
 
+static UIEdgeInsets const kInsets = {16, 20, 16, 20};
+
 @interface QSRichTextEditorCoverCell()
 
-@property(nonatomic, strong) UIImageView *coverImageView;
+@property(nonatomic, strong) QMUIButton *coverButton;
 
 @end
 
@@ -24,17 +26,30 @@
 }
 
 - (void)initSubviews {
-    UIImage *coverImage = UIImageMake(@"edit_Header");
-    self.coverImageView = [[UIImageView alloc] initWithImage:coverImage];
-    UIGestureRecognizer *tap = [[UIGestureRecognizer alloc]initWithTarget:self action:@selector(addArticleCover:)];
-    [self.coverImageView  addGestureRecognizer:tap];
-    [self.contentView addSubview:self.coverImageView];
+    self.coverButton = [[QMUIButton alloc]initWithImage:UIImageMake(@"edit_Header") title:@"添加封面"];
+    [self.coverButton addTarget:self action:@selector(addArticleCover:) forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView addSubview:self.coverButton];
 }
 
 -(void)addArticleCover:(UIGestureRecognizer *)sender {
     if ([self.cellDelegate respondsToSelector:@selector(richEditorViewControllerWillInsertAticleCover)]) {
         [self.cellDelegate richEditorViewControllerWillInsertAticleCover];
     }
+}
+
+-(void)layoutSubviews {
+    [super layoutSubviews];
+    self.coverButton.frame = CGRectInsetEdges([QSRichTextEditorCoverCell cellRect], kInsets);
+}
+
+- (CGSize)sizeThatFits:(CGSize)size {
+    CGSize resultSize = CGSizeMake(size.width, 0);
+    resultSize.height = [QSRichTextEditorCoverCell cellRect].size.height;
+    return resultSize;
+}
+
++(CGRect)cellRect {
+    return CGRectMake(0, 0, SCREEN_WIDTH, 120);
 }
 
 @end

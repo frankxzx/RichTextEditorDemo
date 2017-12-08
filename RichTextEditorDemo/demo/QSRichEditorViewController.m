@@ -37,23 +37,15 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 @property(nonatomic, assign) QSRichEditorState state;
 @property(nonatomic, strong) RichTextEditorToolBar *editorToolBar;
 @property(nonatomic, strong) RichTextEditorMoreView *editorMoreView;
-@property(nonatomic, strong) DTRichTextEditorView *richEditor;
+@property(nonatomic, weak) DTRichTextEditorView *richEditor;
 @property(nonatomic, strong) UIBarButtonItem *doneItem;
 @property(nonatomic, strong) NSMutableArray <UIMenuItem *>*sectionMenuItems;
 @property(nonatomic, strong) NSCache *imageCache;
 @property(nonatomic, strong) QMUIKeyboardManager *keyboardManager;
-@property(nonatomic, strong) QMUITableView *tableView;
 
 @end
 
 @implementation QSRichEditorViewController
-
-- (void)loadView {
-	CGRect frame = [UIScreen mainScreen].bounds;
-	UIView *view = [[UIView alloc] initWithFrame:frame];
-	[view addSubview:self.richEditor];
-	self.view = view;
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -299,15 +291,16 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 
 //编辑器
 -(DTRichTextEditorView *)richEditor {
-	if (!_richEditor) {
-		_richEditor = [[DTRichTextEditorView alloc]initWithFrame:[UIScreen mainScreen].bounds];
-		_richEditor.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-		//_richEditor.baseURL = [NSURL URLWithString:@"http://www.drobnik.com"];
-		//获取 scrollView 的代理事件 来通过滑动来隐藏键盘
-		_richEditor.delegate = self;;
-		_richEditor.textDelegate = self;
-	}
-	return _richEditor;
+   QSRichTextEditorBodyCell *cell  = (QSRichTextEditorBodyCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
+    if (cell) {
+        
+        DTRichTextEditorView *editorView = cell.richEditor;
+        editorView.delegate = self;;
+        editorView.textDelegate = self;
+        
+        return editorView;
+    }
+    return nil;
 }
 
 //选中文本出现的 UIMenu
@@ -357,7 +350,7 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
     }
   
     return [self.tableView qmui_heightForCellWithIdentifier:cellIdentifier cacheByIndexPath:indexPath configuration:^(id cell) {
-        //[cell renderWithNameText:[self.names objectAtIndex:indexPath.row] contentText:[self.contents objectAtIndex:indexPath.row]];
+        
     }];
 }
 
@@ -386,7 +379,9 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
             break;
     }
     QSRichTextEditorCell *cell = (QSRichTextEditorCell *)[self qmui_tableView:tableView cellWithIdentifier:cellIdentifier];
-//    [cell renderWithNameText:[self.names objectAtIndex:indexPath.row] contentText:[self.contents objectAtIndex:indexPath.row]];
+    if (cellIdentifier) {
+        [cell.contentView addSubview:self.richEditor];
+    }
     return cell;
 }
 

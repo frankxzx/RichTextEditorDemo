@@ -7,10 +7,11 @@
 //
 
 #import "QSRichTextEditorTitleCell.h"
+#import <YYText/YYText.h>
 
 @interface QSRichTextEditorTitleCell()
 
-@property(nonatomic, strong) UIImageView *coverImageView;
+@property(nonatomic, strong) YYTextView *titleTextView;
 
 @end
 
@@ -24,9 +25,25 @@
 }
 
 - (void)initSubviews {
-    UIImage *coverImage = UIImageMake(@"edit_Header");
-    self.coverImageView = [[UIImageView alloc] initWithImage:coverImage];
-    [self.contentView addSubview:self.coverImageView];
+    self.titleTextView = [[YYTextView alloc]init];
+    self.titleTextView.placeholderFont = [UIFont boldSystemFontOfSize:18];
+    self.titleTextView.placeholderText = @"请输入标题";
+    [self.contentView addSubview:self.titleTextView];
+}
+
+- (CGSize)sizeThatFits:(CGSize)size {
+    CGSize resultSize = CGSizeMake(size.width, 0);
+    resultSize.height = self.titleTextView.qmui_height;
+    return resultSize;
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    self.titleTextView.frame = [QSRichTextEditorTitleCell cellRect];
+}
+
++(CGRect)cellRect {
+    return CGRectMake(0, 0, SCREEN_WIDTH, 100);
 }
 
 @end

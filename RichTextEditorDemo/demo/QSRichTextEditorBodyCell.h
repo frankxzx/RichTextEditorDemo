@@ -7,8 +7,11 @@
 //
 
 #import <QMUIKit/QMUIKit.h>
+#import <DTRichTextEditor/DTRichTextEditor.h>
 #import "QSRichTextEditorCell.h"
 
 @interface QSRichTextEditorBodyCell : QSRichTextEditorCell
+
+@property(nonatomic, strong) DTRichTextEditorView *richEditor;
 
 @end
