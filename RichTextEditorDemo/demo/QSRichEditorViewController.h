@@ -9,8 +9,15 @@
 #import <UIKit/UIKit.h>
 #import <QMUIKit/QMUIKit.h>
 
-@interface QSRichEditorViewController : QMUICommonViewController
+@interface QSRichEditorViewController : QMUICommonTableViewController
 
 @property(nonatomic, strong) UIView *toolView;
+
+@end
+
+@protocol QSRichEditorViewControllerDelegate <NSObject>
+
+-(void)richEditorViewControllerWillInsertAticleCover;
+-(void)richEditorViewControllerWillInsertAticleTitle;
 
 @end

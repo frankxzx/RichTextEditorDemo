@@ -6,7 +6,9 @@
 //  Copyright © 2017年 frankxzx. All rights reserved.
 //
 
+#import "QSRichEditorViewController.h"
 #import "AppDelegate.h"
+#import <QMUIKit/QMUIKit.h>
 
 @interface AppDelegate ()
 
@@ -16,8 +18,26 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    // Override point for customization after application launch.//oc
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window.backgroundColor = [UIColor blackColor];
+    
+    QSRichEditorViewController *controller = [[QSRichEditorViewController alloc]init];
+    QMUINavigationController *nav = [[QMUINavigationController alloc]initWithRootViewController:controller];
+    self.window.rootViewController = nav;
+    [self.window makeKeyAndVisible];
+
     return YES;
+}
+
+- (void)injected {
+    NSLog(@"I've been injected: %@", self);
+    
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window.backgroundColor = [UIColor blackColor];
+    QSRichEditorViewController *controller = [[QSRichEditorViewController alloc]init];
+    self.window.rootViewController = controller;
+    [self.window makeKeyAndVisible];
 }
 
 

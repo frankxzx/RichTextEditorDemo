@@ -8,9 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
+typedef NS_OPTIONS(NSUInteger, QSRichEditorTextStyle) {
+    QSRichEditorTextStylePlaceholder,
+    QSRichEditorTextStyleNormal,
+    QSRichEditorTextStyleLarger
+};
+
 @protocol RichTextEditorAction <NSObject>
 
-- (void)formatDidSelectFont:(DTCoreTextFontDescriptor *)font;
+- (void)formatDidSelectTextStyle:(QSRichEditorTextStyle)style;
 - (void)formatDidToggleBold;
 - (void)formatDidToggleItalic;
 - (void)formatDidToggleUnderline;
@@ -27,5 +33,8 @@
 -(void)insertAudio;
 -(void)insertHyperlink;
 -(void)insertSeperator;
+
+-(void)richTextEditorOpenMoreView;
+-(void)richTextEditorCloseMoreView;
 
 @end

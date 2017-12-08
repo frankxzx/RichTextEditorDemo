@@ -12,6 +12,9 @@
 #import "RichTextEditorToolBar.h"
 #import "RichTextEditorMoreView.h"
 #import "RichTextEditorAction.h"
+#import "QSRichTextEditorCoverCell.h"
+#import "QSRichTextEditorTitleCell.h"
+#import "QSRichTextEditorBodyCell.h"
 
 typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 	QSRichEditorStateNoneContent,// 没有编辑内容
@@ -36,16 +39,17 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 @property(nonatomic, strong) RichTextEditorMoreView *editorMoreView;
 @property(nonatomic, strong) DTRichTextEditorView *richEditor;
 @property(nonatomic, strong) UIBarButtonItem *doneItem;
-//@property(nonatomic, strong) NSMutableArray *menuItems;
+@property(nonatomic, strong) NSMutableArray <UIMenuItem *>*sectionMenuItems;
 @property(nonatomic, strong) NSCache *imageCache;
 @property(nonatomic, strong) QMUIKeyboardManager *keyboardManager;
+@property(nonatomic, strong) QMUITableView *tableView;
 
 @end
 
 @implementation QSRichEditorViewController
 
 - (void)loadView {
-	CGRect frame = [UIScreen mainScreen].applicationFrame;
+	CGRect frame = [UIScreen mainScreen].bounds;
 	UIView *view = [[UIView alloc] initWithFrame:frame];
 	[view addSubview:self.richEditor];
 	self.view = view;
@@ -53,6 +57,7 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.navigationItem.leftBarButtonItem = [QMUINavigationButton barButtonItemWithType:QMUINavigationButtonTypeBack title:nil position:QMUINavigationButtonPositionLeft target:self action:nil];
 	self.state = QSRichEditorStateNoneContent;
 	[self configDefaultStyle];
 	// 设置键盘只接受 self.richEditor 的通知事件，如果当前界面有其他 UIResponder 导致键盘产生通知事件，则不会被接受
@@ -114,7 +119,9 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 		case QSRichEditorStateWirtingToHtml:
 			[self lodingWithText:@"生成 html 中..."];
 			break;
-		case QSRichEditorStateAttachmentUploding:
+        case QSRichEditorStatePreview:
+            break;
+        case QSRichEditorStateAttachmentUploding:
 			[self lodingWithText:@"上传附件中..."];
 			break;
 		case QSRichEditorStateDone:
@@ -172,6 +179,10 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 -(void)showHtmlString:(UIBarButtonItem *)sender {
 	NSString *htmlString = [self.richEditor HTMLStringWithOptions:DTHTMLWriterOptionDocument];
 	NSLog(@"======= \n %@ \n ======\n======= \n %@ \n ======",self.richEditor.attributedText, htmlString);
+}
+
+-(void)hyperlinkPushed:(UIButton *)sender {
+    
 }
 
 #pragma mark - Helpers
@@ -249,24 +260,16 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 }
 
 -(void)configDefaultStyle {
-	NSMutableDictionary *defaults = [NSMutableDictionary dictionary];
-	[defaults setObject:[NSNumber numberWithBool:YES] forKey:DTDefaultLinkDecoration];
-	[defaults setObject:DTColorCreateWithHTMLName(@"purple") forKey:DTDefaultLinkColor];
-	[defaults setObject:[NSNumber numberWithBool:YES] forKey:DTProcessCustomHTMLAttributes];
-	[defaults setObject:[NSNumber numberWithBool:15] forKey:DTDefaultFontSize];
-	
+
 	// demonstrate half em paragraph spacing
-	DTCSSStylesheet *styleSheet = [[DTCSSStylesheet alloc] initWithStyleBlock:@"p {margin-bottom:0.5em} ol {margin-bottom:0.5em; -webkit-padding-start:40px;} ul {margin-bottom:0.5em;-webkit-padding-start:40px;}"];
-	[defaults setObject:styleSheet forKey:DTDefaultStyleSheet];
+    //DTCSSStylesheet *styleSheet = [[DTCSSStylesheet alloc] initWithStyleBlock:@"p {margin-bottom:0.5em} ol {margin-bottom:0.5em; -webkit-padding-start:40px;} ul {margin-bottom:0.5em;-webkit-padding-start:40px;}"];
 	
-	self.richEditor.textDefaults = defaults;
-	
-	// load initial string from file
-	//	NSString *path = [[NSBundle mainBundle] pathForResource:@"test" ofType:@"html"];
-	//	NSString *html = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:NULL];
-	//	[self.richEditor setHTMLString:html];
-	
-	// image as drawn by your custom views which you return in the delegate method
+    self.richEditor.defaultFontFamily = @"Helvetica";
+    self.richEditor.textSizeMultiplier = 1.0;
+    self.richEditor.maxImageDisplaySize = CGSizeMake(300, 300);
+    self.richEditor.autocorrectionType = UITextAutocorrectionTypeYes;
+    self.richEditor.editorViewDelegate = self;
+    self.richEditor.defaultFontSize = 16;
 	self.richEditor.attributedTextContentView.shouldDrawImages = NO;
 }
 
@@ -275,7 +278,7 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 //工具栏
 -(UIView *)toolView {
 	if (!_toolView) {
-		_toolView = [[UIView alloc]init];
+		_toolView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 44+200)];
 	}
 	return _toolView;
 }
@@ -289,7 +292,7 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 
 -(RichTextEditorMoreView *)editorMoreView {
 	if (!_editorMoreView) {
-		_editorMoreView = [[RichTextEditorMoreView alloc]init];
+		_editorMoreView = [[RichTextEditorMoreView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 200)];
 	}
 	return _editorMoreView;
 }
@@ -297,33 +300,26 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 //编辑器
 -(DTRichTextEditorView *)richEditor {
 	if (!_richEditor) {
-		_richEditor = [[DTRichTextEditorView alloc]initWithFrame:self.view.bounds];
+		_richEditor = [[DTRichTextEditorView alloc]initWithFrame:[UIScreen mainScreen].bounds];
 		_richEditor.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		//_richEditor.baseURL = [NSURL URLWithString:@"http://www.drobnik.com"];
 		//获取 scrollView 的代理事件 来通过滑动来隐藏键盘
-		_richEditor.delegate = self;
-		_richEditor.defaultFontFamily = @"Helvetica";
-		_richEditor.textSizeMultiplier = 1.0;
-		_richEditor.maxImageDisplaySize = CGSizeMake(300, 300);
-		_richEditor.autocorrectionType = UITextAutocorrectionTypeYes;
-		_richEditor.editorViewDelegate = self;
-		_richEditor.defaultFontSize = 15;
+		_richEditor.delegate = self;;
 		_richEditor.textDelegate = self;
-		_richEditor.inputAccessoryView = self.editorToolBar;
 	}
 	return _richEditor;
 }
 
 //选中文本出现的 UIMenu
-//- (NSArray *)menuItems {
-//    if (!_menuItems) {
-//        UIMenuItem *insertItem = [[UIMenuItem alloc] initWithTitle:@"Insert" action:@selector(displayInsertMenu:)];
-//        UIMenuItem *insertStarItem = [[UIMenuItem alloc] initWithTitle:@"★" action:@selector(insertStar:)];
-//        UIMenuItem *insertCheckItem = [[UIMenuItem alloc] initWithTitle:@"☆" action:@selector(insertWhiteStar:)];
-//        _menuItems = @[insertItem, insertStarItem, insertCheckItem];
-//    }
-//    return _menuItems;
-//}
+- (NSArray *)sectionMenuItems {
+    if (!_sectionMenuItems) {
+        UIMenuItem *insertItem = [[UIMenuItem alloc] initWithTitle:@"Insert" action:@selector(displayInsertMenu:)];
+        UIMenuItem *insertStarItem = [[UIMenuItem alloc] initWithTitle:@"★" action:@selector(insertStar:)];
+        UIMenuItem *insertCheckItem = [[UIMenuItem alloc] initWithTitle:@"☆" action:@selector(insertWhiteStar:)];
+        _sectionMenuItems = [NSMutableArray arrayWithArray:@[insertItem, insertStarItem, insertCheckItem]];
+    }
+    return _sectionMenuItems;
+}
 
 //图片缓存
 - (NSCache *)imageCache {
@@ -331,6 +327,71 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 		_imageCache = [[NSCache alloc] init];
 	}
 	return _imageCache;
+}
+
+#pragma mark - QMUITableViewDelegate
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 3;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    static NSString *cellIdentifier;
+    switch (indexPath.row) {
+        case 0:
+            cellIdentifier = @"coverCell";
+            break;
+        case 1:
+            cellIdentifier = @"titleCell";
+            break;
+        case 2:
+            cellIdentifier = @"bodyCell";
+            break;
+        default:
+            break;
+    }
+  
+    return [self.tableView qmui_heightForCellWithIdentifier:cellIdentifier cacheByIndexPath:indexPath configuration:^(id cell) {
+        //[cell renderWithNameText:[self.names objectAtIndex:indexPath.row] contentText:[self.contents objectAtIndex:indexPath.row]];
+    }];
+}
+
+- (UITableViewCell *)qmui_tableView:(UITableView *)tableView cellWithIdentifier:(NSString *)identifier {
+    QSRichTextEditorCell *cell = (QSRichTextEditorCell *)[tableView dequeueReusableCellWithIdentifier:identifier];
+    if (!cell) {
+        cell = [[QSRichTextEditorCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+    }
+    cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
+    return cell;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *cellIdentifier;
+    switch (indexPath.row) {
+        case 0:
+            cellIdentifier = @"coverCell";
+            break;
+        case 1:
+            cellIdentifier = @"titleCell";
+            break;
+        case 2:
+            cellIdentifier = @"bodyCell";
+            break;
+        default:
+            break;
+    }
+    QSRichTextEditorCell *cell = (QSRichTextEditorCell *)[self qmui_tableView:tableView cellWithIdentifier:cellIdentifier];
+//    [cell renderWithNameText:[self.names objectAtIndex:indexPath.row] contentText:[self.contents objectAtIndex:indexPath.row]];
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [self.tableView qmui_clearsSelection];
 }
 
 #pragma mark - DTRichTextEditorViewDelegate
@@ -444,13 +505,14 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 
 - (UIView *)attributedTextContentView:(DTAttributedTextContentView *)attributedTextContentView viewForLink:(NSURL *)url identifier:(NSString *)identifier frame:(CGRect)frame
 {
+    //超链接跳转按钮
 	DTLinkButton *button = [[DTLinkButton alloc] initWithFrame:frame];
 	button.URL = url;
 	button.minimumHitSize = CGSizeMake(25, 25); // adjusts it's bounds so that button is always large enough
 	button.GUID = identifier;
 	
 	// use normal push action for opening URL
-	[button addTarget:self action:@selector(linkPushed:) forControlEvents:UIControlEventTouchUpInside];
+	[button addTarget:self action:@selector(hyperlinkPushed:) forControlEvents:UIControlEventTouchUpInside];
 	
 	// demonstrate combination with long press
 	//UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(linkLongPressed:)];
@@ -527,7 +589,6 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 	UITextRange *range = self.richEditor.selectedTextRange;
 	[self.richEditor changeParagraphLeftMarginBy:-36 toParagraphsContainingRange:range];
 }
-
 
 - (void)toggleListType:(DTCSSListStyleType)listType
 {

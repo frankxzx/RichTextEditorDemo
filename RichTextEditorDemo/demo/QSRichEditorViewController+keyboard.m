@@ -24,4 +24,12 @@
 	}];
 }
 
+-(void)showKeyboard {
+    
+}
+
+-(void)hideKeyboard {
+    
+}
+
 @end

@@ -19,6 +19,10 @@
 		016CCCE21FD92A7E000493F7 /* RichTextEditor.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 016CCCDA1FD92A7E000493F7 /* RichTextEditor.xcassets */; };
 		016CCCE31FD92A7E000493F7 /* RichTextEditorMoreView.m in Sources */ = {isa = PBXBuildFile; fileRef = 016CCCDC1FD92A7E000493F7 /* RichTextEditorMoreView.m */; };
 		016CCCE41FD92A7E000493F7 /* RichTextEditorToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 016CCCDE1FD92A7E000493F7 /* RichTextEditorToolBar.m */; };
+		016CCCEA1FDA6BEC000493F7 /* QSRichTextEditorCoverCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 016CCCE91FDA6BEC000493F7 /* QSRichTextEditorCoverCell.m */; };
+		016CCCED1FDA6C08000493F7 /* QSRichTextEditorTitleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 016CCCEC1FDA6C08000493F7 /* QSRichTextEditorTitleCell.m */; };
+		016CCCF01FDA6C2E000493F7 /* QSRichTextEditorBodyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 016CCCEF1FDA6C2E000493F7 /* QSRichTextEditorBodyCell.m */; };
+		016CCCF31FDA790B000493F7 /* QSRichTextEditorCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 016CCCF21FDA790B000493F7 /* QSRichTextEditorCell.m */; };
 		84490411E7C9011FDFD429B4 /* Pods_RichTextEditorDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B54ABF0B1BDED20575A5DA49 /* Pods_RichTextEditorDemo.framework */; };
 /* End PBXBuildFile section */
 
@@ -45,6 +49,14 @@
 		016CCCDD1FD92A7E000493F7 /* RichTextEditorToolBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RichTextEditorToolBar.h; sourceTree = "<group>"; };
 		016CCCDE1FD92A7E000493F7 /* RichTextEditorToolBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RichTextEditorToolBar.m; sourceTree = "<group>"; };
 		016CCCE51FD92C22000493F7 /* RichTextEditorAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RichTextEditorAction.h; sourceTree = "<group>"; };
+		016CCCE81FDA6BEC000493F7 /* QSRichTextEditorCoverCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSRichTextEditorCoverCell.h; sourceTree = "<group>"; };
+		016CCCE91FDA6BEC000493F7 /* QSRichTextEditorCoverCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSRichTextEditorCoverCell.m; sourceTree = "<group>"; };
+		016CCCEB1FDA6C08000493F7 /* QSRichTextEditorTitleCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSRichTextEditorTitleCell.h; sourceTree = "<group>"; };
+		016CCCEC1FDA6C08000493F7 /* QSRichTextEditorTitleCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSRichTextEditorTitleCell.m; sourceTree = "<group>"; };
+		016CCCEE1FDA6C2E000493F7 /* QSRichTextEditorBodyCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSRichTextEditorBodyCell.h; sourceTree = "<group>"; };
+		016CCCEF1FDA6C2E000493F7 /* QSRichTextEditorBodyCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSRichTextEditorBodyCell.m; sourceTree = "<group>"; };
+		016CCCF11FDA790B000493F7 /* QSRichTextEditorCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSRichTextEditorCell.h; sourceTree = "<group>"; };
+		016CCCF21FDA790B000493F7 /* QSRichTextEditorCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSRichTextEditorCell.m; sourceTree = "<group>"; };
 		4295F660BADBD64DB65E20C2 /* Pods-RichTextEditorDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RichTextEditorDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-RichTextEditorDemo/Pods-RichTextEditorDemo.release.xcconfig"; sourceTree = "<group>"; };
 		B54ABF0B1BDED20575A5DA49 /* Pods_RichTextEditorDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RichTextEditorDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF97F62057F5CFBB40AA3EB3 /* Pods-RichTextEditorDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RichTextEditorDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RichTextEditorDemo/Pods-RichTextEditorDemo.debug.xcconfig"; sourceTree = "<group>"; };
@@ -106,6 +118,14 @@
 				016CCCD71FD92A7E000493F7 /* QSRichEditorViewController+keyboard.m */,
 				016CCCD81FD92A7E000493F7 /* QSRichEditorViewController.h */,
 				016CCCD91FD92A7E000493F7 /* QSRichEditorViewController.m */,
+				016CCCE81FDA6BEC000493F7 /* QSRichTextEditorCoverCell.h */,
+				016CCCE91FDA6BEC000493F7 /* QSRichTextEditorCoverCell.m */,
+				016CCCEB1FDA6C08000493F7 /* QSRichTextEditorTitleCell.h */,
+				016CCCEC1FDA6C08000493F7 /* QSRichTextEditorTitleCell.m */,
+				016CCCEE1FDA6C2E000493F7 /* QSRichTextEditorBodyCell.h */,
+				016CCCEF1FDA6C2E000493F7 /* QSRichTextEditorBodyCell.m */,
+				016CCCF11FDA790B000493F7 /* QSRichTextEditorCell.h */,
+				016CCCF21FDA790B000493F7 /* QSRichTextEditorCell.m */,
 				016CCCDA1FD92A7E000493F7 /* RichTextEditor.xcassets */,
 				016CCCDB1FD92A7E000493F7 /* RichTextEditorMoreView.h */,
 				016CCCDC1FD92A7E000493F7 /* RichTextEditorMoreView.m */,
@@ -272,10 +292,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				016CCCEA1FDA6BEC000493F7 /* QSRichTextEditorCoverCell.m in Sources */,
+				016CCCF01FDA6C2E000493F7 /* QSRichTextEditorBodyCell.m in Sources */,
 				016CCCC21FD92905000493F7 /* ViewController.m in Sources */,
+				016CCCED1FDA6C08000493F7 /* QSRichTextEditorTitleCell.m in Sources */,
 				016CCCE31FD92A7E000493F7 /* RichTextEditorMoreView.m in Sources */,
 				016CCCE11FD92A7E000493F7 /* QSRichEditorViewController.m in Sources */,
 				016CCCE01FD92A7E000493F7 /* QSRichEditorViewController+keyboard.m in Sources */,
+				016CCCF31FDA790B000493F7 /* QSRichTextEditorCell.m in Sources */,
 				016CCCCD1FD92905000493F7 /* main.m in Sources */,
 				016CCCDF1FD92A7E000493F7 /* QSRichEditorConfig.m in Sources */,
 				016CCCBF1FD92905000493F7 /* AppDelegate.m in Sources */,

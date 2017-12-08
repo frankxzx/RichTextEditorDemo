@@ -31,6 +31,11 @@
         self.audioButton.imagePosition = QMUIButtonImagePositionTop;
         self.seperatorButton.imagePosition = QMUIButtonImagePositionTop;
         self.hyperlinkButton.imagePosition = QMUIButtonImagePositionTop;
+        
+        [self.videoButton addTarget:self action:@selector(insertVideo) forControlEvents:UIControlEventTouchUpInside];
+        [self.audioButton addTarget:self action:@selector(insertAudio) forControlEvents:UIControlEventTouchUpInside];
+        [self.seperatorButton addTarget:self action:@selector(insertSeperator) forControlEvents:UIControlEventTouchUpInside];
+        [self.hyperlinkButton addTarget:self action:@selector(insertHyperlink) forControlEvents:UIControlEventTouchUpInside];
 		
 		[self addSubview:self.videoButton];
 		[self addSubview:self.audioButton];
@@ -42,7 +47,12 @@
 
 -(void)layoutSubviews {
 	[super layoutSubviews];
-
+    CGFloat width = SCREEN_WIDTH/2;
+    CGFloat height = SCREEN_HEIGHT/2;
+    self.seperatorButton.frame = CGRectMake(0, 0, width, height);
+    self.hyperlinkButton.frame = CGRectMake(width, 0, width, height);
+    self.videoButton.frame = CGRectMake(0, height, width, height);
+    self.audioButton.frame = CGRectMake(width, height, width, height);
 }
 
 -(void)insertVideo {

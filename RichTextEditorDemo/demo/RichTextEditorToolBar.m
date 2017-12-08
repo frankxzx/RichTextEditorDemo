@@ -49,7 +49,7 @@
 -(instancetype)initWithFrame:(CGRect)frame {
 	if (self = [super initWithFrame:frame]) {
 		self.beginTextEditorButton = [QMUIToolbarButton barButtonItemWithImage:UIImageMake(@"toolbar_style") target:self action:@selector(beginTextEditor)];
-		self.fontStyleButton = [QMUIToolbarButton barButtonItemWithImage:UIImageMake(@"toolbar_font_style1") target:self action:@selector(setFontStyle)];
+        self.fontStyleButton = [QMUIToolbarButton barButtonItemWithImage:UIImageMake(@"toolbar_font_style1") target:self action:@selector(setFontStyle:)];
 		self.boldButton = [QMUIToolbarButton barButtonItemWithImage:UIImageMake(@"toolbar_bold") target:self action:@selector(setBold)];
 		self.italicButton = [QMUIToolbarButton barButtonItemWithImage:UIImageMake(@"toolbar_italic") target:self action:@selector(setItalic)];
 		self.strikeThroughButton = [QMUIToolbarButton barButtonItemWithImage:UIImageMake(@"toolbar_strikethrough") target:self action:@selector(setUnderline)];
@@ -69,14 +69,18 @@
 		[label sizeToFit];
 		
 		self.textCountButton = [[UIBarButtonItem alloc]initWithCustomView:label];
+        
+        UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
 		
-		[self setItems:@[self.beginTextEditorButton,
+		[self setItems:@[flexibleSpace,
+                         self.beginTextEditorButton,
 						 self.fontStyleButton,
 						 self.alignButton,
 						 self.blockquoteButton,
 						 self.orderedListButton,
 						 self.photoButton,
-						 self.moreButton]];
+						 self.moreButton,
+                         flexibleSpace]];
 	}
 	return self;
 }
@@ -97,42 +101,67 @@
 					 self.closeButton] animated:YES];
 }
 
--(void)setFontStyle {
-	
+//一共三种默认的字体样式
+-(void)setFontStyle:(UIBarButtonItem *)sender {
+    if ([self.formatDelegate respondsToSelector:@selector(formatDidSelectTextStyle:)]) {
+        [self.formatDelegate formatDidSelectTextStyle:sender.tag];
+    }
 }
 
+//对齐方式
 - (void)align:(UIBarButtonItem *)sender {
-
+    if ([self.formatDelegate respondsToSelector:@selector(formatDidChangeTextAlignment:)]) {
+        [self.formatDelegate formatDidChangeTextAlignment:sender.tag];
+    }
 }
 
+//加粗
 - (void)setBold {
 	if ([self.formatDelegate respondsToSelector:@selector(formatDidToggleBold)]) {
 		[self.formatDelegate formatDidToggleBold];
 	}
 }
 
+//斜体
 - (void)setItalic {
 	if ([self.formatDelegate respondsToSelector:@selector(formatDidToggleItalic)]) {
 		[self.formatDelegate formatDidToggleItalic];
 	}
 }
 
+//下滑线
 - (void)setUnderline {
 	if ([self.formatDelegate respondsToSelector:@selector(formatDidToggleUnderline)]) {
 		[self.formatDelegate formatDidToggleUnderline];
 	}
 }
 
+//排序
 - (void)setOrderedList:(UIBarButtonItem *)sender {
 	if ([self.formatDelegate respondsToSelector:@selector(toggleListType:)]) {
 		[self.formatDelegate toggleListType:sender.tag];
 	}
 }
 
+//引用
 -(void)setBlockquote {
 	if ([self.formatDelegate respondsToSelector:@selector(formatDidToggleBlockquote)]) {
 		[self.formatDelegate formatDidToggleBlockquote];
 	}
+}
+
+//打开
+-(void)openMoreView:(id)sender {
+    if ([self.formatDelegate respondsToSelector:@selector(richTextEditorOpenMoreView)]) {
+        [self.formatDelegate richTextEditorOpenMoreView];
+    }
+}
+
+//关闭
+-(void)closeMoreView:(id)sender {
+    if ([self.formatDelegate respondsToSelector:@selector(richTextEditorCloseMoreView)]) {
+        [self.formatDelegate richTextEditorCloseMoreView];
+    }
 }
 
 #pragma mark - Lazy subviews

@@ -10,4 +10,7 @@
 
 @interface QSRichEditorViewController (keyboard)
 
+-(void)showKeyboard;
+-(void)hideKeyboard;
+
 @end
