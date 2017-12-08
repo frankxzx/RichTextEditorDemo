@@ -36,6 +36,11 @@
         [self.audioButton addTarget:self action:@selector(insertAudio) forControlEvents:UIControlEventTouchUpInside];
         [self.seperatorButton addTarget:self action:@selector(insertSeperator) forControlEvents:UIControlEventTouchUpInside];
         [self.hyperlinkButton addTarget:self action:@selector(insertHyperlink) forControlEvents:UIControlEventTouchUpInside];
+        
+        [self.videoButton setTitleColor:UIColorBlack forState:UIControlStateNormal];
+        [self.audioButton setTitleColor:UIColorBlack forState:UIControlStateNormal];
+        [self.seperatorButton setTitleColor:UIColorBlack forState:UIControlStateNormal];
+        [self.hyperlinkButton setTitleColor:UIColorBlack forState:UIControlStateNormal];
 		
 		[self addSubview:self.videoButton];
 		[self addSubview:self.audioButton];
@@ -48,7 +53,7 @@
 -(void)layoutSubviews {
 	[super layoutSubviews];
     CGFloat width = SCREEN_WIDTH/2;
-    CGFloat height = SCREEN_HEIGHT/2;
+    CGFloat height = width/2;
     self.seperatorButton.frame = CGRectMake(0, 0, width, height);
     self.hyperlinkButton.frame = CGRectMake(width, 0, width, height);
     self.videoButton.frame = CGRectMake(0, height, width, height);

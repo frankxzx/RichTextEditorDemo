@@ -36,7 +36,7 @@
 
 - (CGSize)sizeThatFits:(CGSize)size {
     CGSize resultSize = CGSizeMake(size.width, 0);
-    resultSize.height = self.richEditor.qmui_height;
+    resultSize.height = [QSRichTextEditorBodyCell cellRect].size.height;
     return resultSize;
 }
 

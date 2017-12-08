@@ -27,6 +27,9 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 
 - (void)initSubviews {
     self.coverButton = [[QMUIButton alloc]initWithImage:UIImageMake(@"edit_Header") title:@"添加封面"];
+    self.coverButton.spacingBetweenImageAndTitle = 12;
+    [self.coverButton setBackgroundColor:UIColorGray];
+    [self.coverButton setTitleColor:UIColorBlack forState:UIControlStateNormal];
     [self.coverButton addTarget:self action:@selector(addArticleCover:) forControlEvents:UIControlEventTouchUpInside];
     [self.contentView addSubview:self.coverButton];
 }

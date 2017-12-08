@@ -52,9 +52,6 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
     self.navigationItem.leftBarButtonItem = [QMUINavigationButton barButtonItemWithType:QMUINavigationButtonTypeBack title:nil position:QMUINavigationButtonPositionLeft target:self action:nil];
 	self.state = QSRichEditorStateNoneContent;
 	[self configDefaultStyle];
-	// 设置键盘只接受 self.richEditor 的通知事件，如果当前界面有其他 UIResponder 导致键盘产生通知事件，则不会被接受
-	self.keyboardManager = [[QMUIKeyboardManager alloc] initWithDelegate:self];
-	[self.keyboardManager addTargetResponder:self.richEditor];
 }
 
 -(void)initSubviews {
@@ -62,17 +59,6 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 	[self.view addSubview:self.toolView];
 	[self.toolView addSubview:self.editorToolBar];
 	[self.toolView addSubview:self.editorMoreView];
-}
-
-- (void)viewWillLayoutSubviews
-{
-	[super viewWillLayoutSubviews];
-	// adjust the top and bottom inset so that bars are never underlapped
-	id<UILayoutSupport>topLayoutGuide = self.topLayoutGuide;
-	id<UILayoutSupport>bottomLayoutGuide = self.bottomLayoutGuide;
-	
-	UIEdgeInsets insets = UIEdgeInsetsMake([topLayoutGuide length], 0, [bottomLayoutGuide length], 0);
-	self.richEditor.contentInset = insets;
 }
 
 -(void)viewDidLayoutSubviews {
@@ -255,14 +241,6 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 
 	// demonstrate half em paragraph spacing
     //DTCSSStylesheet *styleSheet = [[DTCSSStylesheet alloc] initWithStyleBlock:@"p {margin-bottom:0.5em} ol {margin-bottom:0.5em; -webkit-padding-start:40px;} ul {margin-bottom:0.5em;-webkit-padding-start:40px;}"];
-	
-    self.richEditor.defaultFontFamily = @"Helvetica";
-    self.richEditor.textSizeMultiplier = 1.0;
-    self.richEditor.maxImageDisplaySize = CGSizeMake(300, 300);
-    self.richEditor.autocorrectionType = UITextAutocorrectionTypeYes;
-    self.richEditor.editorViewDelegate = self;
-    self.richEditor.defaultFontSize = 16;
-	self.richEditor.attributedTextContentView.shouldDrawImages = NO;
 }
 
 #pragma mark - Lazy subviews
@@ -271,6 +249,7 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 -(UIView *)toolView {
 	if (!_toolView) {
 		_toolView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 44+200)];
+        _toolView.backgroundColor = UIColorWhite;
 	}
 	return _toolView;
 }
@@ -295,8 +274,20 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
     if (cell) {
         
         DTRichTextEditorView *editorView = cell.richEditor;
-        editorView.delegate = self;;
+        editorView.delegate = self;
         editorView.textDelegate = self;
+        
+        editorView.defaultFontFamily = @"Helvetica";
+        editorView.textSizeMultiplier = 1.0;
+        editorView.maxImageDisplaySize = CGSizeMake(300, 300);
+        editorView.autocorrectionType = UITextAutocorrectionTypeYes;
+        editorView.editorViewDelegate = self;
+        editorView.defaultFontSize = 16;
+        editorView.attributedTextContentView.shouldDrawImages = NO;
+        
+        // 设置键盘只接受 self.richEditor 的通知事件，如果当前界面有其他 UIResponder 导致键盘产生通知事件，则不会被接受
+        self.keyboardManager = [[QMUIKeyboardManager alloc] initWithDelegate:self];
+        [self.keyboardManager addTargetResponder:editorView];
         
         return editorView;
     }
@@ -357,30 +348,32 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 - (UITableViewCell *)qmui_tableView:(UITableView *)tableView cellWithIdentifier:(NSString *)identifier {
     QSRichTextEditorCell *cell = (QSRichTextEditorCell *)[tableView dequeueReusableCellWithIdentifier:identifier];
     if (!cell) {
-        cell = [[QSRichTextEditorCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+        if ([identifier isEqualToString:@"coverCell"]) {
+            cell = [[QSRichTextEditorCoverCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+        } else if ([identifier isEqualToString:@"titleCell"]) {
+            cell = [[QSRichTextEditorTitleCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+        } else if ([identifier isEqualToString:@"bodyCell"]) {
+            cell = [[QSRichTextEditorBodyCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+        }
     }
     cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
     return cell;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *cellIdentifier;
+    QSRichTextEditorCell *cell;
     switch (indexPath.row) {
         case 0:
-            cellIdentifier = @"coverCell";
+             cell = (QSRichTextEditorCoverCell *)[self qmui_tableView:tableView cellWithIdentifier:@"coverCell"];
             break;
         case 1:
-            cellIdentifier = @"titleCell";
+            cell = (QSRichTextEditorTitleCell *)[self qmui_tableView:tableView cellWithIdentifier:@"titleCell"];
             break;
         case 2:
-            cellIdentifier = @"bodyCell";
+            cell = (QSRichTextEditorBodyCell *)[self qmui_tableView:tableView cellWithIdentifier:@"bodyCell"];
             break;
         default:
             break;
-    }
-    QSRichTextEditorCell *cell = (QSRichTextEditorCell *)[self qmui_tableView:tableView cellWithIdentifier:cellIdentifier];
-    if (cellIdentifier) {
-        [cell.contentView addSubview:self.richEditor];
     }
     return cell;
 }
