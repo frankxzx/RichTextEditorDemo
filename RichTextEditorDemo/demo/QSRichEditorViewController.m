@@ -16,6 +16,9 @@
 #import "QSRichTextEditorTitleCell.h"
 #import "QSRichTextEditorBodyCell.h"
 
+CGFloat const toolBarHeight = 44;
+CGFloat const editorMoreViewHeight = 200;
+
 typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 	QSRichEditorStateNoneContent,// 没有编辑内容
 	QSRichEditorStateSelection,//正在编辑选中的文本
@@ -248,7 +251,7 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 //工具栏
 -(UIView *)toolView {
 	if (!_toolView) {
-		_toolView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 44+200)];
+		_toolView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, toolBarHeight+editorMoreViewHeight)];
         _toolView.backgroundColor = UIColorWhite;
 	}
 	return _toolView;
@@ -256,14 +259,14 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 
 -(RichTextEditorToolBar *)editorToolBar {
 	if (!_editorToolBar) {
-		_editorToolBar = [[RichTextEditorToolBar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 44)];
+		_editorToolBar = [[RichTextEditorToolBar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, toolBarHeight)];
 	}
 	return _editorToolBar;
 }
 
 -(RichTextEditorMoreView *)editorMoreView {
 	if (!_editorMoreView) {
-		_editorMoreView = [[RichTextEditorMoreView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 200)];
+		_editorMoreView = [[RichTextEditorMoreView alloc]initWithFrame:CGRectMake(0, toolBarHeight, self.view.bounds.size.width, editorMoreViewHeight)];
 	}
 	return _editorMoreView;
 }
@@ -286,12 +289,19 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
         editorView.attributedTextContentView.shouldDrawImages = NO;
         
         // 设置键盘只接受 self.richEditor 的通知事件，如果当前界面有其他 UIResponder 导致键盘产生通知事件，则不会被接受
-        self.keyboardManager = [[QMUIKeyboardManager alloc] initWithDelegate:self];
         [self.keyboardManager addTargetResponder:editorView];
         
         return editorView;
     }
     return nil;
+}
+
+//键盘管理
+-(QMUIKeyboardManager *)keyboardManager {
+    if (!_keyboardManager) {
+        _keyboardManager = [[QMUIKeyboardManager alloc]initWithDelegate:self];
+    }
+    return _keyboardManager;
 }
 
 //选中文本出现的 UIMenu
