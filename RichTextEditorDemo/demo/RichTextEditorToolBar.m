@@ -9,6 +9,7 @@
 #import "RichTextEditorToolBar.h"
 #import "RichTextEditorAction.h"
 #import <QMUIKit/QMUIKit.h>
+#import <YYText/YYText.h>
 
 @interface RichTextEditorToolBar()
 
@@ -36,7 +37,8 @@
 @property(nonatomic, strong) UIBarButtonItem *moreButton;
 
 //关闭
-@property(nonatomic, strong) UIBarButtonItem *closeButton;
+@property(nonatomic, strong) UIBarButtonItem *textEditorCloseButton;
+@property(nonatomic, strong) UIBarButtonItem *moreViewCloseButton;
 
 @property(nonatomic, assign) BOOL isAllowTextEdit;
 
@@ -48,61 +50,101 @@
 
 -(instancetype)initWithFrame:(CGRect)frame {
 	if (self = [super initWithFrame:frame]) {
-		self.beginTextEditorButton = [QMUIToolbarButton barButtonItemWithImage:UIImageMake(@"toolbar_style") target:self action:@selector(beginTextEditor)];
+        self.beginTextEditorButton = [QMUIToolbarButton barButtonItemWithImage:UIImageMake(@"toolbar_style") target:self action:@selector(beginTextEditor:)];
         self.fontStyleButton = [QMUIToolbarButton barButtonItemWithImage:UIImageMake(@"toolbar_font_style1") target:self action:@selector(setFontStyle:)];
+        self.fontStyleButton.tag = QSRichEditorTextStyleNormal;
+        
 		self.boldButton = [QMUIToolbarButton barButtonItemWithImage:UIImageMake(@"toolbar_bold") target:self action:@selector(setBold)];
 		self.italicButton = [QMUIToolbarButton barButtonItemWithImage:UIImageMake(@"toolbar_italic") target:self action:@selector(setItalic)];
 		self.strikeThroughButton = [QMUIToolbarButton barButtonItemWithImage:UIImageMake(@"toolbar_strikethrough") target:self action:@selector(setUnderline)];
 		
 		self.alignButton = [QMUIToolbarButton barButtonItemWithImage:UIImageMake(@"toolbar_align_left") target:self action:@selector(align:)];
+        self.alignButton.tag = kCTTextAlignmentLeft;
 		
 		self.orderedListButton = [QMUIToolbarButton barButtonItemWithImage:UIImageMake(@"toolbar_order") target:self action:@selector(setOrderedList:)];
+        self.orderedListButton.tag = DTCSSListStyleTypeNone;
 		
 		self.photoButton = [QMUIToolbarButton barButtonItemWithImage:UIImageMake(@"toolbar_image") target:self action:@selector(setBold)];
 		self.blockquoteButton = [QMUIToolbarButton barButtonItemWithImage:UIImageMake(@"toolbar_blockquote") target:self action:@selector(setBlockquote)];
 		
-		self.moreButton = [QMUIToolbarButton barButtonItemWithImage:UIImageMake(@"toolbar_more") target:self action:@selector(setBlockquote)];
-		self.closeButton = [QMUIToolbarButton barButtonItemWithImage:UIImageMake(@"toolbar_close") target:self action:@selector(endTextEditor)];
+        self.moreButton = [QMUIToolbarButton barButtonItemWithImage:UIImageMake(@"toolbar_more") target:self action:@selector(openMoreView:)];
+		self.textEditorCloseButton = [QMUIToolbarButton barButtonItemWithImage:UIImageMake(@"toolbar_close") target:self action:@selector(endTextEditor)];
+        self.moreViewCloseButton = [QMUIToolbarButton barButtonItemWithImage:UIImageMake(@"icon_close") target:self action:@selector(closeMoreView:)];
 		
-		UILabel *label = [[UILabel alloc]init];
-		label.attributedText = [[NSAttributedString alloc] initWithString:@"0 字" attributes:@{NSFontAttributeName: UIFontMake(12), NSForegroundColorAttributeName: UIColorGray, NSParagraphStyleAttributeName: [NSMutableParagraphStyle qmui_paragraphStyleWithLineHeight:16 lineBreakMode:NSLineBreakByWordWrapping textAlignment:NSTextAlignmentCenter]}];
-		[label sizeToFit];
-		
-		self.textCountButton = [[UIBarButtonItem alloc]initWithCustomView:label];
-        
-        UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-		
-		[self setItems:@[flexibleSpace,
-                         self.beginTextEditorButton,
-						 self.fontStyleButton,
-						 self.alignButton,
-						 self.blockquoteButton,
-						 self.orderedListButton,
-						 self.photoButton,
-						 self.moreButton,
-                         flexibleSpace]];
+        [self setupTextCountItemWithCount:0];
+        [self initEditorBarItems];
 	}
 	return self;
 }
 
--(void)beginTextEditor {
+-(void)setupTextCountItemWithCount:(NSUInteger)count {
+    UILabel *label = [[UILabel alloc]init];
+    NSMutableAttributedString *textCountString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%lu",(unsigned long)count] attributes:@{NSFontAttributeName: UIFontBoldMake(20), NSForegroundColorAttributeName: UIColorBlack, NSParagraphStyleAttributeName: [NSMutableParagraphStyle qmui_paragraphStyleWithLineHeight:16 lineBreakMode:NSLineBreakByWordWrapping textAlignment:NSTextAlignmentCenter]}];
+    NSAttributedString *zi = [[NSAttributedString alloc] initWithString:@"字" attributes:@{NSFontAttributeName: UIFontMake(15), NSForegroundColorAttributeName: UIColorGray}];
+    [textCountString appendAttributedString: zi];
+    textCountString.yy_kern = @10;
+    label.attributedText = textCountString;
+    [label sizeToFit];
+    
+    self.textCountButton = [[UIBarButtonItem alloc]initWithCustomView:label];
+}
+
+-(void)initEditorBarItems {
+    UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    
+    [self setItems:@[flexibleSpace,
+                     self.beginTextEditorButton,
+                     flexibleSpace,
+                     self.fontStyleButton,
+                     flexibleSpace,
+                     self.alignButton,
+                     flexibleSpace,
+                     self.blockquoteButton,
+                     flexibleSpace,
+                     self.orderedListButton,
+                     flexibleSpace,
+                     self.photoButton,
+                     flexibleSpace,
+                     self.moreButton,
+                     flexibleSpace] animated:YES];
+}
+
+-(void)beginTextEditor:(UIBarButtonItem *)sender {
+    if ([self isTextEditor]) {
+        [self endTextEditor];
+        return;
+    }
+
 	[self setItems:@[self.beginTextEditorButton,
 					 self.boldButton,
 					 self.italicButton,
 					 self.strikeThroughButton,
-					 self.closeButton] animated:YES];
+					 self.textEditorCloseButton] animated:YES];
 }
 
 -(void)endTextEditor {
-	[self setItems:@[self.beginTextEditorButton,
-					 self.boldButton,
-					 self.italicButton,
-					 self.strikeThroughButton,
-					 self.closeButton] animated:YES];
+	[self initEditorBarItems];
+}
+
+-(void)editorMoreViewToolBarItems {
+     UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    [self setItems:@[self.textCountButton, flexibleSpace, self.moreViewCloseButton] animated:YES];
 }
 
 //一共三种默认的字体样式
 -(void)setFontStyle:(UIBarButtonItem *)sender {
+    
+    if (sender.tag == QSRichEditorTextStyleNormal) {
+        sender.image = UIImageMake(@"toolbar_font_style2");
+        sender.tag = QSRichEditorTextStyleLarger;
+    } else if (sender.tag == QSRichEditorTextStyleLarger) {
+        sender.image = UIImageMake(@"toolbar_font_style3");
+        sender.tag = QSRichEditorTextStylePlaceholder;
+    } else if (sender.tag == QSRichEditorTextStylePlaceholder) {
+        sender.image = UIImageMake(@"toolbar_font_style1");
+        sender.tag = QSRichEditorTextStyleNormal;
+    }
+    
     if ([self.formatDelegate respondsToSelector:@selector(formatDidSelectTextStyle:)]) {
         [self.formatDelegate formatDidSelectTextStyle:sender.tag];
     }
@@ -110,6 +152,18 @@
 
 //对齐方式
 - (void)align:(UIBarButtonItem *)sender {
+    
+    if (sender.tag == kCTTextAlignmentLeft) {
+        sender.image = UIImageMake(@"toolbar_align_center");
+        sender.tag = kCTTextAlignmentCenter;
+    } else if (sender.tag == kCTTextAlignmentCenter) {
+        sender.image = UIImageMake(@"toolbar_align_right");
+        sender.tag = kCTTextAlignmentRight;
+    } else if (sender.tag == kCTTextAlignmentRight) {
+        sender.image = UIImageMake(@"toolbar_align_left");
+        sender.tag = kCTTextAlignmentLeft;
+    }
+    
     if ([self.formatDelegate respondsToSelector:@selector(formatDidChangeTextAlignment:)]) {
         [self.formatDelegate formatDidChangeTextAlignment:sender.tag];
     }
@@ -138,6 +192,18 @@
 
 //排序
 - (void)setOrderedList:(UIBarButtonItem *)sender {
+    
+    if (sender.tag == DTCSSListStyleTypeNone) {
+        sender.image = UIImageMake(@"toolbar_order_number");
+        sender.tag = DTCSSListStyleTypeCircle;
+    } else if (sender.tag == DTCSSListStyleTypeCircle) {
+        sender.image = UIImageMake(@"toolbar_order_dot");
+        sender.tag = DTCSSListStyleTypeDecimal;
+    } else if (sender.tag == DTCSSListStyleTypeDecimal) {
+        sender.image = UIImageMake(@"toolbar_order");
+        sender.tag = DTCSSListStyleTypeNone;
+    }
+    
 	if ([self.formatDelegate respondsToSelector:@selector(toggleListType:)]) {
 		[self.formatDelegate toggleListType:sender.tag];
 	}
@@ -152,6 +218,7 @@
 
 //打开
 -(void)openMoreView:(id)sender {
+    [self editorMoreViewToolBarItems];
     if ([self.formatDelegate respondsToSelector:@selector(richTextEditorOpenMoreView)]) {
         [self.formatDelegate richTextEditorOpenMoreView];
     }
@@ -159,9 +226,14 @@
 
 //关闭
 -(void)closeMoreView:(id)sender {
+    [self initEditorBarItems];
     if ([self.formatDelegate respondsToSelector:@selector(richTextEditorCloseMoreView)]) {
         [self.formatDelegate richTextEditorCloseMoreView];
     }
+}
+
+-(BOOL)isTextEditor {
+    return  [self.items containsObject:self.textEditorCloseButton];
 }
 
 #pragma mark - Lazy subviews

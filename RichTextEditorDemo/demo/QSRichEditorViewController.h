@@ -9,9 +9,13 @@
 #import <UIKit/UIKit.h>
 #import <QMUIKit/QMUIKit.h>
 
+extern CGFloat const toolBarHeight;
+extern CGFloat const editorMoreViewHeight;
+
 @interface QSRichEditorViewController : QMUICommonTableViewController
 
 @property(nonatomic, strong) UIView *toolView;
+@property (nonatomic, retain) NSArray *menuItems;
 
 @end
 

@@ -46,6 +46,11 @@
 		[self addSubview:self.audioButton];
 		[self addSubview:self.seperatorButton];
 		[self addSubview:self.hyperlinkButton];
+        
+        self.videoButton.backgroundColor = UIColorWhite;
+        self.audioButton.backgroundColor = UIColorWhite;
+        self.seperatorButton.backgroundColor = UIColorWhite;
+        self.hyperlinkButton.backgroundColor = UIColorWhite;
 	}
 	return self;
 }

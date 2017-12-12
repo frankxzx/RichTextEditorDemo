@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0168006C1FDFC39800C66E28 /* DTRichTextEditorView+qs.m in Sources */ = {isa = PBXBuildFile; fileRef = 0168006B1FDFC39800C66E28 /* DTRichTextEditorView+qs.m */; };
 		016CCCBF1FD92905000493F7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 016CCCBE1FD92905000493F7 /* AppDelegate.m */; };
 		016CCCC21FD92905000493F7 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 016CCCC11FD92905000493F7 /* ViewController.m */; };
 		016CCCC51FD92905000493F7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 016CCCC31FD92905000493F7 /* Main.storyboard */; };
@@ -27,6 +28,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0168006A1FDFC39800C66E28 /* DTRichTextEditorView+qs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DTRichTextEditorView+qs.h"; sourceTree = "<group>"; };
+		0168006B1FDFC39800C66E28 /* DTRichTextEditorView+qs.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "DTRichTextEditorView+qs.m"; sourceTree = "<group>"; };
 		016CCCBA1FD92905000493F7 /* RichTextEditorDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RichTextEditorDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		016CCCBD1FD92905000493F7 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		016CCCBE1FD92905000493F7 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -118,6 +121,8 @@
 				016CCCD71FD92A7E000493F7 /* QSRichEditorViewController+keyboard.m */,
 				016CCCD81FD92A7E000493F7 /* QSRichEditorViewController.h */,
 				016CCCD91FD92A7E000493F7 /* QSRichEditorViewController.m */,
+				0168006A1FDFC39800C66E28 /* DTRichTextEditorView+qs.h */,
+				0168006B1FDFC39800C66E28 /* DTRichTextEditorView+qs.m */,
 				016CCCE81FDA6BEC000493F7 /* QSRichTextEditorCoverCell.h */,
 				016CCCE91FDA6BEC000493F7 /* QSRichTextEditorCoverCell.m */,
 				016CCCEB1FDA6C08000493F7 /* QSRichTextEditorTitleCell.h */,
@@ -295,6 +300,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				016CCCEA1FDA6BEC000493F7 /* QSRichTextEditorCoverCell.m in Sources */,
+				0168006C1FDFC39800C66E28 /* DTRichTextEditorView+qs.m in Sources */,
 				016CCCF01FDA6C2E000493F7 /* QSRichTextEditorBodyCell.m in Sources */,
 				016CCCC21FD92905000493F7 /* ViewController.m in Sources */,
 				016CCCED1FDA6C08000493F7 /* QSRichTextEditorTitleCell.m in Sources */,

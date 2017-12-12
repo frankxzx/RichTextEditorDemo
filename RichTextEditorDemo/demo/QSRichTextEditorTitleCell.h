@@ -9,10 +9,12 @@
 #import <QMUIKit/QMUIKit.h>
 #import "QSRichEditorViewController.h"
 #import "QSRichTextEditorCell.h"
+#import <YYText/YYText.h>
 
 @interface QSRichTextEditorTitleCell : QSRichTextEditorCell
 
 @property(nonatomic, weak) id<QSRichEditorViewControllerDelegate> cellDelegate;
+@property(nonatomic, strong) YYTextView *titleTextView;
 
 @end
 

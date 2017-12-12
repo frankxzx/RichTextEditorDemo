@@ -10,6 +10,7 @@
 
 @interface QSRichEditorViewController (keyboard)
 
+-(void)updateToolBarFrame;
 -(void)showKeyboard;
 -(void)hideKeyboard;
 

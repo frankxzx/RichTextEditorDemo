@@ -7,11 +7,8 @@
 //
 
 #import "QSRichTextEditorTitleCell.h"
-#import <YYText/YYText.h>
 
 @interface QSRichTextEditorTitleCell()
-
-@property(nonatomic, strong) YYTextView *titleTextView;
 
 @end
 
@@ -25,8 +22,9 @@
 }
 
 - (void)initSubviews {
-    self.titleTextView = [[YYTextView alloc]init];
-    self.titleTextView.placeholderFont = [UIFont boldSystemFontOfSize:19];
+    self.titleTextView = [YYTextView new];
+    self.titleTextView.font = [UIFont boldSystemFontOfSize:30];
+    self.titleTextView.placeholderFont = [UIFont boldSystemFontOfSize:30];
     self.titleTextView.placeholderText = @"请输入标题";
     self.titleTextView.textContainerInset = UIEdgeInsetsMake(10, 20, 10, 20);
     [self.contentView addSubview:self.titleTextView];
@@ -44,7 +42,7 @@
 }
 
 +(CGRect)cellRect {
-    return CGRectMake(0, 0, SCREEN_WIDTH, 100);
+    return CGRectMake(0, 0, SCREEN_WIDTH, 60);
 }
 
 @end

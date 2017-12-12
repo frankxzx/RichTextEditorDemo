@@ -1112,11 +1112,11 @@ typedef enum
 	}
 	
 	// If not editable, simple resign first responder (hides context menu, cursors, and selections if showing)
-	if (!self.isEditable)
-	{
-		[self resignFirstResponder];
-		return;
-	}
+//    if (!self.isEditable)
+//    {
+//        [self resignFirstResponder];
+//        return;
+//    }
 	
 	// get touch point here, later it might get corrupted by becoming first reponder
 	CGPoint touchPoint = [gesture locationInView:self.attributedTextContentView];

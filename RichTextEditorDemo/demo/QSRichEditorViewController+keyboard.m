@@ -27,11 +27,11 @@
 	[QMUIKeyboardManager handleKeyboardNotificationWithUserInfo:keyboardUserInfo showBlock:^(QMUIKeyboardUserInfo *keyboardUserInfo) {
 		[QMUIKeyboardManager animateWithAnimated:YES keyboardUserInfo:keyboardUserInfo animations:^{
 			CGFloat distanceFromBottom = [QMUIKeyboardManager distanceFromMinYToBottomInView:weakSelf.view keyboardRect:keyboardUserInfo.endFrame];
-			weakSelf.toolView.layer.transform = CATransform3DMakeTranslation(0, - distanceFromBottom - CGRectGetHeight(weakSelf.toolView.bounds), 0);
+            weakSelf.toolView.frame = CGRectMake(0, SCREEN_HEIGHT - (distanceFromBottom + 44), SCREEN_WIDTH, 244);
 		} completion:NULL];
 	} hideBlock:^(QMUIKeyboardUserInfo *keyboardUserInfo) {
 		[QMUIKeyboardManager animateWithAnimated:YES keyboardUserInfo:keyboardUserInfo animations:^{
-			weakSelf.toolView.layer.transform = CATransform3DIdentity;
+            weakSelf.toolView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, 44);
 		} completion:NULL];
 	}];
 }
@@ -69,6 +69,11 @@
  */
 - (void)keyboardDidChangeFrameWithUserInfo:(QMUIKeyboardUserInfo *)keyboardUserInfo {
     QMUILog(@"键盘frame已经发生变化");
+}
+
+-(void)updateToolBarFrame {
+    CGRect toolbarRect = CGRectFlatMake(0, CGRectGetHeight(self.view.bounds), CGRectGetWidth(self.view.bounds), toolBarHeight);
+    self.toolView.frame = CGRectApplyAffineTransform(toolbarRect, self.toolView.transform);
 }
 
 -(void)showKeyboard {

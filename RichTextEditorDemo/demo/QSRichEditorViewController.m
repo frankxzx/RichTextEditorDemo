@@ -8,6 +8,7 @@
 
 #import "QSRichEditorViewController.h"
 #import "QSRichEditorViewController+keyboard.h"
+#import "DTRichTextEditorView+qs.h"
 #import <DTRichTextEditor/DTRichTextEditor.h>
 #import "RichTextEditorToolBar.h"
 #import "RichTextEditorMoreView.h"
@@ -15,9 +16,11 @@
 #import "QSRichTextEditorCoverCell.h"
 #import "QSRichTextEditorTitleCell.h"
 #import "QSRichTextEditorBodyCell.h"
+#import <YYText/YYText.h>
 
 CGFloat const toolBarHeight = 44;
 CGFloat const editorMoreViewHeight = 200;
+#define richTextHighlightColor [UIColor lightGrayColor]
 
 typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 	QSRichEditorStateNoneContent,// 没有编辑内容
@@ -41,8 +44,8 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 @property(nonatomic, strong) RichTextEditorToolBar *editorToolBar;
 @property(nonatomic, strong) RichTextEditorMoreView *editorMoreView;
 @property(nonatomic, weak) DTRichTextEditorView *richEditor;
+@property(nonatomic, weak) YYTextView *titleTextView;
 @property(nonatomic, strong) UIBarButtonItem *doneItem;
-@property(nonatomic, strong) NSMutableArray <UIMenuItem *>*sectionMenuItems;
 @property(nonatomic, strong) NSCache *imageCache;
 @property(nonatomic, strong) QMUIKeyboardManager *keyboardManager;
 
@@ -55,17 +58,19 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
     self.navigationItem.leftBarButtonItem = [QMUINavigationButton barButtonItemWithType:QMUINavigationButtonTypeBack title:nil position:QMUINavigationButtonPositionLeft target:self action:nil];
 	self.state = QSRichEditorStateNoneContent;
 	[self configDefaultStyle];
+    self.keyboardManager.delegateEnabled = YES;
 }
 
 -(void)initSubviews {
 	[super initSubviews];
-	[self.view addSubview:self.toolView];
-	[self.toolView addSubview:self.editorToolBar];
-	[self.toolView addSubview:self.editorMoreView];
+//    [self.view addSubview:self.toolView];
+//    [self.toolView addSubview:self.editorToolBar];
+//    [self.toolView addSubview:self.editorMoreView];
 }
 
 -(void)viewDidLayoutSubviews {
 	[super viewDidLayoutSubviews];
+    [self updateToolBarFrame];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -92,10 +97,8 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 			break;
 		case QSRichEditorStateScrolling:
 			self.doneItem.enabled = NO;
-			self.richEditor.editable = NO;
 			break;
 		case QSRichEditorStateDidFinishEditing:
-			self.doneItem.enabled = YES;
 			break;
 		case QSRichEditorStateWirtingToHtml:
 			[self lodingWithText:@"生成 html 中..."];
@@ -135,7 +138,6 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 	void(^didSuccessHandle)() = ^{
 		[self showPreviewController];
 	};
-	
 }
 
 //点击预览按钮
@@ -260,6 +262,7 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 -(RichTextEditorToolBar *)editorToolBar {
 	if (!_editorToolBar) {
 		_editorToolBar = [[RichTextEditorToolBar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, toolBarHeight)];
+        _editorToolBar.formatDelegate = self;
 	}
 	return _editorToolBar;
 }
@@ -280,18 +283,24 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
         editorView.delegate = self;
         editorView.textDelegate = self;
         
-        editorView.defaultFontFamily = @"Helvetica";
         editorView.textSizeMultiplier = 1.0;
         editorView.maxImageDisplaySize = CGSizeMake(300, 300);
         editorView.autocorrectionType = UITextAutocorrectionTypeYes;
         editorView.editorViewDelegate = self;
         editorView.defaultFontSize = 16;
         editorView.attributedTextContentView.shouldDrawImages = NO;
-        
-        // 设置键盘只接受 self.richEditor 的通知事件，如果当前界面有其他 UIResponder 导致键盘产生通知事件，则不会被接受
-        [self.keyboardManager addTargetResponder:editorView];
+        editorView.inputAccessoryView = self.editorToolBar;
         
         return editorView;
+    }
+    return nil;
+}
+
+-(YYTextView *)titleTextView {
+    QSRichTextEditorTitleCell *cell  = (QSRichTextEditorTitleCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
+    if (cell) {
+        YYTextView *titleTextView = cell.titleTextView;
+        return titleTextView;
     }
     return nil;
 }
@@ -305,15 +314,16 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 }
 
 //选中文本出现的 UIMenu
-- (NSArray *)sectionMenuItems {
-    if (!_sectionMenuItems) {
-        UIMenuItem *insertItem = [[UIMenuItem alloc] initWithTitle:@"Insert" action:@selector(displayInsertMenu:)];
-        UIMenuItem *insertStarItem = [[UIMenuItem alloc] initWithTitle:@"★" action:@selector(insertStar:)];
-        UIMenuItem *insertCheckItem = [[UIMenuItem alloc] initWithTitle:@"☆" action:@selector(insertWhiteStar:)];
-        _sectionMenuItems = [NSMutableArray arrayWithArray:@[insertItem, insertStarItem, insertCheckItem]];
-    }
-    return _sectionMenuItems;
-}
+//@synthesize menuItems = _menuItems;
+//- (NSArray *)menuItems {
+//    if (!_menuItems) {
+//        UIMenuItem *insertItem = [[UIMenuItem alloc] initWithTitle:@"Insert" action:@selector(displayInsertMenu:)];
+//        UIMenuItem *insertStarItem = [[UIMenuItem alloc] initWithTitle:@"★" action:@selector(insertStar:)];
+//        UIMenuItem *insertCheckItem = [[UIMenuItem alloc] initWithTitle:@"☆" action:@selector(insertWhiteStar:)];
+//        _menuItems = [NSMutableArray arrayWithArray:@[insertItem, insertStarItem, insertCheckItem]];
+//    }
+//    return _menuItems;
+//}
 
 //图片缓存
 - (NSCache *)imageCache {
@@ -543,6 +553,17 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 						pointSize:font.pointSize];
 }
 
+//当前设置了三种默认字体的样式
+-(void)formatDidSelectTextStyle:(QSRichEditorTextStyle)style {
+    [self.richEditor updateTextStyle:style inRange:self.richEditor.selectedTextRange];
+}
+
+//应用样式
+-(void)formatDidToggleBlockquote {
+    [self.richEditor toggleHighlightInRange:self.richEditor.selectedTextRange color:richTextHighlightColor];
+    [self.richEditor applyTextAlignment:kCTTextAlignmentCenter toParagraphsContainingRange:self.richEditor.selectedTextRange];
+}
+
 //加粗
 - (void)formatDidToggleBold
 {
@@ -604,6 +625,14 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 {
 	UITextRange *range = self.richEditor.selectedTextRange;
 	[self.richEditor toggleHyperlinkInRange:range URL:url];
+}
+
+-(void)richTextEditorOpenMoreView {
+    [self.richEditor setInputView:self.editorMoreView animated:YES];
+}
+
+-(void)richTextEditorCloseMoreView {
+    [self.richEditor setInputView:nil animated:YES];
 }
 
 #pragma mark - UIScrollView Delegate
