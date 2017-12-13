@@ -71,14 +71,14 @@
 }
 
 -(void)deleteImage:(id)sender {
-    if ([self.actionDelegate respondsToSelector:@selector(editorViewDeleteImage)]) {
-        [self.actionDelegate editorViewDeleteImage];
+    if ([self.actionDelegate respondsToSelector:@selector(editorViewDeleteImage:)]) {
+        [self.actionDelegate editorViewDeleteImage:sender];
     }
 }
 
 -(void)replaceImage:(id)sender {
-    if ([self.actionDelegate respondsToSelector:@selector(editorViewReplaceImage)]) {
-        [self.actionDelegate editorViewReplaceImage];
+    if ([self.actionDelegate respondsToSelector:@selector(editorViewReplaceImage:)]) {
+        [self.actionDelegate editorViewReplaceImage:sender];
     }
 }
 

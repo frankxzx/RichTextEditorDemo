@@ -631,21 +631,33 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 }
 
 #pragma mark - QSRichTextEditorImageViewDelegate
--(void)editorViewDeleteImage {
-    DTTextRange *range = [DTTextRange rangeWithNSRange:NSMakeRange(self.richEditor.attributedText.length - 2, 1)];
-    [self.richEditor replaceRange:range withText:@""];
+-(void)editorViewDeleteImage:(UIButton *)sender {
+    if (![self isFirstResponder]) {
+        [self.richEditor becomeFirstResponder];
+    }
+    CGPoint touchPoint = [sender.superview convertPoint:sender.center toView:self.richEditor];
+    DTTextPosition *touchPosition = (DTTextPosition *)[self.richEditor closestPositionToPoint:touchPoint];
+    DTTextRange *touchRange = [DTTextRange textRangeFromStart:touchPosition toEnd:touchPosition];
+//    DTTextRange *range = [DTTextRange rangeWithNSRange:NSMakeRange(self.richEditor.attributedText.length - 2, 1)];
+    [self.richEditor replaceRange:touchRange withText:@""];
 }
 -(void)editorViewEditImage {
-    
+    if (![self isFirstResponder]) {
+        [self.richEditor becomeFirstResponder];
+    }
 }
 
 -(void)editorViewCaptionImage {
+    if (![self isFirstResponder]) {
+        [self.richEditor becomeFirstResponder];
+    }
     [self formatDidChangeTextAlignment:kCTTextAlignmentCenter];
-    [self.richEditor insertText:@"\n"];
 }
 
--(void)editorViewReplaceImage {
-    
+-(void)editorViewReplaceImage:(UIButton *)sender {
+    if (![self isFirstResponder]) {
+        [self.richEditor becomeFirstResponder];
+    }
     DTImageTextAttachment *attachment = [[DTImageTextAttachment alloc] initWithElement:nil options:nil];
     attachment.image = (id)[UIImage qmui_imageWithColor:[UIColor qmui_randomColor]];
     CGFloat w = [UIScreen mainScreen].bounds.size.width;
