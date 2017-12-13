@@ -79,10 +79,11 @@
 
 -(void)setupTextCountItemWithCount:(NSUInteger)count {
     UILabel *label = [[UILabel alloc]init];
-    NSMutableAttributedString *textCountString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%lu",(unsigned long)count] attributes:@{NSFontAttributeName: UIFontBoldMake(20), NSForegroundColorAttributeName: UIColorBlack, NSParagraphStyleAttributeName: [NSMutableParagraphStyle qmui_paragraphStyleWithLineHeight:16 lineBreakMode:NSLineBreakByWordWrapping textAlignment:NSTextAlignmentCenter]}];
-    NSAttributedString *zi = [[NSAttributedString alloc] initWithString:@"字" attributes:@{NSFontAttributeName: UIFontMake(15), NSForegroundColorAttributeName: UIColorGray}];
+    NSString *countString = [NSString stringWithFormat:@"%lu",(unsigned long)count];
+    NSMutableAttributedString *textCountString = [[NSMutableAttributedString alloc] initWithString:countString attributes:@{NSFontAttributeName: UIFontBoldMake(20), NSForegroundColorAttributeName: UIColorBlack, NSParagraphStyleAttributeName: [NSMutableParagraphStyle qmui_paragraphStyleWithLineHeight:16 lineBreakMode:NSLineBreakByWordWrapping textAlignment:NSTextAlignmentCenter]}];
+    NSMutableAttributedString *zi = [[NSMutableAttributedString alloc] initWithString:@"字" attributes:@{NSFontAttributeName: UIFontMake(15), NSForegroundColorAttributeName: UIColorGray}];
     [textCountString appendAttributedString: zi];
-    textCountString.yy_kern = @10;
+    [textCountString yy_setKern:@8 range:NSMakeRange(countString.length-1, 1)];
     label.attributedText = textCountString;
     [label sizeToFit];
     
@@ -218,10 +219,10 @@
 
 //打开
 -(void)openMoreView:(id)sender {
-    [self editorMoreViewToolBarItems];
     if ([self.formatDelegate respondsToSelector:@selector(richTextEditorOpenMoreView)]) {
         [self.formatDelegate richTextEditorOpenMoreView];
     }
+    [self editorMoreViewToolBarItems];
 }
 
 //关闭

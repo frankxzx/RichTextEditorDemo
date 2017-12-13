@@ -15,4 +15,6 @@
 
 @property (weak, nonatomic) id<RichTextEditorAction> formatDelegate;
 
+-(void)setupTextCountItemWithCount:(NSUInteger)count;
+
 @end

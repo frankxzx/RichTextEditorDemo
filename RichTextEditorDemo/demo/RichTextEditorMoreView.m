@@ -58,7 +58,7 @@
 -(void)layoutSubviews {
 	[super layoutSubviews];
     CGFloat width = SCREEN_WIDTH/2;
-    CGFloat height = width/2;
+    CGFloat height = self.frame.size.height/2;
     self.seperatorButton.frame = CGRectMake(0, 0, width, height);
     self.hyperlinkButton.frame = CGRectMake(width, 0, width, height);
     self.videoButton.frame = CGRectMake(0, height, width, height);

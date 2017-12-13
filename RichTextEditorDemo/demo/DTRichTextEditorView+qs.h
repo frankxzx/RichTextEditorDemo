@@ -11,6 +11,10 @@
 
 @interface DTRichTextEditorView (qs)
 
+-(DTTextRange *)qs_selectedTextRange;
+
+- (DTCoreTextLayoutLine *)currentLine;
+
 - (void)updateTextStyle:(QSRichEditorTextStyle)style inRange:(UITextRange *)range;
 
 @end

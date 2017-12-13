@@ -31,6 +31,7 @@
         _richEditor = [[DTRichTextEditorView alloc]init];
         _richEditor.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         _richEditor.defaultFontSize = 16;
+        _richEditor.scrollEnabled = NO;
         _richEditor.attributedTextContentView.edgeInsets = UIEdgeInsetsMake(20, 18, 20, 18);
     }
     return _richEditor;

@@ -17,6 +17,24 @@
 
 @implementation DTRichTextEditorView (qs)
 
+-(DTTextRange *)qs_selectedTextRange {
+    DTTextRange *textRange = (DTTextRange *)self.selectedTextRange;
+    if (textRange.length < 1) {
+       NSRange nsRange = [self currentLine].stringRange;
+       return [DTTextRange rangeWithNSRange:nsRange];
+    }
+    return textRange;
+}
+
+static UITextRange * _Nullable extracted(DTRichTextEditorView *object) {
+    return object.selectedTextRange;
+}
+
+- (DTCoreTextLayoutLine *)currentLine {
+    UITextPosition *currentPosition = (DTTextPosition *)[extracted(self) start];
+    return [self layoutLineContainingTextPosition:currentPosition];
+}
+
 - (void)updateTextStyle:(QSRichEditorTextStyle)style inRange:(UITextRange *)range {
 
     UIFont *font;

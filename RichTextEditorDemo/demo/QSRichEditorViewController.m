@@ -63,9 +63,7 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 
 -(void)initSubviews {
 	[super initSubviews];
-//    [self.view addSubview:self.toolView];
-//    [self.toolView addSubview:self.editorToolBar];
-//    [self.toolView addSubview:self.editorMoreView];
+
 }
 
 -(void)viewDidLayoutSubviews {
@@ -97,6 +95,7 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 			break;
 		case QSRichEditorStateScrolling:
 			self.doneItem.enabled = NO;
+            [self.view endEditing:YES];
 			break;
 		case QSRichEditorStateDidFinishEditing:
 			break;
@@ -251,14 +250,6 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 #pragma mark - Lazy subviews
 
 //工具栏
--(UIView *)toolView {
-	if (!_toolView) {
-		_toolView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, toolBarHeight+editorMoreViewHeight)];
-        _toolView.backgroundColor = UIColorWhite;
-	}
-	return _toolView;
-}
-
 -(RichTextEditorToolBar *)editorToolBar {
 	if (!_editorToolBar) {
 		_editorToolBar = [[RichTextEditorToolBar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, toolBarHeight)];
@@ -542,7 +533,8 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 	attachment.displaySize = size;
 	attachment.originalSize = size;
 	
-	[self.richEditor replaceRange:[self.richEditor selectedTextRange] withAttachment:attachment inParagraph:YES];
+    UITextRange * _Nullable extractedExpr = [self.richEditor selectedTextRange];
+    [self.richEditor replaceRange:extractedExpr withAttachment:attachment inParagraph:YES];
 }
 
 //设置字体
@@ -555,63 +547,63 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 
 //当前设置了三种默认字体的样式
 -(void)formatDidSelectTextStyle:(QSRichEditorTextStyle)style {
-    [self.richEditor updateTextStyle:style inRange:self.richEditor.selectedTextRange];
+    [self.richEditor updateTextStyle:style inRange:self.richEditor.qs_selectedTextRange];
 }
 
 //应用样式
 -(void)formatDidToggleBlockquote {
-    [self.richEditor toggleHighlightInRange:self.richEditor.selectedTextRange color:richTextHighlightColor];
-    [self.richEditor applyTextAlignment:kCTTextAlignmentCenter toParagraphsContainingRange:self.richEditor.selectedTextRange];
+    [self.richEditor toggleHighlightInRange:self.richEditor.qs_selectedTextRange color:richTextHighlightColor];
+    [self.richEditor applyTextAlignment:kCTTextAlignmentCenter toParagraphsContainingRange:self.richEditor.qs_selectedTextRange];
 }
 
 //加粗
 - (void)formatDidToggleBold
 {
-	[self.richEditor toggleBoldInRange:self.richEditor.selectedTextRange];
+	[self.richEditor toggleBoldInRange:self.richEditor.qs_selectedTextRange];
 }
 
 //斜体
 - (void)formatDidToggleItalic
 {
-	[self.richEditor toggleItalicInRange:self.richEditor.selectedTextRange];
+	[self.richEditor toggleItalicInRange:self.richEditor.qs_selectedTextRange];
 }
 
 //下划线
 - (void)formatDidToggleUnderline
 {
-	[self.richEditor toggleUnderlineInRange:self.richEditor.selectedTextRange];
+	[self.richEditor toggleUnderlineInRange:self.richEditor.qs_selectedTextRange];
 }
 
 //中划线
 - (void)formatDidToggleStrikethrough
 {
-	[self.richEditor toggleStrikethroughInRange:self.richEditor.selectedTextRange];
+	[self.richEditor toggleStrikethroughInRange:self.richEditor.qs_selectedTextRange];
 }
 
 //对齐
 - (void)formatDidChangeTextAlignment:(CTTextAlignment)alignment
 {
-	UITextRange *range = self.richEditor.selectedTextRange;
+	UITextRange *range = self.richEditor.qs_selectedTextRange;
 	[self.richEditor applyTextAlignment:alignment toParagraphsContainingRange:range];
 }
 
 //列表缩进
 - (void)increaseTabulation
 {
-	UITextRange *range = self.richEditor.selectedTextRange;
+	UITextRange *range = self.richEditor.qs_selectedTextRange;
 	[self.richEditor changeParagraphLeftMarginBy:36 toParagraphsContainingRange:range];
 }
 
 //撤销列表缩进
 - (void)decreaseTabulation
 {
-	UITextRange *range = self.richEditor.selectedTextRange;
+	UITextRange *range = self.richEditor.qs_selectedTextRange;
 	[self.richEditor changeParagraphLeftMarginBy:-36 toParagraphsContainingRange:range];
 }
 
 - (void)toggleListType:(DTCSSListStyleType)listType
 {
-	UITextRange *range = self.richEditor.selectedTextRange;
+	UITextRange *range = self.richEditor.qs_selectedTextRange;
 	
 	DTCSSListStyle *listStyle = [[DTCSSListStyle alloc] init];
 	listStyle.startingItemNumber = 1;
@@ -628,6 +620,7 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 }
 
 -(void)richTextEditorOpenMoreView {
+    [self.editorToolBar setupTextCountItemWithCount:self.richEditor.attributedText.length - 1];
     [self.richEditor setInputView:self.editorMoreView animated:YES];
 }
 
