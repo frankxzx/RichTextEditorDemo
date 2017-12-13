@@ -64,7 +64,7 @@
 		self.orderedListButton = [QMUIToolbarButton barButtonItemWithImage:UIImageMake(@"toolbar_order") target:self action:@selector(setOrderedList:)];
         self.orderedListButton.tag = DTCSSListStyleTypeNone;
 		
-		self.photoButton = [QMUIToolbarButton barButtonItemWithImage:UIImageMake(@"toolbar_image") target:self action:@selector(setBold)];
+		self.photoButton = [QMUIToolbarButton barButtonItemWithImage:UIImageMake(@"toolbar_image") target:self action:@selector(insertImage:)];
 		self.blockquoteButton = [QMUIToolbarButton barButtonItemWithImage:UIImageMake(@"toolbar_blockquote") target:self action:@selector(setBlockquote)];
 		
         self.moreButton = [QMUIToolbarButton barButtonItemWithImage:UIImageMake(@"toolbar_more") target:self action:@selector(openMoreView:)];
@@ -93,8 +93,7 @@
 -(void)initEditorBarItems {
     UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     
-    [self setItems:@[flexibleSpace,
-                     self.beginTextEditorButton,
+    [self setItems:@[self.beginTextEditorButton,
                      flexibleSpace,
                      self.fontStyleButton,
                      flexibleSpace,
@@ -106,8 +105,7 @@
                      flexibleSpace,
                      self.photoButton,
                      flexibleSpace,
-                     self.moreButton,
-                     flexibleSpace] animated:YES];
+                     self.moreButton] animated:YES];
 }
 
 -(void)beginTextEditor:(UIBarButtonItem *)sender {
@@ -196,10 +194,10 @@
     
     if (sender.tag == DTCSSListStyleTypeNone) {
         sender.image = UIImageMake(@"toolbar_order_number");
-        sender.tag = DTCSSListStyleTypeCircle;
+        sender.tag = DTCSSListStyleTypeDecimal;
     } else if (sender.tag == DTCSSListStyleTypeCircle) {
         sender.image = UIImageMake(@"toolbar_order_dot");
-        sender.tag = DTCSSListStyleTypeDecimal;
+        sender.tag = DTCSSListStyleTypeCircle;
     } else if (sender.tag == DTCSSListStyleTypeDecimal) {
         sender.image = UIImageMake(@"toolbar_order");
         sender.tag = DTCSSListStyleTypeNone;
@@ -230,6 +228,13 @@
     [self initEditorBarItems];
     if ([self.formatDelegate respondsToSelector:@selector(richTextEditorCloseMoreView)]) {
         [self.formatDelegate richTextEditorCloseMoreView];
+    }
+}
+
+//插入图片
+-(void)insertImage:(id)sender {
+    if ([self.formatDelegate respondsToSelector:@selector(replaceCurrentSelectionWithPhoto)]) {
+        [self.formatDelegate replaceCurrentSelectionWithPhoto];
     }
 }
 

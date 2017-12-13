@@ -17,6 +17,7 @@
 #import "QSRichTextEditorTitleCell.h"
 #import "QSRichTextEditorBodyCell.h"
 #import <YYText/YYText.h>
+#import "QSRichTextEditorImageView.h"
 
 CGFloat const toolBarHeight = 44;
 CGFloat const editorMoreViewHeight = 200;
@@ -38,7 +39,8 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
                                           DTAttributedTextContentViewDelegate,
  										  DTRichTextEditorViewDelegate,
                                           RichTextEditorAction,
-										  QMUIKeyboardManagerDelegate>
+										  QMUIKeyboardManagerDelegate,
+                                          QSRichTextEditorImageViewDelegate>
 
 @property(nonatomic, assign) QSRichEditorState state;
 @property(nonatomic, strong) RichTextEditorToolBar *editorToolBar;
@@ -476,6 +478,9 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 
 - (UIView *)attributedTextContentView:(DTAttributedTextContentView *)attributedTextContentView viewForAttachment:(DTTextAttachment *)attachment frame:(CGRect)frame
 {
+    QSRichTextEditorImageView *imageView = [[QSRichTextEditorImageView alloc]initWithFrame:frame];
+    imageView.actionDelegate = self;
+    [imageView setImage:[UIImage qmui_imageWithColor:[UIColor qmui_randomColor]]];
 //    NSNumber *cacheKey = [NSNumber numberWithUnsignedInteger:[attachment hash]];
 //
 //    UIImageView *imageView = [self.imageViewCache objectForKey:cacheKey];
@@ -495,11 +500,8 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 //
 //        [self.imageViewCache setObject:imageView forKey:cacheKey];
 //
-//        return imageView;
+        return imageView;
 //    }
-	
-	
-	return nil;
 }
 
 - (UIView *)attributedTextContentView:(DTAttributedTextContentView *)attributedTextContentView viewForLink:(NSURL *)url identifier:(NSString *)identifier frame:(CGRect)frame
@@ -522,14 +524,14 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 
 #pragma mark - DTFormatDelegate
 //插入图片
-- (void)replaceCurrentSelectionWithPhoto:(UIImage *)image
+- (void)replaceCurrentSelectionWithPhoto
 {
 	// make an attachment
 	DTImageTextAttachment *attachment = [[DTImageTextAttachment alloc] initWithElement:nil options:nil];
-	attachment.image = (id)image;
+    attachment.image = (id)[UIImage qmui_imageWithColor:[UIColor qmui_randomColor]];
 	CGFloat w = [UIScreen mainScreen].bounds.size.width;
 	CGFloat h = [UIScreen mainScreen].bounds.size.height / 3;
-	CGSize size = CGSizeMake(w-20, h);
+	CGSize size = CGSizeMake(w-40, h);
 	attachment.displaySize = size;
 	attachment.originalSize = size;
 	
@@ -626,6 +628,33 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 
 -(void)richTextEditorCloseMoreView {
     [self.richEditor setInputView:nil animated:YES];
+}
+
+#pragma mark - QSRichTextEditorImageViewDelegate
+-(void)editorViewDeleteImage {
+    DTTextRange *range = [DTTextRange rangeWithNSRange:NSMakeRange(self.richEditor.attributedText.length - 2, 1)];
+    [self.richEditor replaceRange:range withText:@""];
+}
+-(void)editorViewEditImage {
+    
+}
+
+-(void)editorViewCaptionImage {
+    [self formatDidChangeTextAlignment:kCTTextAlignmentCenter];
+    [self.richEditor insertText:@"\n"];
+}
+
+-(void)editorViewReplaceImage {
+    
+    DTImageTextAttachment *attachment = [[DTImageTextAttachment alloc] initWithElement:nil options:nil];
+    attachment.image = (id)[UIImage qmui_imageWithColor:[UIColor qmui_randomColor]];
+    CGFloat w = [UIScreen mainScreen].bounds.size.width;
+    CGFloat h = [UIScreen mainScreen].bounds.size.height / 3;
+    CGSize size = CGSizeMake(w-40, h);
+    attachment.displaySize = size;
+    attachment.originalSize = size;
+    DTTextRange *range = [DTTextRange rangeWithNSRange:NSMakeRange(self.richEditor.attributedText.length - 2, 1)];
+    [self.richEditor replaceRange:range withAttachment:attachment inParagraph:NO];
 }
 
 #pragma mark - UIScrollView Delegate

@@ -27,7 +27,7 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorTextStyle) {
 - (void)increaseTabulation;
 - (void)toggleListType:(DTCSSListStyleType)listType;
 - (void)applyHyperlinkToSelectedText:(NSURL *)url;
-- (void)replaceCurrentSelectionWithPhoto:(UIImage *)image;
+- (void)replaceCurrentSelectionWithPhoto;
 
 -(void)formatDidToggleBlockquote;
 -(void)insertVideo;
