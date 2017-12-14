@@ -537,7 +537,7 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 	attachment.originalSize = size;
 	
     UITextRange * _Nullable extractedExpr = [self.richEditor selectedTextRange];
-    [self.richEditor replaceRange:extractedExpr withAttachment:attachment inParagraph:YES];
+    [self.richEditor replaceRange:extractedExpr withAttachment:attachment inParagraph:NO];
 }
 
 //设置字体
@@ -633,25 +633,23 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 
 #pragma mark - QSRichTextEditorImageViewDelegate
 -(void)editorViewDeleteImage:(UIButton *)sender {
-    [self moveCursorCloseToAttachment:sender];
-//    CGPoint touchPoint = [sender.superview convertPoint:sender.center toView:self.richEditor];
-//    DTTextPosition *touchPosition = (DTTextPosition *)[self.richEditor closestPositionToPoint:touchPoint];
-//    DTTextRange *touchRange = [DTTextRange textRangeFromStart:touchPosition toEnd:touchPosition];
-////    DTTextRange *range = [DTTextRange rangeWithNSRange:NSMakeRange(self.richEditor.attributedText.length - 2, 1)];
-//    [self.richEditor replaceRange:touchRange withText:@""];
-    [self.richEditor deleteBackward];
+    DTTextPosition *position = [self moveCursorCloseToAttachment:sender];
+    DTTextRange *range = [DTTextRange rangeWithNSRange:NSMakeRange(position.location, 1)];
+    [self.richEditor replaceRange:range withText:@""];
 }
+
 -(void)editorViewEditImage:(UIButton *)sender  {
     [self moveCursorCloseToAttachment:sender];
 }
 
 -(void)editorViewCaptionImage:(UIButton *)sender  {
-    [self moveCursorCloseToAttachment:sender];
+    DTTextPosition *position = [self moveCursorCloseToAttachment:sender];
+    DTTextRange *range = [DTTextRange rangeWithNSRange:NSMakeRange(position.location+1, 1)];
+    [self.richEditor insertText:@""];
     [self formatDidChangeTextAlignment:kCTTextAlignmentCenter];
 }
 
 -(void)editorViewReplaceImage:(UIButton *)sender {
-    [self moveCursorCloseToAttachment:sender];
     DTImageTextAttachment *attachment = [[DTImageTextAttachment alloc] initWithElement:nil options:nil];
     attachment.image = (id)[UIImage qmui_imageWithColor:[UIColor qmui_randomColor]];
     CGFloat w = [UIScreen mainScreen].bounds.size.width;
@@ -659,17 +657,32 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
     CGSize size = CGSizeMake(w-40, h);
     attachment.displaySize = size;
     attachment.originalSize = size;
-    DTTextRange *range = [DTTextRange rangeWithNSRange:NSMakeRange(self.richEditor.attributedText.length - 2, 1)];
+    
+    DTTextPosition *position = [self moveCursorCloseToAttachment:sender];
+    DTTextRange *range = [DTTextRange rangeWithNSRange:NSMakeRange(position.location, 1)];
     [self.richEditor replaceRange:range withAttachment:attachment inParagraph:NO];
 }
 
--(void)moveCursorCloseToAttachment:(UIButton *)sender {
-    if (![self isFirstResponder]) {
-        [self.richEditor becomeFirstResponder];
-    }
+-(DTTextPosition *)moveCursorCloseToAttachment:(UIButton *)sender {
+    return [self moveCursorCloseToAttachment:sender offSet:0];
+}
+
+-(DTTextPosition *)moveCursorCloseToAttachment:(UIButton *)sender offSet:(NSInteger)offset{
+//    if (![self isFirstResponder]) {
+//        [self.richEditor becomeFirstResponder];
+//    }
     
     CGPoint touchPoint = [sender.superview convertPoint:sender.center toView:self.richEditor];
     [self.richEditor qmui_performSelector:NSSelectorFromString(@"moveCursorToPositionClosestToLocation:") withArguments:&touchPoint];
+    
+    DTTextRange *selectedRange = (DTTextRange *)self.richEditor.selectedTextRange;
+    DTTextPosition *start = (DTTextPosition *)selectedRange.start;
+    DTTextRange *range = [DTTextRange rangeWithNSRange:NSMakeRange(start.location, 1)];
+    [self.richEditor setSelectedTextRange:range animated:YES];
+    
+    DTTextPosition *position = (DTTextPosition *)[self.richEditor closestPositionToPoint:touchPoint];
+    QMUILog(@"image position %lu", position.location);
+    return position;
 }
 
 #pragma mark - UIScrollView Delegate
