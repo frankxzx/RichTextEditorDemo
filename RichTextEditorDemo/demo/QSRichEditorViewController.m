@@ -61,6 +61,7 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 	self.state = QSRichEditorStateNoneContent;
 	[self configDefaultStyle];
     self.keyboardManager.delegateEnabled = YES;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
 -(void)initSubviews {
@@ -632,32 +633,25 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 
 #pragma mark - QSRichTextEditorImageViewDelegate
 -(void)editorViewDeleteImage:(UIButton *)sender {
-    if (![self isFirstResponder]) {
-        [self.richEditor becomeFirstResponder];
-    }
-    CGPoint touchPoint = [sender.superview convertPoint:sender.center toView:self.richEditor];
-    DTTextPosition *touchPosition = (DTTextPosition *)[self.richEditor closestPositionToPoint:touchPoint];
-    DTTextRange *touchRange = [DTTextRange textRangeFromStart:touchPosition toEnd:touchPosition];
-//    DTTextRange *range = [DTTextRange rangeWithNSRange:NSMakeRange(self.richEditor.attributedText.length - 2, 1)];
-    [self.richEditor replaceRange:touchRange withText:@""];
+    [self moveCursorCloseToAttachment:sender];
+//    CGPoint touchPoint = [sender.superview convertPoint:sender.center toView:self.richEditor];
+//    DTTextPosition *touchPosition = (DTTextPosition *)[self.richEditor closestPositionToPoint:touchPoint];
+//    DTTextRange *touchRange = [DTTextRange textRangeFromStart:touchPosition toEnd:touchPosition];
+////    DTTextRange *range = [DTTextRange rangeWithNSRange:NSMakeRange(self.richEditor.attributedText.length - 2, 1)];
+//    [self.richEditor replaceRange:touchRange withText:@""];
+    [self.richEditor deleteBackward];
 }
--(void)editorViewEditImage {
-    if (![self isFirstResponder]) {
-        [self.richEditor becomeFirstResponder];
-    }
+-(void)editorViewEditImage:(UIButton *)sender  {
+    [self moveCursorCloseToAttachment:sender];
 }
 
--(void)editorViewCaptionImage {
-    if (![self isFirstResponder]) {
-        [self.richEditor becomeFirstResponder];
-    }
+-(void)editorViewCaptionImage:(UIButton *)sender  {
+    [self moveCursorCloseToAttachment:sender];
     [self formatDidChangeTextAlignment:kCTTextAlignmentCenter];
 }
 
 -(void)editorViewReplaceImage:(UIButton *)sender {
-    if (![self isFirstResponder]) {
-        [self.richEditor becomeFirstResponder];
-    }
+    [self moveCursorCloseToAttachment:sender];
     DTImageTextAttachment *attachment = [[DTImageTextAttachment alloc] initWithElement:nil options:nil];
     attachment.image = (id)[UIImage qmui_imageWithColor:[UIColor qmui_randomColor]];
     CGFloat w = [UIScreen mainScreen].bounds.size.width;
@@ -667,6 +661,15 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
     attachment.originalSize = size;
     DTTextRange *range = [DTTextRange rangeWithNSRange:NSMakeRange(self.richEditor.attributedText.length - 2, 1)];
     [self.richEditor replaceRange:range withAttachment:attachment inParagraph:NO];
+}
+
+-(void)moveCursorCloseToAttachment:(UIButton *)sender {
+    if (![self isFirstResponder]) {
+        [self.richEditor becomeFirstResponder];
+    }
+    
+    CGPoint touchPoint = [sender.superview convertPoint:sender.center toView:self.richEditor];
+    [self.richEditor qmui_performSelector:NSSelectorFromString(@"moveCursorToPositionClosestToLocation:") withArguments:&touchPoint];
 }
 
 #pragma mark - UIScrollView Delegate

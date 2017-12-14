@@ -36,10 +36,6 @@
         self.replaceButton.titleTextColor = UIColorBlack;
         self.editButton.titleTextColor = UIColorBlack;
         
-        self.captionButton.spacingBetweenImageAndTitle = 5;
-        self.replaceButton.spacingBetweenImageAndTitle = 5;
-        self.editButton.spacingBetweenImageAndTitle = 2;
-        
         self.editButton.titleLabel.font = [UIFont systemFontOfSize:12];
         self.captionButton.titleLabel.font = [UIFont systemFontOfSize:12];
         self.replaceButton.titleLabel.font = [UIFont systemFontOfSize:12];
@@ -59,14 +55,14 @@
 }
 
 -(void)captionImage:(id)sender {
-    if ([self.actionDelegate respondsToSelector:@selector(editorViewCaptionImage)]) {
-        [self.actionDelegate editorViewCaptionImage];
+    if ([self.actionDelegate respondsToSelector:@selector(editorViewCaptionImage:)]) {
+        [self.actionDelegate editorViewCaptionImage:sender];
     }
 }
 
 -(void)editorImage:(id)sender {
-    if ([self.actionDelegate respondsToSelector:@selector(editorViewEditImage)]) {
-        [self.actionDelegate editorViewEditImage];
+    if ([self.actionDelegate respondsToSelector:@selector(editorViewEditImage:)]) {
+        [self.actionDelegate editorViewEditImage:sender];
     }
 }
 

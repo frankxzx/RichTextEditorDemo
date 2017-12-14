@@ -11,8 +11,8 @@
 @protocol QSRichTextEditorImageViewDelegate <NSObject>
 
 -(void)editorViewDeleteImage:(UIButton *)sender;
--(void)editorViewEditImage;
--(void)editorViewCaptionImage;
+-(void)editorViewEditImage:(UIButton *)sender;
+-(void)editorViewCaptionImage:(UIButton *)sender;
 -(void)editorViewReplaceImage:(UIButton *)sender;
 
 @end

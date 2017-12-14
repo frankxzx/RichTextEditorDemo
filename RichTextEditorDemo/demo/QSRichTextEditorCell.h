@@ -11,3 +11,4 @@
 @interface QSRichTextEditorCell : QMUITableViewCell
 
 @end
+    

@@ -10,6 +10,12 @@
 
 @implementation QSRichTextEditorCell
 
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+    }
+    return self;
+}
+
 -(CGSize)sizeThatFits:(CGSize)size {
     return [super sizeThatFits:size];
 }
