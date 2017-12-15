@@ -2185,6 +2185,7 @@ typedef enum
 - (void)deleteBackward
 {
 	DTTextRange *replacementTextRange = (id)[self selectedTextRange];
+    NSLog(@"delete selected range init range %@", NSStringFromRange(replacementTextRange.NSRangeValue));
 	UITextRange *entireDocument = [self textRangeFromPosition:self.beginningOfDocument toPosition:self.endOfDocument];
 	
 	// extending the selection towards beginning is done for us on iOS 7
@@ -2201,9 +2202,12 @@ typedef enum
 		replacementTextRange = [DTTextRange textRangeFromStart:delStart toEnd:[replacementTextRange start]];
 	}
 
+    NSLog(@"delete selected range before range %@", NSStringFromRange(replacementTextRange.NSRangeValue));
 	// make sure that the beginning is before any fields
 	UITextPosition *delStart = [self positionSkippingFieldsFromPosition:replacementTextRange.start withinRange:entireDocument inDirection:UITextStorageDirectionBackward];
 	replacementTextRange = [DTTextRange textRangeFromStart:delStart toEnd:replacementTextRange.end];
+    
+   NSLog(@"delete selected range after range %@", NSStringFromRange(replacementTextRange.NSRangeValue));
 	
 	NSAttributedString *replacementText = [[NSAttributedString alloc] init];
 	
@@ -2222,7 +2226,7 @@ typedef enum
 	{
 		[self.undoManager beginUndoGrouping];
 	}
-	
+    NSLog(@"delete back range %@", NSStringFromRange(replacementTextRange.NSRangeValue));
 	// Delete
     [self replaceRange:replacementTextRange withText:replacementText];
 	

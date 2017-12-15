@@ -18,6 +18,8 @@
 #import "QSRichTextEditorBodyCell.h"
 #import <YYText/YYText.h>
 #import "QSRichTextEditorImageView.h"
+#import "QSRichTextSeperatorAttachment.h"
+#import "QSHyperlinkAttachment.h"
 
 CGFloat const toolBarHeight = 44;
 CGFloat const editorMoreViewHeight = 200;
@@ -57,7 +59,7 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationItem.leftBarButtonItem = [QMUINavigationButton barButtonItemWithType:QMUINavigationButtonTypeBack title:nil position:QMUINavigationButtonPositionLeft target:self action:nil];
+    self.navigationItem.leftBarButtonItem = [QMUINavigationButton barButtonItemWithType:QMUINavigationButtonTypeNormal title:@"打印 Html" tintColor:UIColorBlack position:QMUINavigationButtonPositionLeft target:self action:@selector(showHtmlString:)];
 	self.state = QSRichEditorStateNoneContent;
 	[self configDefaultStyle];
     self.keyboardManager.delegateEnabled = YES;
@@ -264,6 +266,7 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 -(RichTextEditorMoreView *)editorMoreView {
 	if (!_editorMoreView) {
 		_editorMoreView = [[RichTextEditorMoreView alloc]initWithFrame:CGRectMake(0, toolBarHeight, self.view.bounds.size.width, editorMoreViewHeight)];
+        _editorMoreView.actionDelegate = self;
 	}
 	return _editorMoreView;
 }
@@ -479,30 +482,30 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 
 - (UIView *)attributedTextContentView:(DTAttributedTextContentView *)attributedTextContentView viewForAttachment:(DTTextAttachment *)attachment frame:(CGRect)frame
 {
-    QSRichTextEditorImageView *imageView = [[QSRichTextEditorImageView alloc]initWithFrame:frame];
-    imageView.actionDelegate = self;
-    [imageView setImage:[UIImage qmui_imageWithColor:[UIColor qmui_randomColor]]];
-//    NSNumber *cacheKey = [NSNumber numberWithUnsignedInteger:[attachment hash]];
-//
-//    UIImageView *imageView = [self.imageViewCache objectForKey:cacheKey];
-//
-//    if (imageView)
-//    {
-//        imageView.frame = frame;
-//        return imageView;
-//    }
-//
-//    if ([attachment isKindOfClass:[DTImageTextAttachment class]])
-//    {
-//        DTImageTextAttachment *imageAttachment = (DTImageTextAttachment *)attachment;
-//
-//        imageView = [[UIImageView alloc] initWithFrame:frame];
-//        imageView.image = imageAttachment.image;
-//
-//        [self.imageViewCache setObject:imageView forKey:cacheKey];
-//
+    if ([attachment isKindOfClass:[DTImageTextAttachment class]])
+    {
+        QSRichTextEditorImageView *imageView = [[QSRichTextEditorImageView alloc]initWithFrame:frame];
+        imageView.actionDelegate = self;
+        [imageView setImage:[UIImage qmui_imageWithColor:[UIColor qmui_randomColor]]];
         return imageView;
-//    }
+    } else if ([attachment isKindOfClass:[QSRichTextSeperatorAttachment class]]) {
+        
+        UIView *line = [[UIView alloc]initWithFrame:frame];
+        line.backgroundColor = [UIColor lightGrayColor];
+        line.qmui_height = PixelOne;
+        return line;
+    }  else if ([attachment isKindOfClass:[QSHyperlinkAttachment class]]) {
+        
+        QMUIButton *linkButon = [[QMUIButton alloc]initWithFrame:frame];
+        [linkButon setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+        linkButon.qmui_borderColor = [UIColor lightGrayColor];
+        linkButon.qmui_borderWidth = PixelOne;
+        linkButon.qmui_borderPosition = QMUIImageBorderPositionBottom;
+        [linkButon setTitle:((QSHyperlinkAttachment *) attachment).title forState:UIControlStateNormal];
+        [linkButon addTarget:self action:@selector(editHyperlink) forControlEvents:UIControlEventTouchUpInside];
+        return linkButon;
+    }
+    return nil;
 }
 
 - (UIView *)attributedTextContentView:(DTAttributedTextContentView *)attributedTextContentView viewForLink:(NSURL *)url identifier:(NSString *)identifier frame:(CGRect)frame
@@ -524,6 +527,22 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 }
 
 #pragma mark - DTFormatDelegate
+
+-(void)editHyperlink {
+    [self.editorMoreView editHyperlink];
+}
+
+//插入分割线
+-(void)insertSeperator {
+    QSRichTextSeperatorAttachment *line = [[QSRichTextSeperatorAttachment alloc]init];
+    CGFloat w = [UIScreen mainScreen].bounds.size.width;
+    CGFloat h = 0.5;
+    CGSize size = CGSizeMake(w-40, h);
+    line.displaySize = size;
+    line.originalSize = size;
+    [self.richEditor replaceRange:self.richEditor.selectedTextRange withAttachment:line inParagraph:NO];
+}
+
 //插入图片
 - (void)replaceCurrentSelectionWithPhoto
 {
@@ -616,10 +635,18 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 }
 
 //设置超链接
-- (void)applyHyperlinkToSelectedText:(NSURL *)url
+- (void)insertHyperlink:(HyperlinkModel *)link
 {
 	UITextRange *range = self.richEditor.selectedTextRange;
-	[self.richEditor toggleHyperlinkInRange:range URL:url];
+    NSURL *url = [NSURL URLWithString:link.link];
+    NSString *title = link.title;
+    QSHyperlinkAttachment *linkAttachment = [[QSHyperlinkAttachment alloc]init];
+//    [title width]
+    linkAttachment.displaySize = CGSizeMake(80, 30);
+    linkAttachment.originalSize = CGSizeMake(80, 30);
+    linkAttachment.title = title;
+    linkAttachment.hyperLinkURL = url;
+    [self.richEditor replaceRange:range withAttachment:linkAttachment inParagraph:NO];
 }
 
 -(void)richTextEditorOpenMoreView {
@@ -634,7 +661,10 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 #pragma mark - QSRichTextEditorImageViewDelegate
 -(void)editorViewDeleteImage:(UIButton *)sender {
     DTTextPosition *position = [self moveCursorCloseToAttachment:sender];
-    DTTextRange *range = [DTTextRange rangeWithNSRange:NSMakeRange(position.location, 1)];
+    CGFloat location = position.location > 0 ? position.location : position.location;
+    DTTextRange *range = [DTTextRange rangeWithNSRange:NSMakeRange(location-1, 1)];
+    QMUILog(@"delete range %@", NSStringFromRange(range.NSRangeValue));
+    [self.richEditor setSelectedTextRange:range];
     [self.richEditor replaceRange:range withText:@""];
 }
 
@@ -644,8 +674,7 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 
 -(void)editorViewCaptionImage:(UIButton *)sender  {
     DTTextPosition *position = [self moveCursorCloseToAttachment:sender];
-    DTTextRange *range = [DTTextRange rangeWithNSRange:NSMakeRange(position.location+1, 1)];
-    [self.richEditor insertText:@""];
+    DTTextRange *range = [DTTextRange rangeWithNSRange:NSMakeRange(position.location, 1)];
     [self formatDidChangeTextAlignment:kCTTextAlignmentCenter];
 }
 
@@ -668,20 +697,12 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 }
 
 -(DTTextPosition *)moveCursorCloseToAttachment:(UIButton *)sender offSet:(NSInteger)offset{
-//    if (![self isFirstResponder]) {
-//        [self.richEditor becomeFirstResponder];
-//    }
     
     CGPoint touchPoint = [sender.superview convertPoint:sender.center toView:self.richEditor];
-    [self.richEditor qmui_performSelector:NSSelectorFromString(@"moveCursorToPositionClosestToLocation:") withArguments:&touchPoint];
-    
-    DTTextRange *selectedRange = (DTTextRange *)self.richEditor.selectedTextRange;
-    DTTextPosition *start = (DTTextPosition *)selectedRange.start;
-    DTTextRange *range = [DTTextRange rangeWithNSRange:NSMakeRange(start.location, 1)];
-    [self.richEditor setSelectedTextRange:range animated:YES];
-    
     DTTextPosition *position = (DTTextPosition *)[self.richEditor closestPositionToPoint:touchPoint];
-    QMUILog(@"image position %lu", position.location);
+    QMUILog(@"closestPositionToPoint position %lu", (unsigned long)position.location);
+    
+    
     return position;
 }
 

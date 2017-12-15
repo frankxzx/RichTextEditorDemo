@@ -12,5 +12,6 @@
 @interface RichTextEditorMoreView : UIView
 
 @property (weak, nonatomic) id<RichTextEditorAction> actionDelegate;
+-(void)editHyperlink;
 
 @end

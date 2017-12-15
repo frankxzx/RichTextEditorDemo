@@ -9,8 +9,9 @@
 #import "RichTextEditorMoreView.h"
 #import <QMUIKit/QMUIKit.h>
 #import "RichTextEditorAction.h"
+#import "QSTextFieldsViewController.h"
 
-@interface RichTextEditorMoreView()
+@interface RichTextEditorMoreView() <QMUITextFieldDelegate>
 
 @property(nonatomic, strong) QMUIButton *videoButton;
 @property(nonatomic, strong) QMUIButton *audioButton;
@@ -85,9 +86,39 @@
 }
 
 -(void)insertHyperlink {
-	if ([self.actionDelegate respondsToSelector:@selector(insertHyperlink)]) {
-		[self.actionDelegate insertHyperlink];
-	}
+    QSTextFieldsViewController *dialogViewController = [[QSTextFieldsViewController alloc] init];
+    dialogViewController.headerViewHeight = 70;
+    dialogViewController.headerViewBackgroundColor = UIColorWhite;
+    dialogViewController.title = @"超链接";
+    dialogViewController.titleView.horizontalTitleFont = UIFontBoldMake(20);
+    dialogViewController.titleLabelFont = UIFontBoldMake(20);
+    dialogViewController.textField1.delegate = self;
+    dialogViewController.textField2.delegate = self;
+    dialogViewController.textField1.placeholder = @"请输入标题（非必需）";
+    dialogViewController.textField2.placeholder = @"输入网址";;
+    [dialogViewController addCancelButtonWithText:@"取消" block:nil];
+    
+    __weak __typeof(QSTextFieldsViewController *)weakDialog = dialogViewController;
+    [dialogViewController addSubmitButtonWithText:@"确定" block:^(QMUIDialogViewController *aDialogViewController) {
+        [aDialogViewController hide];
+        if ([self.actionDelegate respondsToSelector:@selector(insertHyperlink:)]) {
+            HyperlinkModel *link = [[HyperlinkModel alloc]init];
+            link.title = weakDialog.textField1.text;
+            link.link = weakDialog.textField2.text;
+            [self.actionDelegate insertHyperlink:link];
+        }
+    }];
+    [dialogViewController show];
 }
+
+-(void)editHyperlink {
+    [self insertHyperlink];
+}
+
+#pragma mark - <QMUITextFieldDelegate>
+
+@end
+
+@implementation HyperlinkModel
 
 @end

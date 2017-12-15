@@ -196,11 +196,11 @@
         sender.image = UIImageMake(@"toolbar_order_number");
         sender.tag = DTCSSListStyleTypeDecimal;
     } else if (sender.tag == DTCSSListStyleTypeCircle) {
-        sender.image = UIImageMake(@"toolbar_order_dot");
-        sender.tag = DTCSSListStyleTypeCircle;
-    } else if (sender.tag == DTCSSListStyleTypeDecimal) {
         sender.image = UIImageMake(@"toolbar_order");
         sender.tag = DTCSSListStyleTypeNone;
+    } else if (sender.tag == DTCSSListStyleTypeDecimal) {
+        sender.image = UIImageMake(@"toolbar_order_dot");
+        sender.tag = DTCSSListStyleTypeCircle;
     }
     
 	if ([self.formatDelegate respondsToSelector:@selector(toggleListType:)]) {

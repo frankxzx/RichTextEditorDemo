@@ -15,6 +15,13 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorTextStyle) {
     QSRichEditorTextStyleLarger
 };
 
+@interface HyperlinkModel: NSObject
+
+@property(nonatomic, strong) NSString *title;
+@property(nonatomic, strong) NSString *link;
+
+@end
+
 @protocol RichTextEditorAction <NSObject>
 
 - (void)formatDidSelectTextStyle:(QSRichEditorTextStyle)style;
@@ -26,13 +33,12 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorTextStyle) {
 - (void)decreaseTabulation;
 - (void)increaseTabulation;
 - (void)toggleListType:(DTCSSListStyleType)listType;
-- (void)applyHyperlinkToSelectedText:(NSURL *)url;
+- (void)insertHyperlink:(HyperlinkModel *)link;
 - (void)replaceCurrentSelectionWithPhoto;
 
 -(void)formatDidToggleBlockquote;
 -(void)insertVideo;
 -(void)insertAudio;
--(void)insertHyperlink;
 -(void)insertSeperator;
 
 -(void)richTextEditorOpenMoreView;
