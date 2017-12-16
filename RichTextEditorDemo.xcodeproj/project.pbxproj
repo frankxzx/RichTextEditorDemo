@@ -28,6 +28,7 @@
 		016CCCF31FDA790B000493F7 /* QSRichTextEditorCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 016CCCF21FDA790B000493F7 /* QSRichTextEditorCell.m */; };
 		016F49DD1FE3B8ED00768E73 /* QSRichTextSeperatorAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 016F49DC1FE3B8ED00768E73 /* QSRichTextSeperatorAttachment.m */; };
 		016F49E01FE3BE5300768E73 /* QSHyperlinkAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 016F49DF1FE3BE5300768E73 /* QSHyperlinkAttachment.m */; };
+		01957E4C1FE515F200F1281D /* DTImageTextAttachment+qs.m in Sources */ = {isa = PBXBuildFile; fileRef = 01957E4B1FE515F200F1281D /* DTImageTextAttachment+qs.m */; };
 		84490411E7C9011FDFD429B4 /* Pods_RichTextEditorDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B54ABF0B1BDED20575A5DA49 /* Pods_RichTextEditorDemo.framework */; };
 /* End PBXBuildFile section */
 
@@ -72,6 +73,8 @@
 		016F49DC1FE3B8ED00768E73 /* QSRichTextSeperatorAttachment.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSRichTextSeperatorAttachment.m; sourceTree = "<group>"; };
 		016F49DE1FE3BE5300768E73 /* QSHyperlinkAttachment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSHyperlinkAttachment.h; sourceTree = "<group>"; };
 		016F49DF1FE3BE5300768E73 /* QSHyperlinkAttachment.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSHyperlinkAttachment.m; sourceTree = "<group>"; };
+		01957E4A1FE515F200F1281D /* DTImageTextAttachment+qs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DTImageTextAttachment+qs.h"; sourceTree = "<group>"; };
+		01957E4B1FE515F200F1281D /* DTImageTextAttachment+qs.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "DTImageTextAttachment+qs.m"; sourceTree = "<group>"; };
 		4295F660BADBD64DB65E20C2 /* Pods-RichTextEditorDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RichTextEditorDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-RichTextEditorDemo/Pods-RichTextEditorDemo.release.xcconfig"; sourceTree = "<group>"; };
 		B54ABF0B1BDED20575A5DA49 /* Pods_RichTextEditorDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RichTextEditorDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF97F62057F5CFBB40AA3EB3 /* Pods-RichTextEditorDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RichTextEditorDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RichTextEditorDemo/Pods-RichTextEditorDemo.debug.xcconfig"; sourceTree = "<group>"; };
@@ -157,6 +160,8 @@
 				016F49DC1FE3B8ED00768E73 /* QSRichTextSeperatorAttachment.m */,
 				016F49DE1FE3BE5300768E73 /* QSHyperlinkAttachment.h */,
 				016F49DF1FE3BE5300768E73 /* QSHyperlinkAttachment.m */,
+				01957E4A1FE515F200F1281D /* DTImageTextAttachment+qs.h */,
+				01957E4B1FE515F200F1281D /* DTImageTextAttachment+qs.m */,
 			);
 			path = demo;
 			sourceTree = "<group>";
@@ -320,6 +325,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				016CCCEA1FDA6BEC000493F7 /* QSRichTextEditorCoverCell.m in Sources */,
+				01957E4C1FE515F200F1281D /* DTImageTextAttachment+qs.m in Sources */,
 				0168006C1FDFC39800C66E28 /* DTRichTextEditorView+qs.m in Sources */,
 				016CCCF01FDA6C2E000493F7 /* QSRichTextEditorBodyCell.m in Sources */,
 				0168008A1FE36B0F00C66E28 /* QSTextFieldsViewController.m in Sources */,

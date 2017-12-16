@@ -55,26 +55,26 @@
 }
 
 -(void)captionImage:(id)sender {
-    if ([self.actionDelegate respondsToSelector:@selector(editorViewCaptionImage:)]) {
-        [self.actionDelegate editorViewCaptionImage:sender];
+    if ([self.actionDelegate respondsToSelector:@selector(editorViewCaptionImage:attachment:)]) {
+        [self.actionDelegate editorViewCaptionImage:sender attachment:self.attachment];
     }
 }
 
 -(void)editorImage:(id)sender {
-    if ([self.actionDelegate respondsToSelector:@selector(editorViewEditImage:)]) {
-        [self.actionDelegate editorViewEditImage:sender];
+    if ([self.actionDelegate respondsToSelector:@selector(editorViewEditImage:attachment:)]) {
+        [self.actionDelegate editorViewEditImage:sender attachment:self.attachment];
     }
 }
 
 -(void)deleteImage:(id)sender {
-    if ([self.actionDelegate respondsToSelector:@selector(editorViewDeleteImage:)]) {
-        [self.actionDelegate editorViewDeleteImage:sender];
+    if ([self.actionDelegate respondsToSelector:@selector(editorViewDeleteImage:attachment:)]) {
+        [self.actionDelegate editorViewDeleteImage:sender attachment:self.attachment];
     }
 }
 
 -(void)replaceImage:(id)sender {
-    if ([self.actionDelegate respondsToSelector:@selector(editorViewReplaceImage:)]) {
-        [self.actionDelegate editorViewReplaceImage:sender];
+    if ([self.actionDelegate respondsToSelector:@selector(editorViewReplaceImage:attachment:)]) {
+        [self.actionDelegate editorViewReplaceImage:sender attachment:self.attachment];
     }
 }
 

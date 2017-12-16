@@ -20,6 +20,7 @@
 #import "QSRichTextEditorImageView.h"
 #import "QSRichTextSeperatorAttachment.h"
 #import "QSHyperlinkAttachment.h"
+#import "DTImageTextAttachment+qs.h"
 
 CGFloat const toolBarHeight = 44;
 CGFloat const editorMoreViewHeight = 200;
@@ -34,7 +35,8 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 	QSRichEditorStateWirtingToHtml,//原生转译成 Html
 	QSRichEditorStatePreview,//预览富文本
 	QSRichEditorStateAttachmentUploding,//上传语音 短视频
-	QSRichEditorStateDone//完成上传，同步服务器
+	QSRichEditorStateDone,//完成上传，同步服务器
+    QSRichEditorStateCaption
 };
 
 @interface QSRichEditorViewController () <UIScrollViewDelegate,
@@ -114,6 +116,8 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 			break;
 		case QSRichEditorStateDone:
 			break;
+        case QSRichEditorStateCaption:
+            break;
 	}
 	_state = state;
 }
@@ -485,6 +489,7 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
     if ([attachment isKindOfClass:[DTImageTextAttachment class]])
     {
         QSRichTextEditorImageView *imageView = [[QSRichTextEditorImageView alloc]initWithFrame:frame];
+        imageView.attachment = attachment;
         imageView.actionDelegate = self;
         [imageView setImage:[UIImage qmui_imageWithColor:[UIColor qmui_randomColor]]];
         return imageView;
@@ -500,7 +505,7 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
         [linkButon setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
         linkButon.qmui_borderColor = [UIColor lightGrayColor];
         linkButon.qmui_borderWidth = PixelOne;
-        linkButon.qmui_borderPosition = QMUIImageBorderPositionBottom;
+        linkButon.qmui_borderPosition = QMUIBorderViewPositionBottom;
         [linkButon setTitle:((QSHyperlinkAttachment *) attachment).title forState:UIControlStateNormal];
         [linkButon addTarget:self action:@selector(editHyperlink) forControlEvents:UIControlEventTouchUpInside];
         return linkButon;
@@ -659,27 +664,42 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 }
 
 #pragma mark - QSRichTextEditorImageViewDelegate
--(void)editorViewDeleteImage:(UIButton *)sender {
-    DTTextPosition *position = [self moveCursorCloseToAttachment:sender];
-    CGFloat location = position.location > 0 ? position.location : position.location;
-    DTTextRange *range = [DTTextRange rangeWithNSRange:NSMakeRange(location-1, 1)];
-    QMUILog(@"delete range %@", NSStringFromRange(range.NSRangeValue));
-    [self.richEditor setSelectedTextRange:range];
+//删除
+-(void)editorViewDeleteImage:(UIButton *)sender attachment:(DTImageTextAttachment *)attachment{
+    DTTextRange *range = [self rangeOfAttachment:sender];
     [self.richEditor replaceRange:range withText:@""];
 }
 
--(void)editorViewEditImage:(UIButton *)sender  {
-    [self moveCursorCloseToAttachment:sender];
+//编辑
+-(void)editorViewEditImage:(UIButton *)sender attachment:(DTImageTextAttachment *)attachment {
+    [self rangeOfAttachment:sender];
 }
 
--(void)editorViewCaptionImage:(UIButton *)sender  {
-    DTTextPosition *position = [self moveCursorCloseToAttachment:sender];
-    DTTextRange *range = [DTTextRange rangeWithNSRange:NSMakeRange(position.location, 1)];
-    [self formatDidChangeTextAlignment:kCTTextAlignmentCenter];
+//注释
+-(void)editorViewCaptionImage:(UIButton *)sender attachment:(DTImageTextAttachment *)attachment {
+    CGPoint touchPoint = [sender.superview convertPoint:sender.center toView:self.richEditor];
+    
+    [self.richEditor qmui_performSelector:NSSelectorFromString(@"moveCursorToPositionClosestToLocation:") withArguments:&touchPoint];
+    //光标会移动到 Attachment的上方 所以往后移动一格
+    DTTextRange *currentTextRange = (DTTextRange *)self.richEditor.selectedTextRange;
+    CGFloat start = currentTextRange.NSRangeValue.location + 1;
+    DTTextRange *correctRange = [DTTextRange rangeWithNSRange:NSMakeRange(start, 0)];
+    [self.richEditor setSelectedTextRange:correctRange];
+    
+    if (!attachment.isCaption) {
+        //换行居中
+        [self.richEditor insertText:@"\n"];
+        [self.richEditor applyTextAlignment:kCTTextAlignmentCenter toParagraphsContainingRange:self.richEditor.selectedTextRange];
+        attachment.isCaption = YES;
+    } else {
+        //选中之前已经批注的文字
+        
+    }
 }
 
--(void)editorViewReplaceImage:(UIButton *)sender {
-    DTImageTextAttachment *attachment = [[DTImageTextAttachment alloc] initWithElement:nil options:nil];
+//替换
+-(void)editorViewReplaceImage:(UIButton *)sender attachment:(DTImageTextAttachment *)attachment {
+    DTImageTextAttachment *replaceAttachment = [[DTImageTextAttachment alloc] initWithElement:nil options:nil];
     attachment.image = (id)[UIImage qmui_imageWithColor:[UIColor qmui_randomColor]];
     CGFloat w = [UIScreen mainScreen].bounds.size.width;
     CGFloat h = [UIScreen mainScreen].bounds.size.height / 3;
@@ -687,23 +707,27 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
     attachment.displaySize = size;
     attachment.originalSize = size;
     
-    DTTextPosition *position = [self moveCursorCloseToAttachment:sender];
-    DTTextRange *range = [DTTextRange rangeWithNSRange:NSMakeRange(position.location, 1)];
-    [self.richEditor replaceRange:range withAttachment:attachment inParagraph:NO];
+    DTTextRange *range = [self rangeOfAttachment:sender];
+    [self.richEditor replaceRange:range withAttachment:replaceAttachment inParagraph:NO];
 }
 
--(DTTextPosition *)moveCursorCloseToAttachment:(UIButton *)sender {
-    return [self moveCursorCloseToAttachment:sender offSet:0];
-}
-
--(DTTextPosition *)moveCursorCloseToAttachment:(UIButton *)sender offSet:(NSInteger)offset{
-    
+-(DTTextRange *)rangeOfAttachment:(UIButton *)sender {
     CGPoint touchPoint = [sender.superview convertPoint:sender.center toView:self.richEditor];
-    DTTextPosition *position = (DTTextPosition *)[self.richEditor closestPositionToPoint:touchPoint];
-    QMUILog(@"closestPositionToPoint position %lu", (unsigned long)position.location);
+    DTTextPosition *touchPosition = (DTTextPosition *)[self.richEditor closestPositionToPoint:touchPoint];
+    DTTextPosition *endPosition = (DTTextPosition *)[self.richEditor endOfDocument];
     
+    QMUILog(@"closestPositionToPoint position %lu", (unsigned long)touchPosition.location);
+    QMUILog(@"end docoment position %lu", (unsigned long)endPosition.location);
     
-    return position;
+    DTTextPosition *finalPosition;
+    if (touchPosition.location == endPosition.location) {
+        finalPosition = [DTTextPosition textPositionWithLocation:touchPosition.location -1];
+    } else {
+        finalPosition = touchPosition;
+    }
+    
+    DTTextRange *range = [DTTextRange rangeWithNSRange:NSMakeRange(finalPosition.location, 1)];
+    return range;
 }
 
 #pragma mark - UIScrollView Delegate

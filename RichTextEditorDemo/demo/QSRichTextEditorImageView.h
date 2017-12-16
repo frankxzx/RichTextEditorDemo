@@ -7,19 +7,21 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <DTCoreText/DTCoreText.h>
 
 @protocol QSRichTextEditorImageViewDelegate <NSObject>
 
--(void)editorViewDeleteImage:(UIButton *)sender;
--(void)editorViewEditImage:(UIButton *)sender;
--(void)editorViewCaptionImage:(UIButton *)sender;
--(void)editorViewReplaceImage:(UIButton *)sender;
+-(void)editorViewDeleteImage:(UIButton *)sender attachment:(DTImageTextAttachment *)attachment;
+-(void)editorViewEditImage:(UIButton *)sender attachment:(DTImageTextAttachment *)attachment;
+-(void)editorViewCaptionImage:(UIButton *)sender attachment:(DTImageTextAttachment *)attachment;
+-(void)editorViewReplaceImage:(UIButton *)sender attachment:(DTImageTextAttachment *)attachment;
 
 @end
 
 @interface QSRichTextEditorImageView : UIView
 
 @property(nonatomic, weak) id <QSRichTextEditorImageViewDelegate> actionDelegate;
+@property(nonatomic, strong) DTImageTextAttachment *attachment;
 
 -(void)setImage:(UIImage *)image;
 
