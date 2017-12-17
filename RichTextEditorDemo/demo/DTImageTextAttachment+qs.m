@@ -24,11 +24,20 @@ static char kIsCaption;
 
 static char kCaptionText;
 -(void)setCaptionText:(NSString *)captionText {
-    objc_setAssociatedObject(self, &kCaptionText, captionText, OBJC_ASSOCIATION_COPY);
+    objc_setAssociatedObject(self, &kCaptionText, captionText, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
 -(NSString *)captionText {
      return (NSString *)objc_getAssociatedObject(self, &kCaptionText);
+}
+
+static char kCaptionRange;
+-(void)setCaptionRange:(DTTextRange *)captionRange {
+    objc_setAssociatedObject(self, &kCaptionRange, captionRange, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+-(DTTextRange *)captionRange {
+     return (DTTextRange *)objc_getAssociatedObject(self, &kCaptionRange);
 }
 
 @end

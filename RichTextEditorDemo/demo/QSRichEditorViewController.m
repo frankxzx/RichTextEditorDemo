@@ -99,6 +99,7 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 			break;
 		case QSRichEditorStateInputing:
 			self.doneItem.enabled = NO;
+            self.richEditor.defaultFontSize = 16;
 			break;
 		case QSRichEditorStateScrolling:
 			self.doneItem.enabled = NO;
@@ -117,6 +118,7 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 		case QSRichEditorStateDone:
 			break;
         case QSRichEditorStateCaption:
+            self.richEditor.defaultFontSize = 14;
             break;
 	}
 	_state = state;
@@ -434,14 +436,17 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 // RichTextEditor 选中文本生命周期
 - (BOOL)editorView:(DTRichTextEditorView *)editorView shouldChangeTextInRange:(NSRange)range replacementText:(NSAttributedString *)text
 {
-	NSLog(@"editorView:shouldChangeTextInRange:replacementText:");
-	
+    QMUILog(@"editorView:shouldChangeTextInRange:replacementText:%@", text.string);
+    //当处于批注状态时，输入回车键结束批注状态
+    if (self.state == QSRichEditorStateCaption || [text.string isEqualToString:@"\n"]) {
+        self.state = QSRichEditorStateInputing;
+    }
 	return YES;
 }
 
 - (void)editorViewDidChangeSelection:(DTRichTextEditorView *)editorView
 {
-	NSLog(@"editorViewDidChangeSelection:");
+	QMUILog(@"editorViewDidChangeSelection:");
 	
 //    if( self.formatViewController && [self.richEditor inputView] == self.formatViewController.view ){
 //        self.formatViewController.fontDescriptor = [self.richEditor fontDescriptorForRange:self.richEditor.selectedTextRange];
@@ -450,7 +455,7 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 
 - (void)editorViewDidChange:(DTRichTextEditorView *)editorView
 {
-	NSLog(@"editorViewDidChange:");
+	QMUILog(@"editorViewDidChange:");
 }
 
 //选中文本后出现的 UIMenu 点击事件
@@ -489,7 +494,7 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
     if ([attachment isKindOfClass:[DTImageTextAttachment class]])
     {
         QSRichTextEditorImageView *imageView = [[QSRichTextEditorImageView alloc]initWithFrame:frame];
-        imageView.attachment = attachment;
+        imageView.attachment = (DTImageTextAttachment *)attachment;
         imageView.actionDelegate = self;
         [imageView setImage:[UIImage qmui_imageWithColor:[UIColor qmui_randomColor]]];
         return imageView;
@@ -695,6 +700,8 @@ typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
         //选中之前已经批注的文字
         
     }
+//    attachment.captionRange.start = self.richEditor.selectedTextRange.start;
+    self.state = QSRichEditorStateCaption;
 }
 
 //替换
