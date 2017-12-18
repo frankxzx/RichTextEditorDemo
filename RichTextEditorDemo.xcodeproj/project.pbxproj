@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		015167DD1FE76B6D00F2F1C7 /* DTImageCaptionAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 015167DC1FE76B6D00F2F1C7 /* DTImageCaptionAttachment.m */; };
 		0168006C1FDFC39800C66E28 /* DTRichTextEditorView+qs.m in Sources */ = {isa = PBXBuildFile; fileRef = 0168006B1FDFC39800C66E28 /* DTRichTextEditorView+qs.m */; };
 		016800741FE106AE00C66E28 /* QSRichTextEditorImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 016800731FE106AE00C66E28 /* QSRichTextEditorImageView.m */; };
 		0168008A1FE36B0F00C66E28 /* QSTextFieldsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 016800891FE36B0F00C66E28 /* QSTextFieldsViewController.m */; };
@@ -33,6 +34,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		015167DB1FE76B6D00F2F1C7 /* DTImageCaptionAttachment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DTImageCaptionAttachment.h; sourceTree = "<group>"; };
+		015167DC1FE76B6D00F2F1C7 /* DTImageCaptionAttachment.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DTImageCaptionAttachment.m; sourceTree = "<group>"; };
 		0168006A1FDFC39800C66E28 /* DTRichTextEditorView+qs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DTRichTextEditorView+qs.h"; sourceTree = "<group>"; };
 		0168006B1FDFC39800C66E28 /* DTRichTextEditorView+qs.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "DTRichTextEditorView+qs.m"; sourceTree = "<group>"; };
 		016800721FE106AE00C66E28 /* QSRichTextEditorImageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSRichTextEditorImageView.h; sourceTree = "<group>"; };
@@ -160,6 +163,8 @@
 				016F49DC1FE3B8ED00768E73 /* QSRichTextSeperatorAttachment.m */,
 				016F49DE1FE3BE5300768E73 /* QSHyperlinkAttachment.h */,
 				016F49DF1FE3BE5300768E73 /* QSHyperlinkAttachment.m */,
+				015167DB1FE76B6D00F2F1C7 /* DTImageCaptionAttachment.h */,
+				015167DC1FE76B6D00F2F1C7 /* DTImageCaptionAttachment.m */,
 				01957E4A1FE515F200F1281D /* DTImageTextAttachment+qs.h */,
 				01957E4B1FE515F200F1281D /* DTImageTextAttachment+qs.m */,
 			);
@@ -339,6 +344,7 @@
 				016CCCF31FDA790B000493F7 /* QSRichTextEditorCell.m in Sources */,
 				016CCCCD1FD92905000493F7 /* main.m in Sources */,
 				016CCCDF1FD92A7E000493F7 /* QSRichEditorConfig.m in Sources */,
+				015167DD1FE76B6D00F2F1C7 /* DTImageCaptionAttachment.m in Sources */,
 				016CCCBF1FD92905000493F7 /* AppDelegate.m in Sources */,
 				016800741FE106AE00C66E28 /* QSRichTextEditorImageView.m in Sources */,
 				016CCCE41FD92A7E000493F7 /* RichTextEditorToolBar.m in Sources */,

@@ -40,4 +40,13 @@ static char kCaptionRange;
      return (DTTextRange *)objc_getAssociatedObject(self, &kCaptionRange);
 }
 
+static char kCaptionAttachment;
+-(void)setCaptionAttachment:(DTImageCaptionAttachment *)captionAttachment {
+    objc_setAssociatedObject(self, &kCaptionAttachment, captionAttachment, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+-(DTImageCaptionAttachment *)captionAttachment {
+    return (DTImageCaptionAttachment *)objc_getAssociatedObject(self, &kCaptionAttachment);
+}
+
 @end

@@ -8,12 +8,14 @@
 
 #import <DTCoreText/DTCoreText.h>
 #import <DTRichTextEditor/DTRichTextEditor.h>
+#import "DTImageCaptionAttachment.h"
 
 @interface DTImageTextAttachment (qs)
 
 @property(nonatomic, assign) BOOL isCaption;
 @property(nonatomic, copy) NSString *captionText;
 @property(nonatomic, strong) DTTextRange *captionRange;
+@property(nonatomic, strong) DTImageCaptionAttachment *captionAttachment;
 
 @end
 
