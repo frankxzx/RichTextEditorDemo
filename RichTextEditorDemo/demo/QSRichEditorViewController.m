@@ -152,6 +152,18 @@ typedef NS_OPTIONS(NSUInteger, QSImageAttachmentState) {
 }
 
 #pragma mark - Editor Actions
+
+//二次编辑超链接
+-(void)editHyperlink {
+    [self.editorMoreView editHyperlink];
+}
+
+//二次编辑图片注释
+-(void)editImageCaption:(QMUIButton *)sender {
+    CGPoint touchPoint = [sender.superview convertPoint:sender.center toView:self.richEditor];
+    [self.richEditor qmui_performSelector:NSSelectorFromString(@"moveCursorToPositionClosestToLocation:") withArguments:&touchPoint];
+}
+
 //点击完成按钮
 -(void)doneButtonClick:(id)sender {
 	self.state = QSRichEditorStateWirtingToHtml;
@@ -337,18 +349,6 @@ typedef NS_OPTIONS(NSUInteger, QSImageAttachmentState) {
     return _keyboardManager;
 }
 
-//选中文本出现的 UIMenu
-//@synthesize menuItems = _menuItems;
-//- (NSArray *)menuItems {
-//    if (!_menuItems) {
-//        UIMenuItem *insertItem = [[UIMenuItem alloc] initWithTitle:@"Insert" action:@selector(displayInsertMenu:)];
-//        UIMenuItem *insertStarItem = [[UIMenuItem alloc] initWithTitle:@"★" action:@selector(insertStar:)];
-//        UIMenuItem *insertCheckItem = [[UIMenuItem alloc] initWithTitle:@"☆" action:@selector(insertWhiteStar:)];
-//        _menuItems = [NSMutableArray arrayWithArray:@[insertItem, insertStarItem, insertCheckItem]];
-//    }
-//    return _menuItems;
-//}
-
 //图片缓存
 - (NSCache *)imageCache {
 	if (!_imageCache) {
@@ -461,28 +461,23 @@ typedef NS_OPTIONS(NSUInteger, QSImageAttachmentState) {
 // RichTextEditor 选中文本生命周期
 - (BOOL)editorView:(DTRichTextEditorView *)editorView shouldChangeTextInRange:(NSRange)range replacementText:(NSAttributedString *)text {
     
-    if (self.state == QSRichEditorStateCaption) {
-        NSArray *imageAttachments = [self.richEditor.attributedText textAttachmentsWithPredicate:nil class:[DTImageTextAttachment class]];
-        for (DTImageTextAttachment *imageAttachment in imageAttachments) {
-            if ([self.currentEditingAttachment.captionText isEqualToString:imageAttachment.captionText]) {
-                if ([text.string isEqualToString:@"\n"]) {
-                    //退出批注状态
-                }
-                break;
-            }
-        }
-    }
-    
 	return YES;
 }
 
 - (void)editorViewDidChangeSelection:(DTRichTextEditorView *)editorView
 {
 	QMUILog(@"editorViewDidChangeSelection:");
-	
-//    if( self.formatViewController && [self.richEditor inputView] == self.formatViewController.view ){
-//        self.formatViewController.fontDescriptor = [self.richEditor fontDescriptorForRange:self.richEditor.selectedTextRange];
-//    }
+    DTTextRange *selectedRange = (DTTextRange *)editorView.selectedTextRange;
+    NSUInteger textCount = [self.richEditor attributedSubstringForRange:selectedRange].plainTextString.length;
+    if (textCount > 0) {
+        self.editorToolBar.beginTextEditorButton.enabled = YES;
+        self.editorToolBar.blockquoteButton.enabled = YES;
+        self.editorToolBar.photoButton.enabled = NO;
+    } else {
+        self.editorToolBar.beginTextEditorButton.enabled = NO;
+        self.editorToolBar.blockquoteButton.enabled = NO;
+        self.editorToolBar.photoButton.enabled = YES;
+    }
 }
 
 - (void)editorViewDidChange:(DTRichTextEditorView *)editorView
@@ -495,21 +490,6 @@ typedef NS_OPTIONS(NSUInteger, QSImageAttachmentState) {
 {
 	DTTextRange *selectedTextRange = (DTTextRange *)editorView.selectedTextRange;
 	BOOL hasSelection = ![selectedTextRange isEmpty];
-	
-//    if (action == @selector(insertStar:) || action == @selector(insertWhiteStar:))
-//    {
-//        return _showInsertMenu;
-//    }
-//
-//    if (_showInsertMenu)
-//    {
-//        return NO;
-//    }
-//
-//    if (action == @selector(displayInsertMenu:))
-//    {
-//        return (!hasSelection && _showInsertMenu == NO);
-//    }
 	
 	// For fun, disable selectAll:
 	if (action == @selector(selectAll:))
@@ -564,6 +544,17 @@ typedef NS_OPTIONS(NSUInteger, QSImageAttachmentState) {
         textView.textAlignment = NSTextAlignmentCenter;
         
         return textView;
+        
+    } else if ([attachment isKindOfClass:[DTImageCaptionAttachment class]]) {
+        
+        QMUIButton *linkButon = [[QMUIButton alloc]initWithFrame:frame];
+        linkButon.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+        [linkButon setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+        linkButon.titleLabel.font = ((DTImageCaptionAttachment *) attachment).titleFont;
+        [linkButon setTitle:((DTImageCaptionAttachment *) attachment).text forState:UIControlStateNormal];
+        [linkButon addTarget:self action:@selector(editImageCaption:) forControlEvents:UIControlEventTouchUpInside];
+        return linkButon;
+        
     }
     
     return nil;
@@ -605,10 +596,6 @@ typedef NS_OPTIONS(NSUInteger, QSImageAttachmentState) {
 
 #pragma mark - DTFormatDelegate
 
--(void)editHyperlink {
-    [self.editorMoreView editHyperlink];
-}
-
 //插入分割线
 -(void)insertSeperator {
     QSRichTextSeperatorAttachment *line = [[QSRichTextSeperatorAttachment alloc]init];
@@ -625,6 +612,7 @@ typedef NS_OPTIONS(NSUInteger, QSImageAttachmentState) {
 {
 	// make an attachment
 	DTImageTextAttachment *attachment = [[DTImageTextAttachment alloc] initWithElement:nil options:nil];
+//    attachment.captionRange = [self.richEditor selectedTextRange offse]
     attachment.image = (id)[UIImage qmui_imageWithColor:[UIColor qmui_randomColor]];
 	CGFloat w = [UIScreen mainScreen].bounds.size.width;
 	CGFloat h = [UIScreen mainScreen].bounds.size.height / 3;
@@ -737,7 +725,8 @@ typedef NS_OPTIONS(NSUInteger, QSImageAttachmentState) {
 }
 
 -(void)richTextEditorOpenMoreView {
-    [self.editorToolBar setupTextCountItemWithCount:self.richEditor.attributedText.length - 1];
+    
+    [self.editorToolBar setupTextCountItemWithCount:  self.richEditor.attributedText.plainTextString.length - 1];
     [self.richEditor setInputView:self.editorMoreView animated:YES];
 }
 
@@ -759,32 +748,31 @@ typedef NS_OPTIONS(NSUInteger, QSImageAttachmentState) {
 
 //注释
 -(void)editorViewCaptionImage:(UIButton *)sender attachment:(DTImageTextAttachment *)attachment {
-    
-    self.state = QSRichEditorStateCaption;
-
-    CGPoint touchPoint = [sender.superview convertPoint:sender.center toView:self.richEditor];
-    [self.richEditor qmui_performSelector:NSSelectorFromString(@"moveCursorToPositionClosestToLocation:") withArguments:&touchPoint];
-    //光标会移动到 Attachment的上方 所以往后移动一格
-    DTTextRange *currentTextRange = (DTTextRange *)self.richEditor.selectedTextRange;
-    CGFloat start = currentTextRange.NSRangeValue.location + 1;
-    DTTextRange *correctRange = [DTTextRange rangeWithNSRange:NSMakeRange(start, 0)];
-    [self.richEditor setSelectedTextRange:correctRange];
-
-    if (!attachment.isCaption) {
-        //换行居中
-        [self.richEditor insertText:@"\n"];
-        [self.richEditor applyTextAlignment:kCTTextAlignmentCenter toParagraphsContainingRange:self.richEditor.selectedTextRange];
-        attachment.isCaption = YES;
-    } else {
-        //选中之前已经批注的文字
-        if (![attachment.captionRange isEmpty]) {
-            DTTextRange *relpaceRange = attachment.captionRange;
-            [self.richEditor setSelectedTextRange:relpaceRange animated:YES];
-        }
-    }
-
     self.currentEditingAttachment = attachment;
-    attachment.captionRange = [DTTextRange rangeWithNSRange:NSMakeRange(self.selectedTextRange.length, 0)];
+    QMUIDialogTextFieldViewController *captionInputController = [[QMUIDialogTextFieldViewController alloc]init];
+    captionInputController.title = @"图片注释";
+    captionInputController.headerViewHeight = 70;
+    captionInputController.headerViewBackgroundColor = UIColorWhite;
+    captionInputController.titleView.horizontalTitleFont = UIFontBoldMake(20);
+    captionInputController.titleLabelFont = UIFontBoldMake(20);
+    captionInputController.textField.placeholder = @"注释";
+    [captionInputController addCancelButtonWithText:@"取消" block:nil];
+    [captionInputController addSubmitButtonWithText:@"确定" block:^(QMUIDialogViewController *dialogViewController) {
+        [dialogViewController hide];
+        NSString *text = ((QMUIDialogTextFieldViewController *)dialogViewController).textField.text;
+        DTImageCaptionAttachment *caption = [[DTImageCaptionAttachment alloc]init];
+        UIFont *captionTitleFont = [UIFont systemFontOfSize:15];
+        caption.titleFont = captionTitleFont;
+        caption.text = text;
+        CGFloat captionHeight = [text heightForFont:captionTitleFont width:SCREEN_WIDTH - 40];
+        CGSize captionSize = CGSizeMake(SCREEN_WIDTH - 40, captionHeight);
+        caption.displaySize = captionSize;
+        attachment.captionAttachment = caption;
+//        [self.richEditor attributedSubstringForRange:<#(UITextRange *)#>];
+        [self.richEditor replaceRange:self.richEditor.selectedTextRange withAttachment:caption inParagraph:NO];
+        [self.richEditor insertText:@"\n"];
+    }];
+    [captionInputController show];
 }
 
 //替换
@@ -824,6 +812,24 @@ typedef NS_OPTIONS(NSUInteger, QSImageAttachmentState) {
 //上下滑动取消键盘响应
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
 	self.state = QSRichEditorStateScrolling;
+}
+
+-(void)setSelectedRangeObserver {
+    [self.richEditor addObserver:self forKeyPath:@"selectedTextRange" options:kNilOptions context:NULL];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    
+    BOOL isPrior = [[change objectForKey:NSKeyValueChangeNotificationIsPriorKey] boolValue];
+    if (isPrior) return;
+    
+    NSKeyValueChange changeKind = [[change objectForKey:NSKeyValueChangeKindKey] integerValue];
+    if (changeKind != NSKeyValueChangeSetting) return;
+    
+    id newVal = [change objectForKey:NSKeyValueChangeNewKey];
+    if (newVal == [NSNull null]) newVal = nil;
+    
+    QMUILog(@"change selectedTextRange %@",newVal);
 }
 
 - (void)dealloc {

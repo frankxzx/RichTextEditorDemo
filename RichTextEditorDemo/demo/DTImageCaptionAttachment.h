@@ -11,5 +11,6 @@
 @interface DTImageCaptionAttachment : DTTextAttachment
 
 @property(nonatomic, copy) NSString *text;
+@property(nonatomic, strong) UIFont *titleFont;
 
 @end

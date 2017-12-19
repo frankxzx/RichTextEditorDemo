@@ -95,8 +95,13 @@
     dialogViewController.textField1.delegate = self;
     dialogViewController.textField2.delegate = self;
     dialogViewController.textField1.placeholder = @"请输入标题（非必需）";
-    dialogViewController.textField2.placeholder = @"输入网址";;
-    [dialogViewController addCancelButtonWithText:@"取消" block:nil];
+    dialogViewController.textField2.placeholder = @"输入网址";
+    [dialogViewController addCancelButtonWithText:@"取消" block:^(QMUIDialogViewController *aDialogViewController) {
+        [aDialogViewController hide];
+        if (self.actionDelegate) {
+            [self.actionDelegate richTextEditorCloseMoreView];
+        }
+    }];
     
     __weak __typeof(QSTextFieldsViewController *)weakDialog = dialogViewController;
     [dialogViewController addSubmitButtonWithText:@"确定" block:^(QMUIDialogViewController *aDialogViewController) {
@@ -106,6 +111,7 @@
             link.title = weakDialog.textField1.text;
             link.link = weakDialog.textField2.text;
             [self.actionDelegate insertHyperlink:link];
+            [self.actionDelegate richTextEditorCloseMoreView];
         }
     }];
     [dialogViewController show];
