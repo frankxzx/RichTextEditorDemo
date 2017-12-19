@@ -11,5 +11,6 @@
 @interface QSHyperlinkAttachment : DTTextAttachment  <DTTextAttachmentHTMLPersistence>
 
 @property(nonatomic, copy) NSString *title;
+@property(nonatomic, strong) UIFont *titleFont;
 
 @end

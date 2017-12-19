@@ -189,6 +189,13 @@
 	}
 }
 
+//中划线
+- (void)setStrikeThrough {
+    if ([self.formatDelegate respondsToSelector:@selector(formatDidToggleStrikethrough)]) {
+        [self.formatDelegate formatDidToggleStrikethrough];
+    }
+}
+
 //排序
 - (void)setOrderedList:(UIBarButtonItem *)sender {
     

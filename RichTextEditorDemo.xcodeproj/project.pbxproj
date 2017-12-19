@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		015167DD1FE76B6D00F2F1C7 /* DTImageCaptionAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 015167DC1FE76B6D00F2F1C7 /* DTImageCaptionAttachment.m */; };
+		015168121FE8DC4A00F2F1C7 /* DTTextBlockAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 015168111FE8DC4A00F2F1C7 /* DTTextBlockAttachment.m */; };
+		015168151FE8E20100F2F1C7 /* NSString+YYAdd.m in Sources */ = {isa = PBXBuildFile; fileRef = 015168141FE8E20100F2F1C7 /* NSString+YYAdd.m */; };
 		0168006C1FDFC39800C66E28 /* DTRichTextEditorView+qs.m in Sources */ = {isa = PBXBuildFile; fileRef = 0168006B1FDFC39800C66E28 /* DTRichTextEditorView+qs.m */; };
 		016800741FE106AE00C66E28 /* QSRichTextEditorImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 016800731FE106AE00C66E28 /* QSRichTextEditorImageView.m */; };
 		0168008A1FE36B0F00C66E28 /* QSTextFieldsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 016800891FE36B0F00C66E28 /* QSTextFieldsViewController.m */; };
@@ -36,6 +38,10 @@
 /* Begin PBXFileReference section */
 		015167DB1FE76B6D00F2F1C7 /* DTImageCaptionAttachment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DTImageCaptionAttachment.h; sourceTree = "<group>"; };
 		015167DC1FE76B6D00F2F1C7 /* DTImageCaptionAttachment.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DTImageCaptionAttachment.m; sourceTree = "<group>"; };
+		015168101FE8DC4A00F2F1C7 /* DTTextBlockAttachment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DTTextBlockAttachment.h; sourceTree = "<group>"; };
+		015168111FE8DC4A00F2F1C7 /* DTTextBlockAttachment.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DTTextBlockAttachment.m; sourceTree = "<group>"; };
+		015168131FE8E20000F2F1C7 /* NSString+YYAdd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+YYAdd.h"; sourceTree = "<group>"; };
+		015168141FE8E20100F2F1C7 /* NSString+YYAdd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+YYAdd.m"; sourceTree = "<group>"; };
 		0168006A1FDFC39800C66E28 /* DTRichTextEditorView+qs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DTRichTextEditorView+qs.h"; sourceTree = "<group>"; };
 		0168006B1FDFC39800C66E28 /* DTRichTextEditorView+qs.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "DTRichTextEditorView+qs.m"; sourceTree = "<group>"; };
 		016800721FE106AE00C66E28 /* QSRichTextEditorImageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSRichTextEditorImageView.h; sourceTree = "<group>"; };
@@ -165,8 +171,12 @@
 				016F49DF1FE3BE5300768E73 /* QSHyperlinkAttachment.m */,
 				015167DB1FE76B6D00F2F1C7 /* DTImageCaptionAttachment.h */,
 				015167DC1FE76B6D00F2F1C7 /* DTImageCaptionAttachment.m */,
+				015168101FE8DC4A00F2F1C7 /* DTTextBlockAttachment.h */,
+				015168111FE8DC4A00F2F1C7 /* DTTextBlockAttachment.m */,
 				01957E4A1FE515F200F1281D /* DTImageTextAttachment+qs.h */,
 				01957E4B1FE515F200F1281D /* DTImageTextAttachment+qs.m */,
+				015168131FE8E20000F2F1C7 /* NSString+YYAdd.h */,
+				015168141FE8E20100F2F1C7 /* NSString+YYAdd.m */,
 			);
 			path = demo;
 			sourceTree = "<group>";
@@ -332,6 +342,7 @@
 				016CCCEA1FDA6BEC000493F7 /* QSRichTextEditorCoverCell.m in Sources */,
 				01957E4C1FE515F200F1281D /* DTImageTextAttachment+qs.m in Sources */,
 				0168006C1FDFC39800C66E28 /* DTRichTextEditorView+qs.m in Sources */,
+				015168121FE8DC4A00F2F1C7 /* DTTextBlockAttachment.m in Sources */,
 				016CCCF01FDA6C2E000493F7 /* QSRichTextEditorBodyCell.m in Sources */,
 				0168008A1FE36B0F00C66E28 /* QSTextFieldsViewController.m in Sources */,
 				016CCCC21FD92905000493F7 /* ViewController.m in Sources */,
@@ -348,6 +359,7 @@
 				016CCCBF1FD92905000493F7 /* AppDelegate.m in Sources */,
 				016800741FE106AE00C66E28 /* QSRichTextEditorImageView.m in Sources */,
 				016CCCE41FD92A7E000493F7 /* RichTextEditorToolBar.m in Sources */,
+				015168151FE8E20100F2F1C7 /* NSString+YYAdd.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

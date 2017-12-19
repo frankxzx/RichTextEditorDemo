@@ -22,6 +22,8 @@
 #import "QSHyperlinkAttachment.h"
 #import "DTImageTextAttachment+qs.h"
 #import "DTImageCaptionAttachment.h"
+#import "DTTextBlockAttachment.h"
+#import "NSString+YYAdd.h"
 
 CGFloat const toolBarHeight = 44;
 CGFloat const editorMoreViewHeight = 200;
@@ -460,9 +462,9 @@ typedef NS_OPTIONS(NSUInteger, QSImageAttachmentState) {
 - (BOOL)editorView:(DTRichTextEditorView *)editorView shouldChangeTextInRange:(NSRange)range replacementText:(NSAttributedString *)text {
     
     if (self.state == QSRichEditorStateCaption) {
-        NSArray *imageCaptions = [self.richEditor.attributedText textAttachmentsWithPredicate:nil class:[DTImageCaptionAttachment class]];
-        for (DTImageCaptionAttachment *imageCaption in imageCaptions) {
-            if ([self.currentEditingAttachment.captionAttachment isEqual:imageCaption]) {
+        NSArray *imageAttachments = [self.richEditor.attributedText textAttachmentsWithPredicate:nil class:[DTImageTextAttachment class]];
+        for (DTImageTextAttachment *imageAttachment in imageAttachments) {
+            if ([self.currentEditingAttachment.captionText isEqualToString:imageAttachment.captionText]) {
                 if ([text.string isEqualToString:@"\n"]) {
                     //退出批注状态
                 }
@@ -543,22 +545,27 @@ typedef NS_OPTIONS(NSUInteger, QSImageAttachmentState) {
         linkButon.qmui_borderColor = [UIColor lightGrayColor];
         linkButon.qmui_borderWidth = PixelOne;
         linkButon.qmui_borderPosition = QMUIBorderViewPositionBottom;
+        linkButon.titleLabel.font = ((QSHyperlinkAttachment *) attachment).titleFont;
         [linkButon setTitle:((QSHyperlinkAttachment *) attachment).title forState:UIControlStateNormal];
         [linkButon addTarget:self action:@selector(editHyperlink) forControlEvents:UIControlEventTouchUpInside];
         return linkButon;
         
-    } else if ([attachment isKindOfClass:[DTImageCaptionAttachment class]]) {
+    } else if ([attachment isKindOfClass:[DTTextBlockAttachment class]]) {
         
         YYTextView *textView = [YYTextView new];
+        textView.text = ((DTTextBlockAttachment *)attachment).text;
+        textView.editable = NO;
         textView.frame = frame;
         textView.qmui_borderWidth = PixelOne;
         textView.qmui_borderPosition = QMUIBorderViewPositionTop|QMUIBorderViewPositionLeft|QMUIBorderViewPositionRight|QMUIBorderViewPositionBottom;
         textView.qmui_borderColor = UIColorGray;
         textView.backgroundColor = UIColorGrayLighten;
-        textView.layer.cornerRadius = 15;
+        textView.layer.cornerRadius = 2;
+        textView.textAlignment = NSTextAlignmentCenter;
         
         return textView;
     }
+    
     return nil;
 }
 
@@ -573,11 +580,27 @@ typedef NS_OPTIONS(NSUInteger, QSImageAttachmentState) {
 	// use normal push action for opening URL
 	[button addTarget:self action:@selector(hyperlinkPushed:) forControlEvents:UIControlEventTouchUpInside];
 	
-	// demonstrate combination with long press
-	//UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(linkLongPressed:)];
-	//[button addGestureRecognizer:longPress];
-	
 	return button;
+}
+
+- (BOOL)attributedTextContentView:(DTAttributedTextContentView *)attributedTextContentView shouldDrawBackgroundForTextBlock:(DTTextBlock *)textBlock frame:(CGRect)frame context:(CGContextRef)context forLayoutFrame:(DTCoreTextLayoutFrame *)layoutFrame
+{
+    UIBezierPath *roundedRect = [UIBezierPath bezierPathWithRoundedRect:CGRectInset(frame,1,1) cornerRadius:10];
+    
+    CGColorRef color = [textBlock.backgroundColor CGColor];
+    if (color)
+    {
+        CGContextSetFillColorWithColor(context, color);
+        CGContextAddPath(context, [roundedRect CGPath]);
+        CGContextFillPath(context);
+        
+        CGContextAddPath(context, [roundedRect CGPath]);
+        CGContextSetRGBStrokeColor(context, 0, 0, 0, 1);
+        CGContextStrokePath(context);
+        return NO;
+    }
+    
+    return YES; // draw standard background
 }
 
 #pragma mark - DTFormatDelegate
@@ -628,7 +651,14 @@ typedef NS_OPTIONS(NSUInteger, QSImageAttachmentState) {
 
 //应用样式
 -(void)formatDidToggleBlockquote {
-    [self.richEditor toggleHighlightInRange:self.richEditor.qs_selectedTextRange color:richTextHighlightColor];
+    DTTextBlockAttachment *attachment = [[DTTextBlockAttachment alloc]init];
+    NSString *text = [self.richEditor attributedSubstringForRange:self.richEditor.selectedTextRange].string;
+    UIFont *font = [self.richEditor attributedSubstringForRange:self.richEditor.selectedTextRange].yy_font;
+    CGFloat textMaxWidth = SCREEN_WIDTH - 40;
+    CGFloat textHeight = [text heightForFont:font width:textMaxWidth];
+    attachment.displaySize = CGSizeMake(textMaxWidth, textHeight);
+    attachment.text = text;
+    [self.richEditor replaceRange:self.richEditor.qs_selectedTextRange withAttachment:attachment inParagraph:NO];
     [self.richEditor applyTextAlignment:kCTTextAlignmentCenter toParagraphsContainingRange:self.richEditor.qs_selectedTextRange];
 }
 
@@ -677,6 +707,7 @@ typedef NS_OPTIONS(NSUInteger, QSImageAttachmentState) {
 	[self.richEditor changeParagraphLeftMarginBy:-36 toParagraphsContainingRange:range];
 }
 
+//设置序列样式
 - (void)toggleListType:(DTCSSListStyleType)listType
 {
 	UITextRange *range = self.richEditor.qs_selectedTextRange;
@@ -695,9 +726,11 @@ typedef NS_OPTIONS(NSUInteger, QSImageAttachmentState) {
     NSURL *url = [NSURL URLWithString:link.link];
     NSString *title = link.title;
     QSHyperlinkAttachment *linkAttachment = [[QSHyperlinkAttachment alloc]init];
-//    [title width]
-    linkAttachment.displaySize = CGSizeMake(80, 30);
-    linkAttachment.originalSize = CGSizeMake(80, 30);
+    UIFont *buttonTextFont = [UIFont systemFontOfSize:15];
+    linkAttachment.titleFont = buttonTextFont;
+    CGSize maxSize = CGSizeMake(SCREEN_WIDTH - 40, HUGE);
+    CGSize textRect = [title sizeForFont:buttonTextFont size:maxSize mode:NSLineBreakByWordWrapping];
+    linkAttachment.displaySize = textRect;
     linkAttachment.title = title;
     linkAttachment.hyperLinkURL = url;
     [self.richEditor replaceRange:range withAttachment:linkAttachment inParagraph:NO];
@@ -727,37 +760,31 @@ typedef NS_OPTIONS(NSUInteger, QSImageAttachmentState) {
 //注释
 -(void)editorViewCaptionImage:(UIButton *)sender attachment:(DTImageTextAttachment *)attachment {
     
-    DTImageCaptionAttachment *imageCaptionAttachment = [[DTImageCaptionAttachment alloc]init];
-    imageCaptionAttachment.displaySize = CGSizeMake(SCREEN_WIDTH, 44);
-    attachment.captionAttachment = imageCaptionAttachment;
-    [self.richEditor replaceRange:self.richEditor.selectedTextRange withAttachment:imageCaptionAttachment inParagraph:NO];
-    
     self.state = QSRichEditorStateCaption;
-//
-//    CGPoint touchPoint = [sender.superview convertPoint:sender.center toView:self.richEditor];
-//    [self.richEditor qmui_performSelector:NSSelectorFromString(@"moveCursorToPositionClosestToLocation:") withArguments:&touchPoint];
-//    //光标会移动到 Attachment的上方 所以往后移动一格
-//    DTTextRange *currentTextRange = (DTTextRange *)self.richEditor.selectedTextRange;
-//    CGFloat start = currentTextRange.NSRangeValue.location + 1;
-//    DTTextRange *correctRange = [DTTextRange rangeWithNSRange:NSMakeRange(start, 0)];
-//    [self.richEditor setSelectedTextRange:correctRange];
-//
-//    if (!attachment.isCaption) {
-//        //换行居中
-//        [self.richEditor insertText:@"\n"];
-//        [self.richEditor applyTextAlignment:kCTTextAlignmentCenter toParagraphsContainingRange:self.richEditor.selectedTextRange];
-//        attachment.isCaption = YES;
-//    } else {
-//        //选中之前已经批注的文字
-//        if (![attachment.captionRange isEmpty]) {
-//            DTTextRange *relpaceRange = attachment.captionRange;
-//            [self.richEditor setSelectedTextRange:relpaceRange animated:YES];
-//        }
-//    }
-//
-//    self.currentEditingAttachment = attachment;
-//    attachment.captionRange = [DTTextRange rangeWithNSRange:NSMakeRange(self.selectedTextRange.length, 0)];
-//    self.editImageState = QSImageAttachmentStateBegin;
+
+    CGPoint touchPoint = [sender.superview convertPoint:sender.center toView:self.richEditor];
+    [self.richEditor qmui_performSelector:NSSelectorFromString(@"moveCursorToPositionClosestToLocation:") withArguments:&touchPoint];
+    //光标会移动到 Attachment的上方 所以往后移动一格
+    DTTextRange *currentTextRange = (DTTextRange *)self.richEditor.selectedTextRange;
+    CGFloat start = currentTextRange.NSRangeValue.location + 1;
+    DTTextRange *correctRange = [DTTextRange rangeWithNSRange:NSMakeRange(start, 0)];
+    [self.richEditor setSelectedTextRange:correctRange];
+
+    if (!attachment.isCaption) {
+        //换行居中
+        [self.richEditor insertText:@"\n"];
+        [self.richEditor applyTextAlignment:kCTTextAlignmentCenter toParagraphsContainingRange:self.richEditor.selectedTextRange];
+        attachment.isCaption = YES;
+    } else {
+        //选中之前已经批注的文字
+        if (![attachment.captionRange isEmpty]) {
+            DTTextRange *relpaceRange = attachment.captionRange;
+            [self.richEditor setSelectedTextRange:relpaceRange animated:YES];
+        }
+    }
+
+    self.currentEditingAttachment = attachment;
+    attachment.captionRange = [DTTextRange rangeWithNSRange:NSMakeRange(self.selectedTextRange.length, 0)];
 }
 
 //替换
