@@ -24,6 +24,7 @@
 #import "DTImageCaptionAttachment.h"
 #import "DTTextBlockAttachment.h"
 #import "NSString+YYAdd.h"
+#import "DTTextPlaceholderAttachment.h"
 
 CGFloat const toolBarHeight = 44;
 CGFloat const editorMoreViewHeight = 200;
@@ -80,27 +81,22 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
     self.keyboardManager.delegateEnabled = YES;
 }
 
--(void)contentViewDidLayout:(NSNotification *)notification {
-    NSValue *value = notification.userInfo[@"OptimalFrame"];
-    if (value) {
-        CGRect rect = value.CGRectValue;
-        CGFloat height = rect.size.height;
-        if (height > 400) {
-            //[self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-        }
-    }
-}
-
 -(void)initSubviews {
 	[super initSubviews];
     [self.view addSubview:self.richEditor];
-    [self.view addSubview:self.titleTextView];
-    [self.view addSubview:self.coverButton];
+    DTTextPlaceholderAttachment *titleAttchment = [[DTTextPlaceholderAttachment alloc]init];
+    titleAttchment.displaySize = CGRectInsetEdges(CGRectMake(0, 0, SCREEN_WIDTH, 120), kInsets).size;
+//    [self.richEditor replaceRange:[DTTextRange rangeWithNSRange:NSMakeRange(0, 1)] withAttachment:titleAttchment inParagraph:NO];
+    
+    DTTextPlaceholderAttachment *coverAttchment = [[DTTextPlaceholderAttachment alloc]init];
+    coverAttchment.displaySize = CGSizeMake(SCREEN_WIDTH, 60);
+    [self.richEditor replaceRange:[DTTextRange rangeWithNSRange:NSMakeRange(2, 1)] withAttachment:coverAttchment inParagraph:NO];
 }
 
 -(void)viewDidLayoutSubviews {
 	[super viewDidLayoutSubviews];
     [self updateToolBarFrame];
+    self.richEditor.frame = self.view.bounds;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -390,21 +386,6 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
     return (DTTextRange *)self.richEditor.selectedTextRange;
 }
 
-- (UITableViewCell *)qmui_tableView:(UITableView *)tableView cellWithIdentifier:(NSString *)identifier {
-    QSRichTextEditorCell *cell = (QSRichTextEditorCell *)[tableView dequeueReusableCellWithIdentifier:identifier];
-    if (!cell) {
-        if ([identifier isEqualToString:@"coverCell"]) {
-            cell = [[QSRichTextEditorCoverCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
-        } else if ([identifier isEqualToString:@"titleCell"]) {
-            cell = [[QSRichTextEditorTitleCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
-        } else if ([identifier isEqualToString:@"bodyCell"]) {
-            cell = [[QSRichTextEditorBodyCell alloc] initForTableView:tableView withReuseIdentifier:identifier];
-        }
-    }
-    cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
-    return cell;
-}
-
 #pragma mark - DTRichTextEditorViewDelegate
 
 // RichTextEditor 编辑生命周期
@@ -534,6 +515,18 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
         [linkButon addTarget:self action:@selector(editImageCaption:) forControlEvents:UIControlEventTouchUpInside];
         return linkButon;
         
+    } else if ([attachment isKindOfClass:[DTTextPlaceholderAttachment class]]) {
+        
+        RichTextEditorPlaceHolderType type = ((DTTextPlaceholderAttachment *)attachment).placeholderType;
+        switch (type) {
+            case RichTextEditorPlaceHolderTitle:
+                self.titleTextView.frame = frame;
+                return self.titleTextView;
+                
+            case RichTextEditorPlaceHolderCover:
+                self.coverButton.frame = frame;
+                return self.coverButton;
+        }
     }
     
     return nil;
