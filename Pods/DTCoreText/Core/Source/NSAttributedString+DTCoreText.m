@@ -44,16 +44,16 @@
 			// no attachment value
 			return;
 		}
+        
+        if (class && ![attachment isKindOfClass:class])
+        {
+            // doesn't fit class, next
+            return;
+        }
 		
 		if (predicate && ![predicate evaluateWithObject:attachment])
 		{
 			// doesn't fit predicate, next
-			return;
-		}
-		
-		if (class && ![attachment isKindOfClass:class])
-		{
-			// doesn't fit class, next
 			return;
 		}
 		

@@ -31,18 +31,11 @@ static char kCaptionText;
      return (NSString *)objc_getAssociatedObject(self, &kCaptionText);
 }
 
-static char kCaptionRange;
--(void)setCaptionRange:(DTTextRange *)captionRange {
-    objc_setAssociatedObject(self, &kCaptionRange, captionRange, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
--(DTTextRange *)captionRange {
-     return (DTTextRange *)objc_getAssociatedObject(self, &kCaptionRange);
-}
-
 static char kCaptionAttachment;
 -(void)setCaptionAttachment:(DTImageCaptionAttachment *)captionAttachment {
     objc_setAssociatedObject(self, &kCaptionAttachment, captionAttachment, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [self setIsCaption:YES];
+    [self setCaptionText:captionAttachment.text];
 }
 
 -(DTImageCaptionAttachment *)captionAttachment {

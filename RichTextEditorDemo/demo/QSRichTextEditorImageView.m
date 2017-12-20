@@ -48,8 +48,10 @@
         
         UIGestureRecognizer *tap = [[UIGestureRecognizer alloc]initWithTarget:self action:@selector(showButtons:)];
         self.imageView = [[UIImageView alloc]init];
-        [self.imageView setUserInteractionEnabled:YES];
-        [self.imageView addGestureRecognizer:tap];
+        self.imageView.contentMode = UIViewContentModeScaleAspectFill;
+        self.imageView.clipsToBounds = YES;
+        [self setUserInteractionEnabled:YES];
+        [self addGestureRecognizer:tap];
         [self addSubview:self.imageView];
         
         self.contentView = [[UIControl alloc]init];
@@ -110,6 +112,11 @@
 
 -(void)setImage:(UIImage *)image {
     self.imageView.image = image;
+}
+
+-(UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
+    UIView *view = [super hitTest:point withEvent:event];
+    return view;
 }
 
 @end

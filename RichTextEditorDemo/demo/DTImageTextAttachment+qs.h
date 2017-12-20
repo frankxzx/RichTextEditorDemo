@@ -14,7 +14,6 @@
 
 @property(nonatomic, assign) BOOL isCaption;
 @property(nonatomic, copy) NSString *captionText;
-@property(nonatomic, strong) DTTextRange *captionRange;
 @property(nonatomic, strong) DTImageCaptionAttachment *captionAttachment;
 
 @end

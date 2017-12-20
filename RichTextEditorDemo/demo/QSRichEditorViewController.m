@@ -160,8 +160,10 @@ typedef NS_OPTIONS(NSUInteger, QSImageAttachmentState) {
 
 //二次编辑图片注释
 -(void)editImageCaption:(QMUIButton *)sender {
-    CGPoint touchPoint = [sender.superview convertPoint:sender.center toView:self.richEditor];
-    [self.richEditor qmui_performSelector:NSSelectorFromString(@"moveCursorToPositionClosestToLocation:") withArguments:&touchPoint];
+    NSString *captionText = sender.titleLabel.text;
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"captionText == %@", captionText];
+    DTImageTextAttachment *attchment = [self.richEditor.attributedText textAttachmentsWithPredicate:predicate class:[DTImageTextAttachment class]].firstObject;
+    [self editorViewCaptionImage:nil attachment:attchment];
 }
 
 //点击完成按钮
@@ -737,14 +739,13 @@ typedef NS_OPTIONS(NSUInteger, QSImageAttachmentState) {
 #pragma mark - QSRichTextEditorImageViewDelegate
 //删除
 -(void)editorViewDeleteImage:(UIButton *)sender attachment:(DTImageTextAttachment *)attachment{
-//    DTTextRange *range = [self rangeOfAttachment:sender];
     DTTextRange *range = [self.richEditor qs_rangeOfAttachment:attachment];
     [self.richEditor replaceRange:range withText:@""];
 }
 
 //编辑
 -(void)editorViewEditImage:(UIButton *)sender attachment:(DTImageTextAttachment *)attachment {
-    [self rangeOfAttachment:sender];
+    DTTextRange *range = [self.richEditor qs_rangeOfAttachment:attachment];
 }
 
 //注释
@@ -768,8 +769,19 @@ typedef NS_OPTIONS(NSUInteger, QSImageAttachmentState) {
         CGFloat captionHeight = [text heightForFont:captionTitleFont width:SCREEN_WIDTH - 40];
         CGSize captionSize = CGSizeMake(SCREEN_WIDTH - 40, captionHeight);
         caption.displaySize = captionSize;
-        attachment.captionAttachment = caption;
-        [self.richEditor replaceRange:self.richEditor.selectedTextRange withAttachment:caption inParagraph:NO];
+        if (attachment.isCaption) {
+            DTImageCaptionAttachment *oldVal = attachment.captionAttachment;
+            DTTextRange *replaceRange = [self.richEditor qs_rangeOfAttachment:oldVal];
+            [self.richEditor replaceRange:replaceRange withAttachment:caption inParagraph:NO];
+            attachment.captionAttachment = caption;
+        } else {
+            DTTextRange *range = [self.richEditor qs_rangeOfAttachment:attachment];
+            //貌似如果超出当前富文本的 range length，超出的部分将无法选中
+            //DTTextRange *insertRange = [DTTextRange rangeWithNSRange:NSMakeRange(((DTTextPosition *)(range.end)).location, 1)];
+            DTTextRange *insertRange = [DTTextRange emptyRangeAtPosition:range.end];
+            [self.richEditor replaceRange:insertRange withAttachment:caption inParagraph:NO];
+            attachment.captionAttachment = caption;
+        }
     }];
     [captionInputController show];
 }
@@ -777,12 +789,12 @@ typedef NS_OPTIONS(NSUInteger, QSImageAttachmentState) {
 //替换
 -(void)editorViewReplaceImage:(UIButton *)sender attachment:(DTImageTextAttachment *)attachment {
     DTImageTextAttachment *replaceAttachment = [[DTImageTextAttachment alloc] initWithElement:nil options:nil];
-    attachment.image = (id)[UIImage qmui_imageWithColor:[UIColor qmui_randomColor]];
+    replaceAttachment.image = (id)[UIImage qmui_imageWithColor:[UIColor qmui_randomColor]];
     CGFloat w = [UIScreen mainScreen].bounds.size.width;
     CGFloat h = [UIScreen mainScreen].bounds.size.height / 3;
     CGSize size = CGSizeMake(w-40, h);
-    attachment.displaySize = size;
-    attachment.originalSize = size;
+    replaceAttachment.displaySize = size;
+    replaceAttachment.originalSize = size;
     
 //    DTTextRange *range = [self rangeOfAttachment:sender];
     DTTextRange *range = [self.richEditor qs_rangeOfAttachment:attachment];

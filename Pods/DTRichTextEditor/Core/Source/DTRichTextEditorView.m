@@ -1463,8 +1463,11 @@ typedef enum
 {
 	CGPoint touchPoint = [touch locationInView:self];
 	
-	// ignore touches on views that UITextInput adds
-	// those are added to self, user custom views are subviews of contentView
+    // 优先子控件的响应事件
+    if ([touch.view isKindOfClass:NSClassFromString(@"QSRichTextEditorImageView")]) {
+        return NO;
+    }
+    
 	UIView *hitView = [self hitTest:touchPoint withEvent:nil];
 	
 	if (hitView.superview == self && hitView != self.attributedTextContentView)
