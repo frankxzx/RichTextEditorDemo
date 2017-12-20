@@ -403,7 +403,7 @@ typedef NS_OPTIONS(NSUInteger, QSImageAttachmentState) {
         } else if ([identifier isEqualToString:@"titleCell"]) {
             cell = [[QSRichTextEditorTitleCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
         } else if ([identifier isEqualToString:@"bodyCell"]) {
-            cell = [[QSRichTextEditorBodyCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+            cell = [[QSRichTextEditorBodyCell alloc] initForTableView:tableView withReuseIdentifier:identifier];
         }
     }
     cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);

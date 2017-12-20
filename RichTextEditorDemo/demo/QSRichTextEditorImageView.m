@@ -48,10 +48,8 @@
         
         UIGestureRecognizer *tap = [[UIGestureRecognizer alloc]initWithTarget:self action:@selector(showButtons:)];
         self.imageView = [[UIImageView alloc]init];
-        self.imageView.contentMode = UIViewContentModeScaleAspectFill;
-        self.imageView.clipsToBounds = YES;
-        [self setUserInteractionEnabled:YES];
-        [self addGestureRecognizer:tap];
+        [self.imageView setUserInteractionEnabled:YES];
+        [self.imageView addGestureRecognizer:tap];
         [self addSubview:self.imageView];
         
         self.contentView = [[UIControl alloc]init];
@@ -64,7 +62,7 @@
     }
     return self;
 }
-         
+
 -(void)hideButtons:(id)sender {
     [self.contentView setHidden:YES];
 }
@@ -114,9 +112,5 @@
     self.imageView.image = image;
 }
 
--(UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
-    UIView *view = [super hitTest:point withEvent:event];
-    return view;
-}
-
 @end
+

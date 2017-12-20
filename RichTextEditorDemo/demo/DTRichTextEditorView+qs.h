@@ -11,6 +11,8 @@
 
 @interface DTRichTextEditorView (qs)
 
+-(DTTextAttachment *)qs_attachmentWithRange:(DTTextRange *)range;
+
 -(DTTextRange *)qs_rangeOfAttachment:(DTTextAttachment *)attachment;
 
 -(DTTextRange *)qs_selectedTextRange;
