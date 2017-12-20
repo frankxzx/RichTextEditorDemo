@@ -737,7 +737,8 @@ typedef NS_OPTIONS(NSUInteger, QSImageAttachmentState) {
 #pragma mark - QSRichTextEditorImageViewDelegate
 //删除
 -(void)editorViewDeleteImage:(UIButton *)sender attachment:(DTImageTextAttachment *)attachment{
-    DTTextRange *range = [self rangeOfAttachment:sender];
+//    DTTextRange *range = [self rangeOfAttachment:sender];
+    DTTextRange *range = [self.richEditor qs_rangeOfAttachment:attachment];
     [self.richEditor replaceRange:range withText:@""];
 }
 
@@ -768,9 +769,7 @@ typedef NS_OPTIONS(NSUInteger, QSImageAttachmentState) {
         CGSize captionSize = CGSizeMake(SCREEN_WIDTH - 40, captionHeight);
         caption.displaySize = captionSize;
         attachment.captionAttachment = caption;
-//        [self.richEditor attributedSubstringForRange:<#(UITextRange *)#>];
         [self.richEditor replaceRange:self.richEditor.selectedTextRange withAttachment:caption inParagraph:NO];
-        [self.richEditor insertText:@"\n"];
     }];
     [captionInputController show];
 }
@@ -785,7 +784,8 @@ typedef NS_OPTIONS(NSUInteger, QSImageAttachmentState) {
     attachment.displaySize = size;
     attachment.originalSize = size;
     
-    DTTextRange *range = [self rangeOfAttachment:sender];
+//    DTTextRange *range = [self rangeOfAttachment:sender];
+    DTTextRange *range = [self.richEditor qs_rangeOfAttachment:attachment];
     [self.richEditor replaceRange:range withAttachment:replaceAttachment inParagraph:NO];
 }
 
@@ -793,9 +793,6 @@ typedef NS_OPTIONS(NSUInteger, QSImageAttachmentState) {
     CGPoint touchPoint = [sender.superview convertPoint:sender.center toView:self.richEditor];
     DTTextPosition *touchPosition = (DTTextPosition *)[self.richEditor closestPositionToPoint:touchPoint];
     DTTextPosition *endPosition = (DTTextPosition *)[self.richEditor endOfDocument];
-    
-    QMUILog(@"closestPositionToPoint position %lu", (unsigned long)touchPosition.location);
-    QMUILog(@"end docoment position %lu", (unsigned long)endPosition.location);
     
     DTTextPosition *finalPosition;
     if (touchPosition.location == endPosition.location) {
@@ -805,6 +802,8 @@ typedef NS_OPTIONS(NSUInteger, QSImageAttachmentState) {
     }
     
     DTTextRange *range = [DTTextRange rangeWithNSRange:NSMakeRange(finalPosition.location, 1)];
+    self.richEditor.selectedTextRange = [DTTextRange emptyRangeAtPosition:range.end offset:1];
+    QMUILog(@"move cursor to range: %@", NSStringFromRange(((DTTextRange *)self.richEditor.selectedTextRange).NSRangeValue));
     return range;
 }
 

@@ -145,8 +145,6 @@
 				016CCCD61FD92A7E000493F7 /* QSRichEditorViewController+keyboard.h */,
 				016CCCD81FD92A7E000493F7 /* QSRichEditorViewController.h */,
 				016CCCD91FD92A7E000493F7 /* QSRichEditorViewController.m */,
-				0168006A1FDFC39800C66E28 /* DTRichTextEditorView+qs.h */,
-				0168006B1FDFC39800C66E28 /* DTRichTextEditorView+qs.m */,
 				016CCCE81FDA6BEC000493F7 /* QSRichTextEditorCoverCell.h */,
 				016CCCE91FDA6BEC000493F7 /* QSRichTextEditorCoverCell.m */,
 				016CCCEB1FDA6C08000493F7 /* QSRichTextEditorTitleCell.h */,
@@ -157,7 +155,6 @@
 				016800731FE106AE00C66E28 /* QSRichTextEditorImageView.m */,
 				016CCCF11FDA790B000493F7 /* QSRichTextEditorCell.h */,
 				016CCCF21FDA790B000493F7 /* QSRichTextEditorCell.m */,
-				016CCCDA1FD92A7E000493F7 /* RichTextEditor.xcassets */,
 				016CCCDB1FD92A7E000493F7 /* RichTextEditorMoreView.h */,
 				016CCCDC1FD92A7E000493F7 /* RichTextEditorMoreView.m */,
 				016800881FE36B0F00C66E28 /* QSTextFieldsViewController.h */,
@@ -175,8 +172,11 @@
 				015168111FE8DC4A00F2F1C7 /* DTTextBlockAttachment.m */,
 				01957E4A1FE515F200F1281D /* DTImageTextAttachment+qs.h */,
 				01957E4B1FE515F200F1281D /* DTImageTextAttachment+qs.m */,
+				0168006A1FDFC39800C66E28 /* DTRichTextEditorView+qs.h */,
+				0168006B1FDFC39800C66E28 /* DTRichTextEditorView+qs.m */,
 				015168131FE8E20000F2F1C7 /* NSString+YYAdd.h */,
 				015168141FE8E20100F2F1C7 /* NSString+YYAdd.m */,
+				016CCCDA1FD92A7E000493F7 /* RichTextEditor.xcassets */,
 			);
 			path = demo;
 			sourceTree = "<group>";

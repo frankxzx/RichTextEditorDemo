@@ -17,6 +17,20 @@
 
 @implementation DTRichTextEditorView (qs)
 
+-(DTTextRange *)qs_rangeOfAttachment:(DTTextAttachment *)attachment {
+    NSAttributedString *string = self.attributedText;
+        if (![string length]) { return nil; }
+        NSRange entireRange = NSMakeRange(0, [string length]);
+        __block DTTextRange *range;
+        [string enumerateAttribute:NSAttachmentAttributeName inRange:entireRange options:NSAttributedStringEnumerationLongestEffectiveRangeNotRequired usingBlock:^(DTTextAttachment *_attachment, NSRange _range, BOOL *stop) {
+            if (!_attachment) { return; }
+            if ([_attachment isEqual:attachment]) {
+                range = [DTTextRange rangeWithNSRange:_range];
+            }
+        }];
+        return range;
+}
+
 -(DTTextRange *)qs_selectedTextRange {
     DTTextRange *textRange = (DTTextRange *)self.selectedTextRange;
     if (textRange.length < 1) {

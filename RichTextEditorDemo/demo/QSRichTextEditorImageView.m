@@ -16,6 +16,7 @@
 @property(nonatomic, strong) QMUIFillButton *replaceButton;
 @property(nonatomic, strong) QMUIFillButton *editButton;
 @property(nonatomic, strong) QMUIButton *closeButton;
+@property(nonatomic, strong) UIControl *contentView;
 
 @end
 
@@ -23,7 +24,7 @@
 
 -(instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        self.imageView = [[UIImageView alloc]init];
+        
         self.captionButton = [[QMUIFillButton alloc]initWithImage:UIImageMake(@"icon_editor_caption") title:@"注释"];
         self.replaceButton = [[QMUIFillButton alloc]initWithImage:UIImageMake(@"icon_editor_pick") title:@"替换"];
         self.editButton = [[QMUIFillButton alloc]initWithImage:UIImageMake(@"icon_editor_crop") title:@"编辑"];
@@ -45,13 +46,29 @@
         [self.replaceButton addTarget:self action:@selector(replaceImage:) forControlEvents:UIControlEventTouchUpInside];
         [self.closeButton addTarget:self action:@selector(deleteImage:) forControlEvents:UIControlEventTouchUpInside];
         
+        UIGestureRecognizer *tap = [[UIGestureRecognizer alloc]initWithTarget:self action:@selector(showButtons:)];
+        self.imageView = [[UIImageView alloc]init];
+        [self.imageView setUserInteractionEnabled:YES];
+        [self.imageView addGestureRecognizer:tap];
         [self addSubview:self.imageView];
-        [self addSubview:self.captionButton];
-        [self addSubview:self.replaceButton];
-        [self addSubview:self.editButton];
-        [self addSubview:self.closeButton];
+        
+        self.contentView = [[UIControl alloc]init];
+        [self.contentView addTarget:self action:@selector(hideButtons:) forControlEvents:UIControlEventTouchUpInside];
+        [self.contentView addSubview:self.captionButton];
+        [self.contentView addSubview:self.replaceButton];
+        [self.contentView addSubview:self.editButton];
+        [self.contentView addSubview:self.closeButton];
+        [self.imageView addSubview:self.contentView];
     }
     return self;
+}
+         
+-(void)hideButtons:(id)sender {
+    [self.contentView setHidden:YES];
+}
+
+-(void)showButtons:(id)sender {
+    [self.contentView setHidden:NO];
 }
 
 -(void)captionImage:(id)sender {
@@ -88,6 +105,7 @@
     self.replaceButton.frame = CGRectMake(self.qmui_width - margin - width - margin - width, self.qmui_height - margin - height, width, height);
     self.closeButton.frame = CGRectMake(self.qmui_width - margin - 44, margin, 44, 44);
     self.imageView.frame = self.bounds;
+    self.contentView.frame = self.imageView.bounds;
 }
 
 -(void)setImage:(UIImage *)image {
