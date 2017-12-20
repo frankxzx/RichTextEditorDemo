@@ -463,6 +463,10 @@ typedef NS_OPTIONS(NSUInteger, QSImageAttachmentState) {
 // RichTextEditor 选中文本生命周期
 - (BOOL)editorView:(DTRichTextEditorView *)editorView shouldChangeTextInRange:(NSRange)range replacementText:(NSAttributedString *)text {
     
+    DTTextAttachment *attchment = [self.richEditor qs_attachmentWithRange:[DTTextRange rangeWithNSRange:range]];
+    if (attchment) {
+        return NO;
+    }
 	return YES;
 }
 
