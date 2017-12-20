@@ -48,6 +48,8 @@ typedef NS_OPTIONS(NSUInteger, QSImageAttachmentState) {
     QSImageAttachmentStateEnd
 };
 
+static UIEdgeInsets const kInsets = {16, 20, 16, 20};
+
 @interface QSRichEditorViewController () <UIScrollViewDelegate,
                                           DTAttributedTextContentViewDelegate,
  										  DTRichTextEditorViewDelegate,
@@ -59,8 +61,9 @@ typedef NS_OPTIONS(NSUInteger, QSImageAttachmentState) {
 @property(nonatomic, assign) QSImageAttachmentState editImageState;
 @property(nonatomic, strong) RichTextEditorToolBar *editorToolBar;
 @property(nonatomic, strong) RichTextEditorMoreView *editorMoreView;
-@property(nonatomic, weak) DTRichTextEditorView *richEditor;
-@property(nonatomic, weak) YYTextView *titleTextView;
+@property(nonatomic, strong) DTRichTextEditorView *richEditor;
+@property(nonatomic, strong) YYTextView *titleTextView;
+@property(nonatomic, strong) QMUIButton *coverButton;
 @property(nonatomic, weak) DTImageTextAttachment *currentEditingAttachment;
 @property(nonatomic, strong) UIBarButtonItem *doneItem;
 @property(nonatomic, strong) NSCache *imageCache;
@@ -74,14 +77,25 @@ typedef NS_OPTIONS(NSUInteger, QSImageAttachmentState) {
     [super viewDidLoad];
     self.navigationItem.leftBarButtonItem = [QMUINavigationButton barButtonItemWithType:QMUINavigationButtonTypeNormal title:@"打印 Html" tintColor:UIColorBlack position:QMUINavigationButtonPositionLeft target:self action:@selector(showHtmlString:)];
 	self.state = QSRichEditorStateNoneContent;
-	[self configDefaultStyle];
     self.keyboardManager.delegateEnabled = YES;
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+}
+
+-(void)contentViewDidLayout:(NSNotification *)notification {
+    NSValue *value = notification.userInfo[@"OptimalFrame"];
+    if (value) {
+        CGRect rect = value.CGRectValue;
+        CGFloat height = rect.size.height;
+        if (height > 400) {
+            //[self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+        }
+    }
 }
 
 -(void)initSubviews {
 	[super initSubviews];
-
+    [self.view addSubview:self.richEditor];
+    [self.view addSubview:self.titleTextView];
+    [self.view addSubview:self.coverButton];
 }
 
 -(void)viewDidLayoutSubviews {
@@ -152,6 +166,11 @@ typedef NS_OPTIONS(NSUInteger, QSImageAttachmentState) {
 }
 
 #pragma mark - Editor Actions
+
+//插入封面
+-(void)addArticleCover:(id)sender {
+
+}
 
 //二次编辑超链接
 -(void)editHyperlink {
@@ -287,12 +306,6 @@ typedef NS_OPTIONS(NSUInteger, QSImageAttachmentState) {
 	}
 }
 
--(void)configDefaultStyle {
-
-	// demonstrate half em paragraph spacing
-    //DTCSSStylesheet *styleSheet = [[DTCSSStylesheet alloc] initWithStyleBlock:@"p {margin-bottom:0.5em} ol {margin-bottom:0.5em; -webkit-padding-start:40px;} ul {margin-bottom:0.5em;-webkit-padding-start:40px;}"];
-}
-
 #pragma mark - Lazy subviews
 
 //工具栏
@@ -314,33 +327,47 @@ typedef NS_OPTIONS(NSUInteger, QSImageAttachmentState) {
 
 //编辑器
 -(DTRichTextEditorView *)richEditor {
-   QSRichTextEditorBodyCell *cell  = (QSRichTextEditorBodyCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
-    if (cell) {
+   
+    if (!_richEditor) {
+        _richEditor = [[DTRichTextEditorView alloc]init];
+        _richEditor.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        _richEditor.defaultFontSize = 16;
+        _richEditor.attributedTextContentView.edgeInsets = UIEdgeInsetsMake(20, 18, 20, 18);
+        _richEditor.delegate = self;
+        _richEditor.textDelegate = self;
         
-        DTRichTextEditorView *editorView = cell.richEditor;
-        editorView.delegate = self;
-        editorView.textDelegate = self;
-        
-        editorView.textSizeMultiplier = 1.0;
-        editorView.maxImageDisplaySize = CGSizeMake(300, 300);
-        editorView.autocorrectionType = UITextAutocorrectionTypeYes;
-        editorView.editorViewDelegate = self;
-        editorView.defaultFontSize = 16;
-        editorView.attributedTextContentView.shouldDrawImages = NO;
-        editorView.inputAccessoryView = self.editorToolBar;
-        
-        return editorView;
+        _richEditor.textSizeMultiplier = 1.0;
+        _richEditor.maxImageDisplaySize = CGSizeMake(300, 300);
+        _richEditor.autocorrectionType = UITextAutocorrectionTypeYes;
+        _richEditor.editorViewDelegate = self;
+        _richEditor.attributedTextContentView.shouldDrawImages = NO;
+        _richEditor.inputAccessoryView = self.editorToolBar;
     }
-    return nil;
+    return _richEditor;
 }
 
+//标题
 -(YYTextView *)titleTextView {
-    QSRichTextEditorTitleCell *cell  = (QSRichTextEditorTitleCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
-    if (cell) {
-        YYTextView *titleTextView = cell.titleTextView;
-        return titleTextView;
+    if (!_titleTextView) {
+        _titleTextView = [YYTextView new];
+        _titleTextView.font = [UIFont boldSystemFontOfSize:30];
+        _titleTextView.placeholderFont = [UIFont boldSystemFontOfSize:30];
+        _titleTextView.placeholderText = @"请输入标题";
+        _titleTextView.textContainerInset = UIEdgeInsetsMake(10, 20, 10, 20);
     }
-    return nil;
+    return _titleTextView;
+}
+
+//封面
+-(QMUIButton *)coverButton {
+    if (!_coverButton) {
+        _coverButton = [[QMUIButton alloc]initWithImage:UIImageMake(@"edit_Header") title:@"添加封面"];
+        _coverButton.spacingBetweenImageAndTitle = 12;
+        [_coverButton setBackgroundColor:UIColorGray];
+        [_coverButton setTitleColor:UIColorBlack forState:UIControlStateNormal];
+        [_coverButton addTarget:self action:@selector(addArticleCover:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _coverButton;
 }
 
 //键盘管理
@@ -363,38 +390,6 @@ typedef NS_OPTIONS(NSUInteger, QSImageAttachmentState) {
     return (DTTextRange *)self.richEditor.selectedTextRange;
 }
 
-#pragma mark - QMUITableViewDelegate
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 3;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    static NSString *cellIdentifier;
-    switch (indexPath.row) {
-        case 0:
-            cellIdentifier = @"coverCell";
-            break;
-        case 1:
-            cellIdentifier = @"titleCell";
-            break;
-        case 2:
-            cellIdentifier = @"bodyCell";
-            break;
-        default:
-            break;
-    }
-  
-    return [self.tableView qmui_heightForCellWithIdentifier:cellIdentifier cacheByIndexPath:indexPath configuration:^(id cell) {
-        
-    }];
-}
-
 - (UITableViewCell *)qmui_tableView:(UITableView *)tableView cellWithIdentifier:(NSString *)identifier {
     QSRichTextEditorCell *cell = (QSRichTextEditorCell *)[tableView dequeueReusableCellWithIdentifier:identifier];
     if (!cell) {
@@ -408,28 +403,6 @@ typedef NS_OPTIONS(NSUInteger, QSImageAttachmentState) {
     }
     cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
     return cell;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    QSRichTextEditorCell *cell;
-    switch (indexPath.row) {
-        case 0:
-             cell = (QSRichTextEditorCoverCell *)[self qmui_tableView:tableView cellWithIdentifier:@"coverCell"];
-            break;
-        case 1:
-            cell = (QSRichTextEditorTitleCell *)[self qmui_tableView:tableView cellWithIdentifier:@"titleCell"];
-            break;
-        case 2:
-            cell = (QSRichTextEditorBodyCell *)[self qmui_tableView:tableView cellWithIdentifier:@"bodyCell"];
-            break;
-        default:
-            break;
-    }
-    return cell;
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [self.tableView qmui_clearsSelection];
 }
 
 #pragma mark - DTRichTextEditorViewDelegate
@@ -463,10 +436,10 @@ typedef NS_OPTIONS(NSUInteger, QSImageAttachmentState) {
 // RichTextEditor 选中文本生命周期
 - (BOOL)editorView:(DTRichTextEditorView *)editorView shouldChangeTextInRange:(NSRange)range replacementText:(NSAttributedString *)text {
     
-    DTTextAttachment *attchment = [self.richEditor qs_attachmentWithRange:[DTTextRange rangeWithNSRange:range]];
-    if (attchment) {
-        return NO;
-    }
+//    DTTextAttachment *attchment = [self.richEditor qs_attachmentWithRange:[DTTextRange rangeWithNSRange:range]];
+//    if (attchment) {
+//        return NO;
+//    }
 	return YES;
 }
 
@@ -827,6 +800,10 @@ typedef NS_OPTIONS(NSUInteger, QSImageAttachmentState) {
 //上下滑动取消键盘响应
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
 	self.state = QSRichEditorStateScrolling;
+}
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    
 }
 
 -(void)setSelectedRangeObserver {

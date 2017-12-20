@@ -10,6 +10,7 @@
 		015167DD1FE76B6D00F2F1C7 /* DTImageCaptionAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 015167DC1FE76B6D00F2F1C7 /* DTImageCaptionAttachment.m */; };
 		015168121FE8DC4A00F2F1C7 /* DTTextBlockAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 015168111FE8DC4A00F2F1C7 /* DTTextBlockAttachment.m */; };
 		015168151FE8E20100F2F1C7 /* NSString+YYAdd.m in Sources */ = {isa = PBXBuildFile; fileRef = 015168141FE8E20100F2F1C7 /* NSString+YYAdd.m */; };
+		015168191FEA5B1500F2F1C7 /* DTTextPlaceholderAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 015168181FEA5B1500F2F1C7 /* DTTextPlaceholderAttachment.m */; };
 		0168006C1FDFC39800C66E28 /* DTRichTextEditorView+qs.m in Sources */ = {isa = PBXBuildFile; fileRef = 0168006B1FDFC39800C66E28 /* DTRichTextEditorView+qs.m */; };
 		016800741FE106AE00C66E28 /* QSRichTextEditorImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 016800731FE106AE00C66E28 /* QSRichTextEditorImageView.m */; };
 		0168008A1FE36B0F00C66E28 /* QSTextFieldsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 016800891FE36B0F00C66E28 /* QSTextFieldsViewController.m */; };
@@ -42,6 +43,8 @@
 		015168111FE8DC4A00F2F1C7 /* DTTextBlockAttachment.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DTTextBlockAttachment.m; sourceTree = "<group>"; };
 		015168131FE8E20000F2F1C7 /* NSString+YYAdd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+YYAdd.h"; sourceTree = "<group>"; };
 		015168141FE8E20100F2F1C7 /* NSString+YYAdd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+YYAdd.m"; sourceTree = "<group>"; };
+		015168171FEA5B1500F2F1C7 /* DTTextPlaceholderAttachment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DTTextPlaceholderAttachment.h; sourceTree = "<group>"; };
+		015168181FEA5B1500F2F1C7 /* DTTextPlaceholderAttachment.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DTTextPlaceholderAttachment.m; sourceTree = "<group>"; };
 		0168006A1FDFC39800C66E28 /* DTRichTextEditorView+qs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DTRichTextEditorView+qs.h"; sourceTree = "<group>"; };
 		0168006B1FDFC39800C66E28 /* DTRichTextEditorView+qs.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "DTRichTextEditorView+qs.m"; sourceTree = "<group>"; };
 		016800721FE106AE00C66E28 /* QSRichTextEditorImageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSRichTextEditorImageView.h; sourceTree = "<group>"; };
@@ -166,6 +169,8 @@
 				016F49DC1FE3B8ED00768E73 /* QSRichTextSeperatorAttachment.m */,
 				016F49DE1FE3BE5300768E73 /* QSHyperlinkAttachment.h */,
 				016F49DF1FE3BE5300768E73 /* QSHyperlinkAttachment.m */,
+				015168171FEA5B1500F2F1C7 /* DTTextPlaceholderAttachment.h */,
+				015168181FEA5B1500F2F1C7 /* DTTextPlaceholderAttachment.m */,
 				015167DB1FE76B6D00F2F1C7 /* DTImageCaptionAttachment.h */,
 				015167DC1FE76B6D00F2F1C7 /* DTImageCaptionAttachment.m */,
 				015168101FE8DC4A00F2F1C7 /* DTTextBlockAttachment.h */,
@@ -354,6 +359,7 @@
 				016CCCE01FD92A7E000493F7 /* QSRichEditorViewController+keyboard.m in Sources */,
 				016CCCF31FDA790B000493F7 /* QSRichTextEditorCell.m in Sources */,
 				016CCCCD1FD92905000493F7 /* main.m in Sources */,
+				015168191FEA5B1500F2F1C7 /* DTTextPlaceholderAttachment.m in Sources */,
 				016CCCDF1FD92A7E000493F7 /* QSRichEditorConfig.m in Sources */,
 				015167DD1FE76B6D00F2F1C7 /* DTImageCaptionAttachment.m in Sources */,
 				016CCCBF1FD92905000493F7 /* AppDelegate.m in Sources */,

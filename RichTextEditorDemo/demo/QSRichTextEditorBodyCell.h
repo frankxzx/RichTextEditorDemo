@@ -13,5 +13,6 @@
 @interface QSRichTextEditorBodyCell : QSRichTextEditorCell
 
 @property(nonatomic, strong) DTRichTextEditorView *richEditor;
+@property(nonatomic, assign) BOOL isFullScreen;
 
 @end

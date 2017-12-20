@@ -12,7 +12,7 @@
 extern CGFloat const toolBarHeight;
 extern CGFloat const editorMoreViewHeight;
 
-@interface QSRichEditorViewController : QMUICommonTableViewController
+@interface QSRichEditorViewController : QMUICommonViewController
 
 @property(nonatomic, strong) UIView *toolView;
 @property (nonatomic, retain) NSArray *menuItems;
