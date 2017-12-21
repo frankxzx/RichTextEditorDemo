@@ -308,7 +308,7 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
         _richEditor = [[DTRichTextEditorView alloc]init];
         _richEditor.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         _richEditor.defaultFontSize = 16;
-        _richEditor.attributedTextContentView.edgeInsets = UIEdgeInsetsMake(84 + 200, 18, 20, 18);
+        _richEditor.attributedTextContentView.edgeInsets = UIEdgeInsetsMake(84 + 60 + 57, 18, 20, 18);
         _richEditor.delegate = self;
         _richEditor.textDelegate = self;
         
@@ -326,7 +326,7 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 -(YYTextView *)titleTextView {
     if (!_titleTextView) {
         _titleTextView = [YYTextView new];
-        _titleTextView.frame = CGRectMake(20, self.coverButton.qmui_bottom + 20, SCREEN_WIDTH - 40, 100);
+        _titleTextView.frame = CGRectMake(20, self.coverButton.qmui_bottom + 20, SCREEN_WIDTH - 40, 57);
         _titleTextView.font = [UIFont boldSystemFontOfSize:30];
         _titleTextView.placeholderFont = [UIFont boldSystemFontOfSize:30];
         _titleTextView.placeholderText = @"请输入标题";

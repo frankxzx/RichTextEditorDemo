@@ -48,7 +48,8 @@
 }
 
 -(UIBarButtonItem *)setBarButtonItem:(NSString *)imageName action:(SEL)selector {
-    return [QMUIToolbarButton barButtonItemWithImage:[UIImageMake(imageName) imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] target:self action:selector];
+    UIBarButtonItem *item = [QMUIToolbarButton barButtonItemWithImage:[UIImageMake(imageName) imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] target:self action:selector];
+    return item;
 }
 
 -(void)setupTextCountItemWithCount:(NSUInteger)count {
@@ -108,13 +109,13 @@
 -(void)setFontStyle:(UIBarButtonItem *)sender {
     
     if (sender.tag == QSRichEditorTextStyleNormal) {
-        sender.image = UIImageMake(@"toolbar_font_style2");
+        sender.image = [UIImageMake(@"toolbar_font_style2") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
         sender.tag = QSRichEditorTextStyleLarger;
     } else if (sender.tag == QSRichEditorTextStyleLarger) {
-        sender.image = UIImageMake(@"toolbar_font_style3");
+        sender.image = [UIImageMake(@"toolbar_font_style3") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
         sender.tag = QSRichEditorTextStylePlaceholder;
     } else if (sender.tag == QSRichEditorTextStylePlaceholder) {
-        sender.image = UIImageMake(@"toolbar_font_style1");
+        sender.image = [UIImageMake(@"toolbar_font_style1") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
         sender.tag = QSRichEditorTextStyleNormal;
     }
     
@@ -127,13 +128,13 @@
 - (void)align:(UIBarButtonItem *)sender {
     
     if (sender.tag == kCTTextAlignmentLeft) {
-        sender.image = UIImageMake(@"toolbar_align_center");
+        sender.image = [UIImageMake(@"toolbar_align_center") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
         sender.tag = kCTTextAlignmentCenter;
     } else if (sender.tag == kCTTextAlignmentCenter) {
-        sender.image = UIImageMake(@"toolbar_align_right");
+        sender.image = [UIImageMake(@"toolbar_align_right") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
         sender.tag = kCTTextAlignmentRight;
     } else if (sender.tag == kCTTextAlignmentRight) {
-        sender.image = UIImageMake(@"toolbar_align_left");
+        sender.image = [UIImageMake(@"toolbar_align_left") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
         sender.tag = kCTTextAlignmentLeft;
     }
     
@@ -174,13 +175,13 @@
 - (void)setOrderedList:(UIBarButtonItem *)sender {
     
     if (sender.tag == DTCSSListStyleTypeNone) {
-        sender.image = UIImageMake(@"toolbar_order_number");
+        sender.image = [UIImageMake(@"toolbar_order_number") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
         sender.tag = DTCSSListStyleTypeDecimal;
     } else if (sender.tag == DTCSSListStyleTypeCircle) {
-        sender.image = UIImageMake(@"toolbar_order");
+        sender.image = [UIImageMake(@"toolbar_order") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
         sender.tag = DTCSSListStyleTypeNone;
     } else if (sender.tag == DTCSSListStyleTypeDecimal) {
-        sender.image = UIImageMake(@"toolbar_order_dot");
+        sender.image = [UIImageMake(@"toolbar_order_dot") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
         sender.tag = DTCSSListStyleTypeCircle;
     }
     
