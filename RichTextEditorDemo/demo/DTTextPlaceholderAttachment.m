@@ -7,6 +7,9 @@
 //
 
 #import "DTTextPlaceholderAttachment.h"
+#import <QMUIKit/QMUIKit.h>
+
+static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 
 @implementation DTTextPlaceholderAttachment
 
@@ -16,12 +19,7 @@
     
     if (self)
     {
-        // get base URL
-        NSURL *baseURL = [options objectForKey:NSBaseURLDocumentOption];
-        //        NSString *src = [element.attributes objectForKey:@"src"];
-        
-        // content URL
-        //        _contentURL = [NSURL URLWithString:src relativeToURL:baseURL];
+        self.displaySize = CGSizeMake(SCREEN_WIDTH - 40, 60);
     }
     
     return self;
@@ -33,42 +31,35 @@
 {
     NSMutableString *retString = [NSMutableString string];
     
-    [retString appendString:@"<p class='imageDes';"];
+    [retString appendString:@"<cover></cover>"];
     
-    NSMutableString *styleString = [NSMutableString string];
+    return retString;
+}
+
+@end
+
+@implementation DTTextTitleAttachment
+
+- (id)initWithElement:(DTHTMLElement *)element options:(NSDictionary *)options
+{
+    self = [super initWithElement:element options:options];
     
-    [styleString appendFormat:@"font-size:12px;"];
-    [styleString appendFormat:@"color: #e2e2e2;"];
-    [styleString appendFormat:@"margin:8px;"];
-    [styleString appendFormat:@"text-align:center;"];
-    
-    // add local style for size, since sizes might vary quite a bit
-    if ([styleString length])
+    if (self)
     {
-        [retString appendFormat:@" style=\"%@\"", styleString];
+        self.displaySize = CGRectInsetEdges(CGRectMake(0, 0, SCREEN_WIDTH, 120), kInsets).size;
     }
     
-    [retString appendString:@">"];
+    return self;
+}
+
+#pragma mark - DTTextAttachmentHTMLEncoding
+
+- (NSString *)stringByEncodingAsHTML
+{
+    NSMutableString *retString = [NSMutableString string];
     
-    // attach the attributes dictionary
-    NSMutableDictionary *tmpAttributes = [_attributes mutableCopy];
-    
-    // remove src,style, width and height we already have these
-    [tmpAttributes removeObjectForKey:@"src"];
-    [tmpAttributes removeObjectForKey:@"style"];
-    [tmpAttributes removeObjectForKey:@"width"];
-    [tmpAttributes removeObjectForKey:@"height"];
-    
-    for (__strong NSString *oneKey in [tmpAttributes allKeys])
-    {
-        oneKey = [oneKey stringByAddingHTMLEntities];
-        NSString *value = [[tmpAttributes objectForKey:oneKey] stringByAddingHTMLEntities];
-        [retString appendFormat:@" %@=\"%@\"", oneKey, value];
-    }
-    
-    
-    [retString appendString:@"</p>"];
-    
+    [retString appendString:@"<richTextEditorTitle></richTextEditorTitle>"];
+
     return retString;
 }
 

@@ -79,18 +79,14 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
     self.navigationItem.leftBarButtonItem = [QMUINavigationButton barButtonItemWithType:QMUINavigationButtonTypeNormal title:@"打印 Html" tintColor:UIColorBlack position:QMUINavigationButtonPositionLeft target:self action:@selector(showHtmlString:)];
 	self.state = QSRichEditorStateNoneContent;
     self.keyboardManager.delegateEnabled = YES;
+    [self.richEditor becomeFirstResponder];
 }
 
 -(void)initSubviews {
 	[super initSubviews];
     [self.view addSubview:self.richEditor];
-    DTTextPlaceholderAttachment *titleAttchment = [[DTTextPlaceholderAttachment alloc]init];
-    titleAttchment.displaySize = CGRectInsetEdges(CGRectMake(0, 0, SCREEN_WIDTH, 120), kInsets).size;
-//    [self.richEditor replaceRange:[DTTextRange rangeWithNSRange:NSMakeRange(0, 1)] withAttachment:titleAttchment inParagraph:NO];
-    
-    DTTextPlaceholderAttachment *coverAttchment = [[DTTextPlaceholderAttachment alloc]init];
-    coverAttchment.displaySize = CGSizeMake(SCREEN_WIDTH, 60);
-    [self.richEditor replaceRange:[DTTextRange rangeWithNSRange:NSMakeRange(2, 1)] withAttachment:coverAttchment inParagraph:NO];
+    [self.richEditor addSubview:self.titleTextView];
+    [self.richEditor addSubview:self.coverButton];
 }
 
 -(void)viewDidLayoutSubviews {
@@ -101,7 +97,6 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
-	[self.richEditor becomeFirstResponder];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -234,21 +229,6 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 	
 }
 
-//插入分隔线
--(void)insertSeparatorLine {
-	
-}
-
-//图片更换
--(void)replaceImageAtRange:(id)range {
-	
-}
-
-//图片注释
--(void)commentImageAtRange:(id)range {
-	
-}
-
 //插入文章封面
 -(void)insertArticleCover {
 	
@@ -328,7 +308,7 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
         _richEditor = [[DTRichTextEditorView alloc]init];
         _richEditor.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         _richEditor.defaultFontSize = 16;
-        _richEditor.attributedTextContentView.edgeInsets = UIEdgeInsetsMake(20, 18, 20, 18);
+        _richEditor.attributedTextContentView.edgeInsets = UIEdgeInsetsMake(84 + 200, 18, 20, 18);
         _richEditor.delegate = self;
         _richEditor.textDelegate = self;
         
@@ -346,6 +326,7 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 -(YYTextView *)titleTextView {
     if (!_titleTextView) {
         _titleTextView = [YYTextView new];
+        _titleTextView.frame = CGRectMake(20, self.coverButton.qmui_bottom + 20, SCREEN_WIDTH - 40, 100);
         _titleTextView.font = [UIFont boldSystemFontOfSize:30];
         _titleTextView.placeholderFont = [UIFont boldSystemFontOfSize:30];
         _titleTextView.placeholderText = @"请输入标题";
@@ -358,6 +339,7 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 -(QMUIButton *)coverButton {
     if (!_coverButton) {
         _coverButton = [[QMUIButton alloc]initWithImage:UIImageMake(@"edit_Header") title:@"添加封面"];
+        _coverButton.frame = CGRectMake(20, 20 + self.qmui_navigationBarMaxYInViewCoordinator, SCREEN_WIDTH - 40, 60);
         _coverButton.spacingBetweenImageAndTitle = 12;
         [_coverButton setBackgroundColor:UIColorGray];
         [_coverButton setTitleColor:UIColorBlack forState:UIControlStateNormal];
@@ -515,18 +497,6 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
         [linkButon addTarget:self action:@selector(editImageCaption:) forControlEvents:UIControlEventTouchUpInside];
         return linkButon;
         
-    } else if ([attachment isKindOfClass:[DTTextPlaceholderAttachment class]]) {
-        
-        RichTextEditorPlaceHolderType type = ((DTTextPlaceholderAttachment *)attachment).placeholderType;
-        switch (type) {
-            case RichTextEditorPlaceHolderTitle:
-                self.titleTextView.frame = frame;
-                return self.titleTextView;
-                
-            case RichTextEditorPlaceHolderCover:
-                self.coverButton.frame = frame;
-                return self.coverButton;
-        }
     }
     
     return nil;
@@ -576,7 +546,7 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
     CGSize size = CGSizeMake(w-40, h);
     line.displaySize = size;
     line.originalSize = size;
-    [self.richEditor replaceRange:self.richEditor.selectedTextRange withAttachment:line inParagraph:NO];
+    [self.richEditor replaceRange:self.richEditor.selectedTextRange withAttachment:line inParagraph:YES];
 }
 
 //插入图片
@@ -593,7 +563,7 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 	attachment.originalSize = size;
 	
     UITextRange * _Nullable extractedExpr = [self.richEditor selectedTextRange];
-    [self.richEditor replaceRange:extractedExpr withAttachment:attachment inParagraph:NO];
+    [self.richEditor replaceRange:extractedExpr withAttachment:attachment inParagraph:YES];
 }
 
 //设置字体
@@ -609,7 +579,6 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
     [self.richEditor updateTextStyle:style inRange:self.richEditor.qs_selectedTextRange];
 }
 
-//应用样式
 -(void)formatDidToggleBlockquote {
     DTTextBlockAttachment *attachment = [[DTTextBlockAttachment alloc]init];
     NSString *text = [self.richEditor attributedSubstringForRange:self.richEditor.selectedTextRange].string;
@@ -618,7 +587,7 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
     CGFloat textHeight = [text heightForFont:font width:textMaxWidth];
     attachment.displaySize = CGSizeMake(textMaxWidth, textHeight);
     attachment.text = text;
-    [self.richEditor replaceRange:self.richEditor.qs_selectedTextRange withAttachment:attachment inParagraph:NO];
+    [self.richEditor replaceRange:self.richEditor.qs_selectedTextRange withAttachment:attachment inParagraph:YES];
     [self.richEditor applyTextAlignment:kCTTextAlignmentCenter toParagraphsContainingRange:self.richEditor.qs_selectedTextRange];
 }
 
@@ -742,14 +711,14 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
         if (attachment.isCaption) {
             DTImageCaptionAttachment *oldVal = attachment.captionAttachment;
             DTTextRange *replaceRange = [self.richEditor qs_rangeOfAttachment:oldVal];
-            [self.richEditor replaceRange:replaceRange withAttachment:caption inParagraph:NO];
+            [self.richEditor replaceRange:replaceRange withAttachment:caption inParagraph:YES];
             attachment.captionAttachment = caption;
         } else {
             DTTextRange *range = [self.richEditor qs_rangeOfAttachment:attachment];
             //貌似如果超出当前富文本的 range length，超出的部分将无法选中
             //DTTextRange *insertRange = [DTTextRange rangeWithNSRange:NSMakeRange(((DTTextPosition *)(range.end)).location, 1)];
             DTTextRange *insertRange = [DTTextRange emptyRangeAtPosition:range.end];
-            [self.richEditor replaceRange:insertRange withAttachment:caption inParagraph:NO];
+            [self.richEditor replaceRange:insertRange withAttachment:caption inParagraph:YES];
             attachment.captionAttachment = caption;
         }
     }];
@@ -768,7 +737,7 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
     
 //    DTTextRange *range = [self rangeOfAttachment:sender];
     DTTextRange *range = [self.richEditor qs_rangeOfAttachment:attachment];
-    [self.richEditor replaceRange:range withAttachment:replaceAttachment inParagraph:NO];
+    [self.richEditor replaceRange:range withAttachment:replaceAttachment inParagraph:YES];
 }
 
 -(DTTextRange *)rangeOfAttachment:(UIButton *)sender {

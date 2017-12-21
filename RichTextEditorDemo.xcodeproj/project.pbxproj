@@ -33,6 +33,7 @@
 		016F49DD1FE3B8ED00768E73 /* QSRichTextSeperatorAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 016F49DC1FE3B8ED00768E73 /* QSRichTextSeperatorAttachment.m */; };
 		016F49E01FE3BE5300768E73 /* QSHyperlinkAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 016F49DF1FE3BE5300768E73 /* QSHyperlinkAttachment.m */; };
 		01957E4C1FE515F200F1281D /* DTImageTextAttachment+qs.m in Sources */ = {isa = PBXBuildFile; fileRef = 01957E4B1FE515F200F1281D /* DTImageTextAttachment+qs.m */; };
+		01F9E4F51FEBAC77000D915F /* htmlText.html in Resources */ = {isa = PBXBuildFile; fileRef = 01F9E4F41FEBAC77000D915F /* htmlText.html */; };
 		84490411E7C9011FDFD429B4 /* Pods_RichTextEditorDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B54ABF0B1BDED20575A5DA49 /* Pods_RichTextEditorDemo.framework */; };
 /* End PBXBuildFile section */
 
@@ -87,6 +88,7 @@
 		016F49DF1FE3BE5300768E73 /* QSHyperlinkAttachment.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSHyperlinkAttachment.m; sourceTree = "<group>"; };
 		01957E4A1FE515F200F1281D /* DTImageTextAttachment+qs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DTImageTextAttachment+qs.h"; sourceTree = "<group>"; };
 		01957E4B1FE515F200F1281D /* DTImageTextAttachment+qs.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "DTImageTextAttachment+qs.m"; sourceTree = "<group>"; };
+		01F9E4F41FEBAC77000D915F /* htmlText.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = htmlText.html; sourceTree = "<group>"; };
 		4295F660BADBD64DB65E20C2 /* Pods-RichTextEditorDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RichTextEditorDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-RichTextEditorDemo/Pods-RichTextEditorDemo.release.xcconfig"; sourceTree = "<group>"; };
 		B54ABF0B1BDED20575A5DA49 /* Pods_RichTextEditorDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RichTextEditorDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF97F62057F5CFBB40AA3EB3 /* Pods-RichTextEditorDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RichTextEditorDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RichTextEditorDemo/Pods-RichTextEditorDemo.debug.xcconfig"; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 				016CCCD61FD92A7E000493F7 /* QSRichEditorViewController+keyboard.h */,
 				016CCCD81FD92A7E000493F7 /* QSRichEditorViewController.h */,
 				016CCCD91FD92A7E000493F7 /* QSRichEditorViewController.m */,
+				01F9E4F41FEBAC77000D915F /* htmlText.html */,
 				016CCCE81FDA6BEC000493F7 /* QSRichTextEditorCoverCell.h */,
 				016CCCE91FDA6BEC000493F7 /* QSRichTextEditorCoverCell.m */,
 				016CCCEB1FDA6C08000493F7 /* QSRichTextEditorTitleCell.h */,
@@ -265,6 +268,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				016CCCCA1FD92905000493F7 /* LaunchScreen.storyboard in Resources */,
+				01F9E4F51FEBAC77000D915F /* htmlText.html in Resources */,
 				016CCCE21FD92A7E000493F7 /* RichTextEditor.xcassets in Resources */,
 				016CCCC71FD92905000493F7 /* Assets.xcassets in Resources */,
 				016CCCC51FD92905000493F7 /* Main.storyboard in Resources */,

@@ -23,31 +23,32 @@
 
 -(instancetype)initWithFrame:(CGRect)frame {
 	if (self = [super initWithFrame:frame]) {
-        self.beginTextEditorButton = [QMUIToolbarButton barButtonItemWithImage:UIImageMake(@"toolbar_style") target:self action:@selector(beginTextEditor:)];
-        self.fontStyleButton = [QMUIToolbarButton barButtonItemWithImage:UIImageMake(@"toolbar_font_style1") target:self action:@selector(setFontStyle:)];
-        self.fontStyleButton.tag = QSRichEditorTextStyleNormal;
         
-		self.boldButton = [QMUIToolbarButton barButtonItemWithImage:UIImageMake(@"toolbar_bold") target:self action:@selector(setBold)];
-		self.italicButton = [QMUIToolbarButton barButtonItemWithImage:UIImageMake(@"toolbar_italic") target:self action:@selector(setItalic)];
-		self.strikeThroughButton = [QMUIToolbarButton barButtonItemWithImage:UIImageMake(@"toolbar_strikethrough") target:self action:@selector(setUnderline)];
-		
-		self.alignButton = [QMUIToolbarButton barButtonItemWithImage:UIImageMake(@"toolbar_align_left") target:self action:@selector(align:)];
+        self.beginTextEditorButton = [self setBarButtonItem:@"toolbar_style" action:@selector(beginTextEditor:)];
+        self.fontStyleButton = [self setBarButtonItem:@"toolbar_font_style1" action:@selector(setFontStyle:)];
+        self.boldButton = [self setBarButtonItem:@"toolbar_bold" action:@selector(setBold)];
+        self.italicButton = [self setBarButtonItem:@"toolbar_italic" action:@selector(setItalic)];
+        self.strikeThroughButton = [self setBarButtonItem:@"toolbar_strikethrough" action:@selector(setUnderline)];
+        self.alignButton = [self setBarButtonItem:@"toolbar_align_left" action:@selector(align:)];
+        self.orderedListButton = [self setBarButtonItem:@"toolbar_order" action:@selector(setOrderedList:)];
+        self.photoButton = [self setBarButtonItem:@"toolbar_image" action:@selector(insertImage:)];
+        self.blockquoteButton = [self setBarButtonItem:@"toolbar_blockquote" action:@selector(setBlockquote)];
+        self.moreButton = [self setBarButtonItem:@"toolbar_more" action:@selector(openMoreView:)];
+        self.textEditorCloseButton = [self setBarButtonItem:@"toolbar_close" action:@selector(endTextEditor)];
+        self.moreViewCloseButton = [self setBarButtonItem:@"icon_close" action:@selector(closeMoreView:)];
+        
+        self.fontStyleButton.tag = QSRichEditorTextStyleNormal;
         self.alignButton.tag = kCTTextAlignmentLeft;
-		
-		self.orderedListButton = [QMUIToolbarButton barButtonItemWithImage:UIImageMake(@"toolbar_order") target:self action:@selector(setOrderedList:)];
         self.orderedListButton.tag = DTCSSListStyleTypeNone;
-		
-		self.photoButton = [QMUIToolbarButton barButtonItemWithImage:UIImageMake(@"toolbar_image") target:self action:@selector(insertImage:)];
-		self.blockquoteButton = [QMUIToolbarButton barButtonItemWithImage:UIImageMake(@"toolbar_blockquote") target:self action:@selector(setBlockquote)];
-		
-        self.moreButton = [QMUIToolbarButton barButtonItemWithImage:UIImageMake(@"toolbar_more") target:self action:@selector(openMoreView:)];
-		self.textEditorCloseButton = [QMUIToolbarButton barButtonItemWithImage:UIImageMake(@"toolbar_close") target:self action:@selector(endTextEditor)];
-        self.moreViewCloseButton = [QMUIToolbarButton barButtonItemWithImage:UIImageMake(@"icon_close") target:self action:@selector(closeMoreView:)];
 		
         [self setupTextCountItemWithCount:0];
         [self initEditorBarItems];
 	}
 	return self;
+}
+
+-(UIBarButtonItem *)setBarButtonItem:(NSString *)imageName action:(SEL)selector {
+    return [QMUIToolbarButton barButtonItemWithImage:[UIImageMake(imageName) imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] target:self action:selector];
 }
 
 -(void)setupTextCountItemWithCount:(NSUInteger)count {

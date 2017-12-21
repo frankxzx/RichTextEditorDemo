@@ -8,13 +8,10 @@
 
 #import <DTCoreText/DTCoreText.h>
 
-typedef NS_OPTIONS(NSUInteger, RichTextEditorPlaceHolderType) {
-    RichTextEditorPlaceHolderTitle,
-    RichTextEditorPlaceHolderCover
-};
-
 @interface DTTextPlaceholderAttachment : DTTextAttachment
 
-@property(nonatomic, assign) RichTextEditorPlaceHolderType placeholderType;
+@end
+
+@interface DTTextTitleAttachment : DTTextAttachment
 
 @end
