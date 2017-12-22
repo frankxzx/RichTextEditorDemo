@@ -29,9 +29,9 @@
         self.replaceButton = [[QMUIFillButton alloc]initWithImage:UIImageMake(@"icon_editor_pick") title:@"替换"];
         self.editButton = [[QMUIFillButton alloc]initWithImage:UIImageMake(@"icon_editor_crop") title:@"编辑"];
         self.closeButton = [[QMUIButton alloc]initWithImage:UIImageMake(@"edit_close") title:nil];
-        self.captionButton.fillColor = FillButtonColorGray;
-        self.replaceButton.fillColor = FillButtonColorGray;
-        self.editButton.fillColor = FillButtonColorGray;
+        self.captionButton.fillColor = UIColorWhite;
+        self.replaceButton.fillColor = UIColorWhite;
+        self.editButton.fillColor = UIColorWhite;
         
         self.captionButton.titleTextColor = UIColorBlack;
         self.replaceButton.titleTextColor = UIColorBlack;

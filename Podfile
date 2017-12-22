@@ -5,4 +5,5 @@ target 'RichTextEditorDemo' do
  pod 'QMUIKit'
  pod 'DTRichTextEditor'
  pod 'YYText'
+ pod 'ZFPlayer'
 end

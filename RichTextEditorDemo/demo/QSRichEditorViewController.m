@@ -27,6 +27,7 @@
 #import "DTTextPlaceholderAttachment.h"
 #import "UIBarButtonItem+qs.h"
 #import "QSTextBlockView.h"
+#import <ZFPlayer/ZFPlayer.h>
 
 CGFloat const toolBarHeight = 44;
 CGFloat const editorMoreViewHeight = 200;
@@ -510,6 +511,38 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
         [linkButon addTarget:self action:@selector(editImageCaption:) forControlEvents:UIControlEventTouchUpInside];
         return linkButon;
         
+    } else if ([attachment isKindOfClass:[DTVideoTextAttachment class]]) {
+        
+//        self.playerView = [[ZFPlayerView alloc] init];
+//        [self.view addSubview:self.playerView];
+//        [self.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
+//            make.top.equalTo(self.view).offset(20);
+//            make.left.right.equalTo(self.view);
+//            // Here a 16:9 aspect ratio, can customize the video aspect ratio
+//            make.height.equalTo(self.playerView.mas_width).multipliedBy(9.0f/16.0f);
+//        }];
+//        // control view（you can custom）
+//        ZFPlayerControlView *controlView = [[ZFPlayerControlView alloc] init];
+//        // model
+//        ZFPlayerModel *playerModel = [[ZFPlayerModel alloc]init];
+//        playerModel.fatherView = ...
+//        playerModel.videoURL = ...
+//        playerModel.title = ...
+//        [self.playerView playerControlView:controlView playerModel:playerModel];
+//
+//        // delegate
+//        self.playerView.delegate = self;
+//        // auto play the video
+//        [self.playerView autoPlayTheVideo];
+        
+        QMUIButton *linkButon = [[QMUIButton alloc]initWithFrame:frame];
+        linkButon.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+        [linkButon setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+        linkButon.titleLabel.font = ((DTImageCaptionAttachment *) attachment).titleFont;
+        [linkButon setTitle:((DTImageCaptionAttachment *) attachment).text forState:UIControlStateNormal];
+        [linkButon addTarget:self action:@selector(editImageCaption:) forControlEvents:UIControlEventTouchUpInside];
+        return linkButon;
+        
     }
     
     return nil;
@@ -560,6 +593,7 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
     line.displaySize = size;
     line.originalSize = size;
     [self.richEditor replaceRange:self.richEditor.selectedTextRange withAttachment:line inParagraph:YES];
+    [self.richEditor insertText:@"\n"];
 }
 
 //插入图片
@@ -577,6 +611,25 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 	
     UITextRange * _Nullable extractedExpr = [self.richEditor selectedTextRange];
     [self.richEditor replaceRange:extractedExpr withAttachment:attachment inParagraph:YES];
+}
+
+//插入视频
+-(void)insertVideo {
+    
+    DTVideoTextAttachment *attachment = [[DTVideoTextAttachment alloc] initWithElement:nil options:nil];
+    CGFloat w = [UIScreen mainScreen].bounds.size.width;
+    CGFloat h = [UIScreen mainScreen].bounds.size.height / 3;
+    CGSize size = CGSizeMake(w-40, h);
+    attachment.displaySize = size;
+    attachment.originalSize = size;
+    
+    UITextRange * _Nullable extractedExpr = [self.richEditor selectedTextRange];
+    [self.richEditor replaceRange:extractedExpr withAttachment:attachment inParagraph:YES];
+}
+
+//插入语音
+-(void)insertAudio {
+    
 }
 
 //设置字体
@@ -735,6 +788,10 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
             attachment.captionAttachment = caption;
         }
     }];
+    
+    if (attachment.isCaption) {
+        captionInputController.textField.text = attachment.captionText;
+    }
     [captionInputController show];
 }
 
