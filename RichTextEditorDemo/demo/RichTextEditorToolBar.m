@@ -10,6 +10,7 @@
 #import "RichTextEditorAction.h"
 #import <QMUIKit/QMUIKit.h>
 #import <YYText/YYText.h>
+#import "UIBarButtonItem+qs.h"
 
 @interface RichTextEditorToolBar()
 
@@ -24,18 +25,18 @@
 -(instancetype)initWithFrame:(CGRect)frame {
 	if (self = [super initWithFrame:frame]) {
         
-        self.beginTextEditorButton = [self setBarButtonItem:@"toolbar_style" action:@selector(beginTextEditor:)];
-        self.fontStyleButton = [self setBarButtonItem:@"toolbar_font_style1" action:@selector(setFontStyle:)];
-        self.boldButton = [self setBarButtonItem:@"toolbar_bold" action:@selector(setBold)];
-        self.italicButton = [self setBarButtonItem:@"toolbar_italic" action:@selector(setItalic)];
-        self.strikeThroughButton = [self setBarButtonItem:@"toolbar_strikethrough" action:@selector(setUnderline)];
-        self.alignButton = [self setBarButtonItem:@"toolbar_align_left" action:@selector(align:)];
-        self.orderedListButton = [self setBarButtonItem:@"toolbar_order" action:@selector(setOrderedList:)];
-        self.photoButton = [self setBarButtonItem:@"toolbar_image" action:@selector(insertImage:)];
-        self.blockquoteButton = [self setBarButtonItem:@"toolbar_blockquote" action:@selector(setBlockquote)];
-        self.moreButton = [self setBarButtonItem:@"toolbar_more" action:@selector(openMoreView:)];
-        self.textEditorCloseButton = [self setBarButtonItem:@"toolbar_close" action:@selector(endTextEditor)];
-        self.moreViewCloseButton = [self setBarButtonItem:@"icon_close" action:@selector(closeMoreView:)];
+        self.beginTextEditorButton = [UIBarButtonItem qs_setBarButtonItem:@"toolbar_style" target:self action:@selector(beginTextEditor:)];
+        self.fontStyleButton = [UIBarButtonItem qs_setBarButtonItem:@"toolbar_font_style1" target:self action:@selector(setFontStyle:)];
+        self.boldButton = [UIBarButtonItem qs_setBarButtonItem:@"toolbar_bold" target:self action:@selector(setBold)];
+        self.italicButton = [UIBarButtonItem qs_setBarButtonItem:@"toolbar_italic" target:self action:@selector(setItalic)];
+        self.strikeThroughButton = [UIBarButtonItem qs_setBarButtonItem:@"toolbar_strikethrough" target:self action:@selector(setUnderline)];
+        self.alignButton = [UIBarButtonItem qs_setBarButtonItem:@"toolbar_align_left" target:self action:@selector(align:)];
+        self.orderedListButton = [UIBarButtonItem qs_setBarButtonItem:@"toolbar_order" target:self action:@selector(setOrderedList:)];
+        self.photoButton = [UIBarButtonItem qs_setBarButtonItem:@"toolbar_image" target:self action:@selector(insertImage:)];
+        self.blockquoteButton = [UIBarButtonItem qs_setBarButtonItem:@"toolbar_blockquote" target:self action:@selector(setBlockquote)];
+        self.moreButton = [UIBarButtonItem qs_setBarButtonItem:@"toolbar_more" target:self action:@selector(openMoreView:)];
+        self.textEditorCloseButton = [UIBarButtonItem qs_setBarButtonItem:@"toolbar_close" target:self action:@selector(endTextEditor)];
+        self.moreViewCloseButton = [UIBarButtonItem qs_setBarButtonItem:@"icon_close" target:self action:@selector(closeMoreView:)];
         
         self.fontStyleButton.tag = QSRichEditorTextStyleNormal;
         self.alignButton.tag = kCTTextAlignmentLeft;
@@ -45,11 +46,6 @@
         [self initEditorBarItems];
 	}
 	return self;
-}
-
--(UIBarButtonItem *)setBarButtonItem:(NSString *)imageName action:(SEL)selector {
-    UIBarButtonItem *item = [QMUIToolbarButton barButtonItemWithImage:[UIImageMake(imageName) imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] target:self action:selector];
-    return item;
 }
 
 -(void)setupTextCountItemWithCount:(NSUInteger)count {

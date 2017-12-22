@@ -11,6 +11,8 @@
 
 @interface DTRichTextEditorView (qs)
 
+-(void)qs_setLineSpacing:(CGFloat)space;
+
 -(DTTextAttachment *)qs_attachmentWithRange:(DTTextRange *)range;
 
 -(DTTextRange *)qs_rangeOfAttachment:(DTTextAttachment *)attachment;

@@ -25,10 +25,15 @@
 #import "DTTextBlockAttachment.h"
 #import "NSString+YYAdd.h"
 #import "DTTextPlaceholderAttachment.h"
+#import "UIBarButtonItem+qs.h"
+#import "QSTextBlockView.h"
 
 CGFloat const toolBarHeight = 44;
 CGFloat const editorMoreViewHeight = 200;
+CGFloat const textViewMinimumHeight = 57;
+CGFloat const textViewMaximumHeight = 150;
 #define richTextHighlightColor [UIColor lightGrayColor]
+#define LightenPlaceholderColor [UIColor colorWithRed:0.96 green:0.96 blue:0.97 alpha:1.00]
 
 typedef NS_OPTIONS(NSUInteger, QSRichEditorState) {
 	QSRichEditorStateNoneContent,// 没有编辑内容
@@ -56,14 +61,15 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
  										  DTRichTextEditorViewDelegate,
                                           RichTextEditorAction,
 										  QMUIKeyboardManagerDelegate,
-                                          QSRichTextEditorImageViewDelegate>
+                                          QSRichTextEditorImageViewDelegate,
+                                          QMUITextViewDelegate>
 
 @property(nonatomic, assign) QSRichEditorState state;
 @property(nonatomic, assign) QSImageAttachmentState editImageState;
 @property(nonatomic, strong) RichTextEditorToolBar *editorToolBar;
 @property(nonatomic, strong) RichTextEditorMoreView *editorMoreView;
 @property(nonatomic, strong) DTRichTextEditorView *richEditor;
-@property(nonatomic, strong) YYTextView *titleTextView;
+@property(nonatomic, strong) QMUITextView *titleTextView;
 @property(nonatomic, strong) QMUIButton *coverButton;
 @property(nonatomic, weak) DTImageTextAttachment *currentEditingAttachment;
 @property(nonatomic, strong) UIBarButtonItem *doneItem;
@@ -80,6 +86,11 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 	self.state = QSRichEditorStateNoneContent;
     self.keyboardManager.delegateEnabled = YES;
     [self.richEditor becomeFirstResponder];
+    
+    NSMutableDictionary *defaults = [NSMutableDictionary dictionary];
+    DTCSSStylesheet *styleSheet = [[DTCSSStylesheet alloc] initWithStyleBlock:@"p {line-height:27px;}"];
+    [defaults setObject:styleSheet forKey:DTDefaultStyleSheet];
+    self.richEditor.textDefaults = defaults;
 }
 
 -(void)initSubviews {
@@ -93,6 +104,10 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 	[super viewDidLayoutSubviews];
     [self updateToolBarFrame];
     self.richEditor.frame = self.view.bounds;
+    
+    CGSize textViewSize = [self.titleTextView sizeThatFits:CGSizeMake(SCREEN_WIDTH - 40, HUGE)];
+    self.titleTextView.frame = CGRectMake(20, self.coverButton.qmui_bottom + 20, SCREEN_WIDTH - 40, fmin(textViewMaximumHeight, fmax(textViewSize.height, textViewMinimumHeight)));
+    _richEditor.attributedTextContentView.edgeInsets = UIEdgeInsetsMake(self.titleTextView.qmui_bottom + 20, 20, 20, 20);
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -308,12 +323,10 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
         _richEditor = [[DTRichTextEditorView alloc]init];
         _richEditor.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         _richEditor.defaultFontSize = 16;
-        _richEditor.attributedTextContentView.edgeInsets = UIEdgeInsetsMake(84 + 60 + 57, 18, 20, 18);
         _richEditor.delegate = self;
         _richEditor.textDelegate = self;
         
         _richEditor.textSizeMultiplier = 1.0;
-        _richEditor.maxImageDisplaySize = CGSizeMake(300, 300);
         _richEditor.autocorrectionType = UITextAutocorrectionTypeYes;
         _richEditor.editorViewDelegate = self;
         _richEditor.attributedTextContentView.shouldDrawImages = NO;
@@ -323,14 +336,19 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 }
 
 //标题
--(YYTextView *)titleTextView {
+-(QMUITextView *)titleTextView {
     if (!_titleTextView) {
-        _titleTextView = [YYTextView new];
+        _titleTextView = [QMUITextView new];
         _titleTextView.frame = CGRectMake(20, self.coverButton.qmui_bottom + 20, SCREEN_WIDTH - 40, 57);
-        _titleTextView.font = [UIFont boldSystemFontOfSize:30];
-        _titleTextView.placeholderFont = [UIFont boldSystemFontOfSize:30];
-        _titleTextView.placeholderText = @"请输入标题";
-        _titleTextView.textContainerInset = UIEdgeInsetsMake(10, 20, 10, 20);
+        UIFont *font = [UIFont boldSystemFontOfSize:30];
+        _titleTextView.font = font;
+        [_titleTextView setValue:font forKeyPath:@"placeholderLabel.font"];
+        _titleTextView.placeholder = @"请输入标题";
+        _titleTextView.textContainerInset = UIEdgeInsetsMake(10, 0, 10, 0);
+        _titleTextView.delegate = self;
+        _titleTextView.autoResizable = YES;
+        _titleTextView.maximumTextLength = 40;
+        _titleTextView.scrollEnabled = NO;
     }
     return _titleTextView;
 }
@@ -341,8 +359,8 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
         _coverButton = [[QMUIButton alloc]initWithImage:UIImageMake(@"edit_Header") title:@"添加封面"];
         _coverButton.frame = CGRectMake(20, 20 + self.qmui_navigationBarMaxYInViewCoordinator, SCREEN_WIDTH - 40, 60);
         _coverButton.spacingBetweenImageAndTitle = 12;
-        [_coverButton setBackgroundColor:UIColorGray];
-        [_coverButton setTitleColor:UIColorBlack forState:UIControlStateNormal];
+        [_coverButton setBackgroundColor:LightenPlaceholderColor];
+        [_coverButton setTitleColor:UIColorGray forState:UIControlStateNormal];
         [_coverButton addTarget:self action:@selector(addArticleCover:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _coverButton;
@@ -412,13 +430,13 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
     DTTextRange *selectedRange = (DTTextRange *)editorView.selectedTextRange;
     NSUInteger textCount = [self.richEditor attributedSubstringForRange:selectedRange].plainTextString.length;
     if (textCount > 0) {
-        self.editorToolBar.beginTextEditorButton.enabled = YES;
-        self.editorToolBar.blockquoteButton.enabled = YES;
-        self.editorToolBar.photoButton.enabled = NO;
+        [self.editorToolBar.beginTextEditorButton qs_setEnable:YES];
+        [self.editorToolBar.blockquoteButton qs_setEnable:YES];
+        [self.editorToolBar.photoButton  qs_setEnable:NO];
     } else {
-        self.editorToolBar.beginTextEditorButton.enabled = NO;
-        self.editorToolBar.blockquoteButton.enabled = NO;
-        self.editorToolBar.photoButton.enabled = YES;
+        [self.editorToolBar.beginTextEditorButton qs_setEnable:NO];
+        [self.editorToolBar.blockquoteButton qs_setEnable:NO];
+        [self.editorToolBar.photoButton  qs_setEnable:YES];
     }
 }
 
@@ -474,16 +492,11 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
         
     } else if ([attachment isKindOfClass:[DTTextBlockAttachment class]]) {
         
-        YYTextView *textView = [YYTextView new];
-        textView.text = ((DTTextBlockAttachment *)attachment).text;
-        textView.editable = NO;
+        QSTextBlockView *textView = [[QSTextBlockView alloc]initWithAttachment:(DTTextBlockAttachment *)attachment];
         textView.frame = frame;
-        textView.qmui_borderWidth = PixelOne;
-        textView.qmui_borderPosition = QMUIBorderViewPositionTop|QMUIBorderViewPositionLeft|QMUIBorderViewPositionRight|QMUIBorderViewPositionBottom;
-        textView.qmui_borderColor = UIColorGray;
-        textView.backgroundColor = UIColorGrayLighten;
-        textView.layer.cornerRadius = 2;
-        textView.textAlignment = NSTextAlignmentCenter;
+        textView.text = ((DTTextBlockAttachment *)attachment).text;
+        textView.backgroundColor = LightenPlaceholderColor;
+        textView.delegate = self;
         
         return textView;
         
@@ -584,7 +597,7 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
     NSString *text = [self.richEditor attributedSubstringForRange:self.richEditor.selectedTextRange].string;
     UIFont *font = [self.richEditor attributedSubstringForRange:self.richEditor.selectedTextRange].yy_font;
     CGFloat textMaxWidth = SCREEN_WIDTH - 40;
-    CGFloat textHeight = [text heightForFont:font width:textMaxWidth];
+    CGFloat textHeight = [text heightForFont:font width:textMaxWidth] + 20;
     attachment.displaySize = CGSizeMake(textMaxWidth, textHeight);
     attachment.text = text;
     [self.richEditor replaceRange:self.richEditor.qs_selectedTextRange withAttachment:attachment inParagraph:YES];
@@ -655,7 +668,7 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
     NSURL *url = [NSURL URLWithString:link.link];
     NSString *title = link.title;
     QSHyperlinkAttachment *linkAttachment = [[QSHyperlinkAttachment alloc]init];
-    UIFont *buttonTextFont = [UIFont systemFontOfSize:15];
+    UIFont *buttonTextFont = [UIFont systemFontOfSize:16];
     linkAttachment.titleFont = buttonTextFont;
     CGSize maxSize = CGSizeMake(SCREEN_WIDTH - 40, HUGE);
     CGSize textRect = [title sizeForFont:buttonTextFont size:maxSize mode:NSLineBreakByWordWrapping];
@@ -758,6 +771,29 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
     return range;
 }
 
+#pragma mark - QMUITextViewDelegate
+-(void)textView:(QMUITextView *)textView newHeightAfterTextChanged:(CGFloat)height {
+    if ([textView isKindOfClass:[QMUITextView class]]) {
+        height = fmin(textViewMaximumHeight, fmax(height, textViewMinimumHeight));
+        BOOL needsChangeHeight = CGRectGetHeight(textView.frame) != height;
+        if (needsChangeHeight) {
+            [self.view setNeedsLayout];
+            [self.view layoutIfNeeded];
+        }
+    }
+    
+    if ([textView isKindOfClass:[QSTextBlockView class]]) {
+        height = fmax(height, textViewMinimumHeight);
+        BOOL needsChangeHeight = CGRectGetHeight(textView.frame) != height;
+        if (needsChangeHeight) {
+            ((QSTextBlockView *)textView).attachment.displaySize = CGSizeMake(SCREEN_WIDTH - 40, height);
+            self.richEditor.attributedTextContentView.shouldLayoutCustomSubviews = YES;
+            [self.richEditor relayoutText];
+        }
+    }
+
+}
+
 #pragma mark - UIScrollView Delegate
 //上下滑动取消键盘响应
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
@@ -771,7 +807,6 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 -(void)setSelectedRangeObserver {
     [self.richEditor addObserver:self forKeyPath:@"selectedTextRange" options:kNilOptions context:NULL];
 }
-
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     
     BOOL isPrior = [[change objectForKey:NSKeyValueChangeNotificationIsPriorKey] boolValue];

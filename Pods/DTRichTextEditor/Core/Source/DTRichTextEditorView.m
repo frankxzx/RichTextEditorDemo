@@ -1468,6 +1468,11 @@ typedef enum
         return NO;
     }
     
+    // 标题输入框
+    if ([touch.view isKindOfClass:NSClassFromString(@"YYTextContainerView")]) {
+        return NO;
+    }
+    
 	UIView *hitView = [self hitTest:touchPoint withEvent:nil];
 	
 	if (hitView.superview == self && hitView != self.attributedTextContentView)

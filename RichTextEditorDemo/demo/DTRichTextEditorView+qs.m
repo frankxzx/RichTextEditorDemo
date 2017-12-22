@@ -17,6 +17,9 @@
 
 @implementation DTRichTextEditorView (qs)
 
+-(void)qs_setLineSpacing:(CGFloat)space {
+}
+
 -(DTTextAttachment *)qs_attachmentWithRange:(DTTextRange *)range {
     NSAttributedString *string = self.attributedText;
     if (![string length]) { return nil; }
