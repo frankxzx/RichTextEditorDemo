@@ -73,24 +73,28 @@
 
 -(void)captionImage:(id)sender {
     if ([self.actionDelegate respondsToSelector:@selector(editorViewCaptionImage:attachment:)]) {
+        NSAssert(self.attachment, @"初始化 imageAttchement 时需要赋值 attchemnt");
         [self.actionDelegate editorViewCaptionImage:sender attachment:self.attachment];
     }
 }
 
 -(void)editorImage:(id)sender {
     if ([self.actionDelegate respondsToSelector:@selector(editorViewEditImage:attachment:)]) {
+        NSAssert(self.attachment, @"初始化 imageAttchement 时需要赋值 attchemnt");
         [self.actionDelegate editorViewEditImage:sender attachment:self.attachment];
     }
 }
 
 -(void)deleteImage:(id)sender {
     if ([self.actionDelegate respondsToSelector:@selector(editorViewDeleteImage:attachment:)]) {
+        NSAssert(self.attachment, @"初始化 imageAttchement 时需要赋值 attchemnt");
         [self.actionDelegate editorViewDeleteImage:sender attachment:self.attachment];
     }
 }
 
 -(void)replaceImage:(id)sender {
     if ([self.actionDelegate respondsToSelector:@selector(editorViewReplaceImage:attachment:)]) {
+        NSAssert(self.attachment, @"初始化 imageAttchement 时需要赋值 attchemnt");
         [self.actionDelegate editorViewReplaceImage:sender attachment:self.attachment];
     }
 }

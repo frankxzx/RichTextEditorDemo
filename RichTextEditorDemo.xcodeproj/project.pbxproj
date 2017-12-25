@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		012031441FF08D4D0058323B /* QSRichTextEditorVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 012031431FF08D4D0058323B /* QSRichTextEditorVideoView.m */; };
 		015167DD1FE76B6D00F2F1C7 /* DTImageCaptionAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 015167DC1FE76B6D00F2F1C7 /* DTImageCaptionAttachment.m */; };
 		015168121FE8DC4A00F2F1C7 /* DTTextBlockAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 015168111FE8DC4A00F2F1C7 /* DTTextBlockAttachment.m */; };
 		015168151FE8E20100F2F1C7 /* NSString+YYAdd.m in Sources */ = {isa = PBXBuildFile; fileRef = 015168141FE8E20100F2F1C7 /* NSString+YYAdd.m */; };
@@ -35,6 +36,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		012031421FF08D4D0058323B /* QSRichTextEditorVideoView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSRichTextEditorVideoView.h; sourceTree = "<group>"; };
+		012031431FF08D4D0058323B /* QSRichTextEditorVideoView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSRichTextEditorVideoView.m; sourceTree = "<group>"; };
 		015167DB1FE76B6D00F2F1C7 /* DTImageCaptionAttachment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DTImageCaptionAttachment.h; sourceTree = "<group>"; };
 		015167DC1FE76B6D00F2F1C7 /* DTImageCaptionAttachment.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DTImageCaptionAttachment.m; sourceTree = "<group>"; };
 		015168101FE8DC4A00F2F1C7 /* DTTextBlockAttachment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DTTextBlockAttachment.h; sourceTree = "<group>"; };
@@ -143,6 +146,8 @@
 				01F9E4FD1FECF01D000D915F /* QSTextBlockView.m */,
 				016800721FE106AE00C66E28 /* QSRichTextEditorImageView.h */,
 				016800731FE106AE00C66E28 /* QSRichTextEditorImageView.m */,
+				012031421FF08D4D0058323B /* QSRichTextEditorVideoView.h */,
+				012031431FF08D4D0058323B /* QSRichTextEditorVideoView.m */,
 				016CCCDB1FD92A7E000493F7 /* RichTextEditorMoreView.h */,
 				016CCCDC1FD92A7E000493F7 /* RichTextEditorMoreView.m */,
 				016800881FE36B0F00C66E28 /* QSTextFieldsViewController.h */,
@@ -365,6 +370,7 @@
 				01957E4C1FE515F200F1281D /* DTImageTextAttachment+qs.m in Sources */,
 				0168006C1FDFC39800C66E28 /* DTRichTextEditorView+qs.m in Sources */,
 				015168121FE8DC4A00F2F1C7 /* DTTextBlockAttachment.m in Sources */,
+				012031441FF08D4D0058323B /* QSRichTextEditorVideoView.m in Sources */,
 				0168008A1FE36B0F00C66E28 /* QSTextFieldsViewController.m in Sources */,
 				016CCCC21FD92905000493F7 /* ViewController.m in Sources */,
 				016F49E01FE3BE5300768E73 /* QSHyperlinkAttachment.m in Sources */,
