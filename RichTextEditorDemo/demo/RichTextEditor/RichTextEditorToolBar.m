@@ -36,7 +36,7 @@
         self.blockquoteButton = [UIBarButtonItem qs_setBarButtonItem:@"toolbar_blockquote" target:self action:@selector(setBlockquote)];
         self.moreButton = [UIBarButtonItem qs_setBarButtonItem:@"toolbar_more" target:self action:@selector(openMoreView:)];
         self.textEditorCloseButton = [UIBarButtonItem qs_setBarButtonItem:@"toolbar_close" target:self action:@selector(endTextEditor)];
-        self.moreViewCloseButton = [UIBarButtonItem qs_setBarButtonItem:@"icon_close" target:self action:@selector(closeMoreView:)];
+        self.moreViewCloseButton = [UIBarButtonItem qs_setBarButtonItem:@"icon_close" target:self action:@selector(closeMoreView)];
         
         self.fontStyleButton.tag = QSRichEditorTextStyleNormal;
         self.alignButton.tag = kCTTextAlignmentLeft;
@@ -202,7 +202,7 @@
 }
 
 //关闭
--(void)closeMoreView:(id)sender {
+-(void)closeMoreView {
     [self initEditorBarItems];
     if ([self.formatDelegate respondsToSelector:@selector(richTextEditorCloseMoreView)]) {
         [self.formatDelegate richTextEditorCloseMoreView];

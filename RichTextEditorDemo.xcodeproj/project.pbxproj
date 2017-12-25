@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		012031441FF08D4D0058323B /* QSRichTextEditorVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 012031431FF08D4D0058323B /* QSRichTextEditorVideoView.m */; };
+		012031471FF096580058323B /* DTDateAttachement.m in Sources */ = {isa = PBXBuildFile; fileRef = 012031461FF096580058323B /* DTDateAttachement.m */; };
 		015167DD1FE76B6D00F2F1C7 /* DTImageCaptionAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 015167DC1FE76B6D00F2F1C7 /* DTImageCaptionAttachment.m */; };
 		015168121FE8DC4A00F2F1C7 /* DTTextBlockAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 015168111FE8DC4A00F2F1C7 /* DTTextBlockAttachment.m */; };
 		015168151FE8E20100F2F1C7 /* NSString+YYAdd.m in Sources */ = {isa = PBXBuildFile; fileRef = 015168141FE8E20100F2F1C7 /* NSString+YYAdd.m */; };
@@ -38,6 +39,8 @@
 /* Begin PBXFileReference section */
 		012031421FF08D4D0058323B /* QSRichTextEditorVideoView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSRichTextEditorVideoView.h; sourceTree = "<group>"; };
 		012031431FF08D4D0058323B /* QSRichTextEditorVideoView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSRichTextEditorVideoView.m; sourceTree = "<group>"; };
+		012031451FF096580058323B /* DTDateAttachement.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DTDateAttachement.h; sourceTree = "<group>"; };
+		012031461FF096580058323B /* DTDateAttachement.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DTDateAttachement.m; sourceTree = "<group>"; };
 		015167DB1FE76B6D00F2F1C7 /* DTImageCaptionAttachment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DTImageCaptionAttachment.h; sourceTree = "<group>"; };
 		015167DC1FE76B6D00F2F1C7 /* DTImageCaptionAttachment.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DTImageCaptionAttachment.m; sourceTree = "<group>"; };
 		015168101FE8DC4A00F2F1C7 /* DTTextBlockAttachment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DTTextBlockAttachment.h; sourceTree = "<group>"; };
@@ -114,6 +117,8 @@
 				015167DC1FE76B6D00F2F1C7 /* DTImageCaptionAttachment.m */,
 				015168101FE8DC4A00F2F1C7 /* DTTextBlockAttachment.h */,
 				015168111FE8DC4A00F2F1C7 /* DTTextBlockAttachment.m */,
+				012031451FF096580058323B /* DTDateAttachement.h */,
+				012031461FF096580058323B /* DTDateAttachement.m */,
 				01957E4A1FE515F200F1281D /* DTImageTextAttachment+qs.h */,
 				01957E4B1FE515F200F1281D /* DTImageTextAttachment+qs.m */,
 			);
@@ -377,6 +382,7 @@
 				016CCCE31FD92A7E000493F7 /* RichTextEditorMoreView.m in Sources */,
 				016F49DD1FE3B8ED00768E73 /* QSRichTextSeperatorAttachment.m in Sources */,
 				01F9E4FE1FECF01D000D915F /* QSTextBlockView.m in Sources */,
+				012031471FF096580058323B /* DTDateAttachement.m in Sources */,
 				016CCCE11FD92A7E000493F7 /* QSRichEditorViewController.m in Sources */,
 				016CCCE01FD92A7E000493F7 /* QSRichEditorViewController+keyboard.m in Sources */,
 				016CCCCD1FD92905000493F7 /* main.m in Sources */,

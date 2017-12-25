@@ -44,4 +44,6 @@
 
 -(void)setupTextCountItemWithCount:(NSUInteger)count;
 
+-(void)closeMoreView;
+
 @end

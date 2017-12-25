@@ -75,21 +75,18 @@
     
 	if ([self.actionDelegate respondsToSelector:@selector(insertVideo)]) {
 		[self.actionDelegate insertVideo];
-        [self.actionDelegate richTextEditorCloseMoreView];
 	}
 }
 
 -(void)insertAudio {
 	if ([self.actionDelegate respondsToSelector:@selector(insertAudio)]) {
 		[self.actionDelegate insertAudio];
-        [self.actionDelegate richTextEditorCloseMoreView];
 	}
 }
 
 -(void)insertSeperator {
 	if ([self.actionDelegate respondsToSelector:@selector(insertSeperator)]) {
 		[self.actionDelegate insertSeperator];
-        [self.actionDelegate richTextEditorCloseMoreView];
 	}
 }
 
@@ -119,7 +116,6 @@
             link.title = weakDialog.textField1.text;
             link.link = weakDialog.textField2.text;
             [self.actionDelegate insertHyperlink:link];
-            [self.actionDelegate richTextEditorCloseMoreView];
         }
     }];
     [dialogViewController show];

@@ -25,4 +25,6 @@
 
 - (NSAttributedString *)attributedStringForTextRange:(DTTextRange *)textRange wrappingAttachment:(DTTextAttachment *)attachment inParagraph:(BOOL)inParagraph;
 
+-(void)insertAttachment:(DTTextAttachment *)attchment;
+
 @end

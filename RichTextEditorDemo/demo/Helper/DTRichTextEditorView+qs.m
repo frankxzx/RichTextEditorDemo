@@ -104,4 +104,8 @@ static UITextRange * _Nullable extracted(DTRichTextEditorView *object) {
     }
 }
 
+-(void)insertAttachment:(DTTextAttachment *)attchment {
+    [self replaceRange:self.selectedTextRange withAttachment:attchment inParagraph:YES];
+}
+
 @end

@@ -24,7 +24,9 @@
 #import "DTTextPlaceholderAttachment.h"
 #import "UIBarButtonItem+qs.h"
 #import "QSTextBlockView.h"
+#import "QSRichTextEditorVideoView.h"
 #import "ZFPlayer.h"
+#import "DTDateAttachement.h"
 
 CGFloat const toolBarHeight = 44;
 CGFloat const editorMoreViewHeight = 200;
@@ -61,7 +63,8 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 										  QMUIKeyboardManagerDelegate,
                                           QSRichTextEditorImageViewDelegate,
                                           QMUITextViewDelegate,
-                                          ZFPlayerDelegate>
+                                          ZFPlayerDelegate,
+                                          QSRichTextEditorVideoViewDelegate>
 
 @property(nonatomic, assign) QSRichEditorState state;
 @property(nonatomic, assign) QSImageAttachmentState editImageState;
@@ -160,14 +163,6 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 
 - (void)displayInsertMenu:(id)sender {
 	[[UIMenuController sharedMenuController] setMenuVisible:YES animated:YES];
-}
-
-- (void)insertStar:(id)sender {
-	[self.richEditor insertText:@"★"];
-}
-
-- (void)insertWhiteStar:(id)sender {
-	[self.richEditor insertText:@"☆"];
 }
 
 #pragma mark - Editor Actions
@@ -356,7 +351,7 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 -(QMUIButton *)coverButton {
     if (!_coverButton) {
         _coverButton = [[QMUIButton alloc]initWithImage:UIImageMake(@"edit_Header") title:@"添加封面"];
-        _coverButton.frame = CGRectMake(20, 20 + self.qmui_navigationBarMaxYInViewCoordinator, SCREEN_WIDTH - 40, 60);
+        _coverButton.frame = CGRectMake(20, 20 + self.qmui_navigationBarMaxYInViewCoordinator, SCREEN_WIDTH - 40, 80);
         _coverButton.spacingBetweenImageAndTitle = 12;
         [_coverButton setBackgroundColor:LightenPlaceholderColor];
         [_coverButton setTitleColor:UIColorGray forState:UIControlStateNormal];
@@ -511,16 +506,18 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
         
     } else if ([attachment isKindOfClass:[DTVideoTextAttachment class]]) {
         
-        ZFPlayerView *videoPlayer = [[ZFPlayerView alloc] init];
-        videoPlayer.frame = frame;
-        ZFPlayerModel *playerModel = [[ZFPlayerModel alloc]init];
-        playerModel.fatherView = self.richEditor.attributedTextContentView;
-        NSURL *videoURL = attachment.contentURL;
-        playerModel.videoURL = videoURL;
-        [videoPlayer playerControlView:nil playerModel:playerModel];
-        videoPlayer.delegate = self;
+        QSRichTextEditorVideoView *videoView = [[QSRichTextEditorVideoView alloc]initWithFrame:frame];
+        videoView.attachment = (DTVideoTextAttachment *)attachment;
+        videoView.actionDelegate = self;
         
-        return videoPlayer;
+        return videoView;
+    } else if ([attachment isKindOfClass:[DTDateAttachement class]]) {
+        
+        QMUILabel *label = [[QMUILabel alloc]init];
+        label.frame = frame;
+        label.text = ((DTDateAttachement *)attachment).dateString;
+        
+        return label;
     }
     
     return nil;
@@ -570,7 +567,8 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
     CGSize size = CGSizeMake(w-40, h);
     line.displaySize = size;
     line.originalSize = size;
-    [self.richEditor replaceRange:self.richEditor.selectedTextRange withAttachment:line inParagraph:YES];
+    [self.richEditor insertAttachment:line];
+    [self.editorToolBar closeMoreView];
 }
 
 //插入图片
@@ -585,9 +583,8 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 	CGSize size = CGSizeMake(w-40, h);
 	attachment.displaySize = size;
 	attachment.originalSize = size;
-	
-    UITextRange * _Nullable extractedExpr = [self.richEditor selectedTextRange];
-    [self.richEditor replaceRange:extractedExpr withAttachment:attachment inParagraph:YES];
+    [self.richEditor insertAttachment:attachment];
+    [self.editorToolBar closeMoreView];
 }
 
 //插入视频
@@ -600,9 +597,8 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
     attachment.displaySize = size;
     attachment.originalSize = size;
     attachment.contentURL = [NSURL URLWithString:@"http://baobab.wdjcdn.com/1453449211052451530564.mp4"];
-    
-    UITextRange * _Nullable extractedExpr = [self.richEditor selectedTextRange];
-    [self.richEditor replaceRange:extractedExpr withAttachment:attachment inParagraph:YES];
+    [self.richEditor insertAttachment:attachment];
+    [self.editorToolBar closeMoreView];
 }
 
 //插入语音
@@ -716,14 +712,13 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 }
 
 -(void)richTextEditorCloseMoreView {
-    [self.richEditor setInputView:nil animated:YES];
+    [self.editorToolBar closeMoreView];
 }
 
 #pragma mark - QSRichTextEditorImageViewDelegate
 //删除
 -(void)editorViewDeleteImage:(UIButton *)sender attachment:(DTImageTextAttachment *)attachment{
-    DTTextRange *range = [self.richEditor qs_rangeOfAttachment:attachment];
-    [self.richEditor replaceRange:range withText:@""];
+    [self deleteAttachment: attachment];
 }
 
 //编辑
@@ -806,6 +801,15 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
     return range;
 }
 
+#pragma mark - QSRichTextEditorVideoViewDelegate
+-(void)editorViewDeleteVideo:(UIButton *)sender attachment:(DTVideoTextAttachment *)attachment {
+    [self deleteAttachment:attachment];
+}
+
+-(void)editorViewPlayVideo:(UIButton *)sender attachment:(DTVideoTextAttachment *)attachment {
+    
+}
+
 #pragma mark - QMUITextViewDelegate
 -(void)textView:(QMUITextView *)textView newHeightAfterTextChanged:(CGFloat)height {
     if ([textView isKindOfClass:[QMUITextView class]]) {
@@ -856,9 +860,20 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
     QMUILog(@"change selectedTextRange %@",newVal);
 }
 
+#pragma mark - Helper
+-(void)deleteAttachment:(DTTextAttachment *)attachment {
+    DTTextRange *range = [self.richEditor qs_rangeOfAttachment:attachment];
+    [self.richEditor replaceRange:range withText:@""];
+}
+
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[self.richEditor removeObserver:self forKeyPath:@"selectedTextRange"];
+}
+
+-(void)insertDateAttachment {
+    DTDateAttachement *attachment = [[DTDateAttachement alloc]init];
+    [self.richEditor insertAttachment:attachment];
 }
 
 // letting iOS set the insets automatically interferes with
