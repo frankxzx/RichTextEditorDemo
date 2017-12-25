@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "DTCoreTextFontDescriptor.h"
+#import <DTCoreText/DTCoreText.h>
 
 typedef NS_OPTIONS(NSUInteger, QSRichEditorTextStyle) {
     QSRichEditorTextStylePlaceholder,

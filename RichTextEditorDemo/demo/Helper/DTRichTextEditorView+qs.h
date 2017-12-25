@@ -23,8 +23,6 @@
 
 - (void)updateTextStyle:(QSRichEditorTextStyle)style inRange:(UITextRange *)range;
 
-- (NSAttributedString *)attributedStringForTextRange:(DTTextRange *)textRange wrappingAttachment:(DTTextAttachment *)attachment inParagraph:(BOOL)inParagraph;
-
 -(void)insertAttachment:(DTTextAttachment *)attchment;
 
 @end

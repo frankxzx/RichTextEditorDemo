@@ -11,6 +11,7 @@
 #import <QMUIKit/QMUIKit.h>
 #import <YYText/YYText.h>
 #import "UIBarButtonItem+qs.h"
+#import "QSRichEditorFontStyle.h"
 
 @interface RichTextEditorToolBar()
 
@@ -29,7 +30,7 @@
         self.fontStyleButton = [UIBarButtonItem qs_setBarButtonItem:@"toolbar_font_style1" target:self action:@selector(setFontStyle:)];
         self.boldButton = [UIBarButtonItem qs_setBarButtonItem:@"toolbar_bold" target:self action:@selector(setBold)];
         self.italicButton = [UIBarButtonItem qs_setBarButtonItem:@"toolbar_italic" target:self action:@selector(setItalic)];
-        self.strikeThroughButton = [UIBarButtonItem qs_setBarButtonItem:@"toolbar_strikethrough" target:self action:@selector(setUnderline)];
+        self.strikeThroughButton = [UIBarButtonItem qs_setBarButtonItem:@"toolbar_strikethrough" target:self action:@selector(setStrikeThrough)];
         self.alignButton = [UIBarButtonItem qs_setBarButtonItem:@"toolbar_align_left" target:self action:@selector(align:)];
         self.orderedListButton = [UIBarButtonItem qs_setBarButtonItem:@"toolbar_order" target:self action:@selector(setOrderedList:)];
         self.photoButton = [UIBarButtonItem qs_setBarButtonItem:@"toolbar_image" target:self action:@selector(insertImage:)];
@@ -161,6 +162,9 @@
 
 //下滑线
 - (void)setUnderline {
+    self.boldButton.image = self.boldButton.originalImage;
+    self.italicButton.image = self.italicButton.originalImage;
+    self.strikeThroughButton.image = [self.strikeThroughButton.image qmui_imageWithTintColor:UIColorBlue];
     if ([self.formatDelegate respondsToSelector:@selector(formatDidToggleUnderline)]) {
         [self.formatDelegate formatDidToggleUnderline];
     }
@@ -229,6 +233,21 @@
     BOOL isBlod = attributes.isBold;
     BOOL isItalic = attributes.isItalic;
     BOOL isStrikeThrough = attributes.isStrikethrough;
+    
+    QSRichEditorFontStyle *fontStyle = attributes[@"QSRichEditorFontStyle"];
+    switch (fontStyle.style) {
+        case QSRichEditorTextStylePlaceholder:
+            self.fontStyleButton.image = [UIImageMake(@"toolbar_font_style1") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+            break;
+            
+        case QSRichEditorTextStyleNormal:
+            self.fontStyleButton.image = [UIImageMake(@"toolbar_font_style2") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+            break;
+            
+        case QSRichEditorTextStyleLarger:
+            self.fontStyleButton.image = [UIImageMake(@"toolbar_font_style3") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+            break;
+    }
     
     NSArray *styles = attributes[@"DTTextLists"];
     DTCSSListStyle *listStyle = styles.firstObject;

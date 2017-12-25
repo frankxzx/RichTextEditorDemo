@@ -9,11 +9,8 @@
 #import "DTRichTextEditorView+qs.h"
 #import <QMUIKit/QMUIKit.h>
 #import <DTCoreText/DTCoreText.h>
-
-#define QSRichEditorPlaceholderColor UIColorGray
-#define QSRichEditorLargerColor UIColorBlack
-#define QSRichEditorNormalColor UIColorBlack
-
+#import "QSRichEditorFontStyle.h"
+#import <YYText/YYText.h>
 
 @implementation DTRichTextEditorView (qs)
 
@@ -56,6 +53,7 @@
     return textRange;
 }
 
+//当前行
 static UITextRange * _Nullable extracted(DTRichTextEditorView *object) {
     return object.selectedTextRange;
 }
@@ -65,45 +63,27 @@ static UITextRange * _Nullable extracted(DTRichTextEditorView *object) {
     return [self layoutLineContainingTextPosition:currentPosition];
 }
 
+//设置样式
 - (void)updateTextStyle:(QSRichEditorTextStyle)style inRange:(UITextRange *)range {
 
-    UIFont *font;
-    switch (style) {
-        case QSRichEditorTextStyleNormal: {
-            font = UIFontMake(16);
-            CTFontRef ctFont = DTCTFontCreateWithUIFont(font);
-            DTCoreTextFontDescriptor *fontDescriptor = [DTCoreTextFontDescriptor fontDescriptorForCTFont:ctFont];
-            CFRelease(ctFont);
-            
-            [self setForegroundColor:QSRichEditorNormalColor inRange:range];
-            [self updateFontInRange:range withFontFamilyName:fontDescriptor.fontFamily pointSize:16];
-            break;
-        }
-            
-        case QSRichEditorTextStyleLarger: {
-            font = UIFontBoldMake(20);
-            CTFontRef ctFont = DTCTFontCreateWithUIFont(font);
-            DTCoreTextFontDescriptor *fontDescriptor = [DTCoreTextFontDescriptor fontDescriptorForCTFont:ctFont];
-            CFRelease(ctFont);
-            
-            [self setForegroundColor:QSRichEditorLargerColor inRange:range];
-            [self updateFontInRange:range withFontFamilyName:fontDescriptor.fontFamily  pointSize:20];
-            break;
-        }
-            
-        case QSRichEditorTextStylePlaceholder: {
-            font = UIFontLightMake(15);
-            CTFontRef ctFont = DTCTFontCreateWithUIFont(font);
-            DTCoreTextFontDescriptor *fontDescriptor = [DTCoreTextFontDescriptor fontDescriptorForCTFont:ctFont];
-            CFRelease(ctFont);
-            
-            [self setForegroundColor:QSRichEditorPlaceholderColor inRange:range];
-            [self updateFontInRange:range withFontFamilyName:fontDescriptor.fontFamily  pointSize:15];
-            break;
-        }
-    }
+    QSRichEditorFontStyle *fontStyle = [[QSRichEditorFontStyle alloc]initWithStyle:style];
+    NSMutableAttributedString *attributeString = [[self attributedSubstringForRange:range]mutableCopy];
+    [attributeString addAttribute:@"QSRichEditorFontStyle" value:fontStyle range:attributeString.yy_rangeOfAll];
+    [self configStyle:fontStyle inRange:range];
 }
 
+-(void)configStyle:(QSRichEditorFontStyle *)style inRange:(UITextRange *)range {
+    
+    UIFont *font = style.font;
+    CTFontRef ctFont = DTCTFontCreateWithUIFont(font);
+    DTCoreTextFontDescriptor *fontDescriptor = [DTCoreTextFontDescriptor fontDescriptorForCTFont:ctFont];
+    CFRelease(ctFont);
+    
+    [self setForegroundColor:style.textColor inRange:range];
+    [self updateFontInRange:range withFontFamilyName:fontDescriptor.fontFamily  pointSize:20];
+}
+
+//插入多媒体
 -(void)insertAttachment:(DTTextAttachment *)attchment {
     [self replaceRange:self.selectedTextRange withAttachment:attchment inParagraph:YES];
 }
