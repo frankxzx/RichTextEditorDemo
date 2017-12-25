@@ -46,4 +46,6 @@
 
 -(void)closeMoreView;
 
+-(void)updateStateWithTypingAttributes:(NSDictionary *)attributes;
+
 @end

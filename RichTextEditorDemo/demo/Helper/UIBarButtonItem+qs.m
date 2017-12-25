@@ -11,8 +11,6 @@
 
 @interface UIBarButtonItem ()
 
-@property(nonatomic, strong) UIImage *originalImage;
-
 @property(nonatomic, strong) UIImage *disableImage;
 
 @end
@@ -21,6 +19,10 @@
 
 +(UIBarButtonItem *)qs_setBarButtonItem:(NSString *)imageName target:(id)target action:(SEL)selector {
     UIImage *iconImage = [UIImageMake(imageName) imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    return [UIBarButtonItem qs_setBarButtonItemWithImage:iconImage target:target action:selector];
+}
+
++(UIBarButtonItem *)qs_setBarButtonItemWithImage:(UIImage *)iconImage target:(id)target action:(SEL)selector {
     UIBarButtonItem *item = [QMUIToolbarButton barButtonItemWithImage:iconImage target:target action:selector];
     [item setTitleTextAttributes:@{NSForegroundColorAttributeName: UIColorGray} forState:UIControlStateDisabled];
     item.originalImage = iconImage;

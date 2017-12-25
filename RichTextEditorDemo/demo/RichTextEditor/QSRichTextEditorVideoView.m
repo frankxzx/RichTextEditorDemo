@@ -32,12 +32,12 @@
         self.imageView = [[UIImageView alloc]init];
         self.imageView.image = [UIImage qmui_imageWithColor:[UIColor qmui_randomColor]];
         [self addSubview:self.imageView];
-        [self addSubview:self.closeButton];
         
-        UIView *maskView = [[UIView alloc]init];
-        maskView.backgroundColor = UIColorMask;
+        self.maskView = [[UIView alloc]init];
+        self.maskView.backgroundColor = UIColorMask;
         [self addSubview:self.maskView];
         [self addSubview:self.playButton];
+        [self addSubview:self.closeButton];
     }
     return self;
 }

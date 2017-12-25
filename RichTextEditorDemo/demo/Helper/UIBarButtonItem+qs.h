@@ -10,8 +10,12 @@
 
 @interface UIBarButtonItem (qs)
 
++(UIBarButtonItem *)qs_setBarButtonItemWithImage:(UIImage *)iconImage target:(id)target action:(SEL)selector;
+
 +(UIBarButtonItem *)qs_setBarButtonItem:(NSString *)imageName target:(id)target action:(SEL)selector;
 
 -(void)qs_setEnable:(BOOL)isEnable;
+
+@property(nonatomic, strong) UIImage *originalImage;
 
 @end

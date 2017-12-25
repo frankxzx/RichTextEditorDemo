@@ -432,6 +432,9 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
         [self.editorToolBar.blockquoteButton qs_setEnable:NO];
         [self.editorToolBar.photoButton  qs_setEnable:YES];
     }
+    
+    NSDictionary *typingAttributes = [self.richEditor typingAttributesForRange:selectedRange];
+    [self.editorToolBar updateStateWithTypingAttributes:typingAttributes];
 }
 
 - (void)editorViewDidChange:(DTRichTextEditorView *)editorView
@@ -468,7 +471,7 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
     } else if ([attachment isKindOfClass:[QSRichTextSeperatorAttachment class]]) {
         
         UIView *line = [[UIView alloc]initWithFrame:frame];
-        line.backgroundColor = [UIColor lightGrayColor];
+        line.backgroundColor = [[UIColor lightGrayColor]colorWithAlphaComponent:0.5];
         line.qmui_height = PixelOne;
         return line;
         
@@ -509,14 +512,14 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
         QSRichTextEditorVideoView *videoView = [[QSRichTextEditorVideoView alloc]initWithFrame:frame];
         videoView.attachment = (DTVideoTextAttachment *)attachment;
         videoView.actionDelegate = self;
-        
         return videoView;
+        
     } else if ([attachment isKindOfClass:[DTDateAttachement class]]) {
         
         QMUILabel *label = [[QMUILabel alloc]init];
+        label.textAlignment = NSTextAlignmentCenter;
         label.frame = frame;
         label.text = ((DTDateAttachement *)attachment).dateString;
-        
         return label;
     }
     
@@ -706,13 +709,12 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 }
 
 -(void)richTextEditorOpenMoreView {
-    
-    [self.editorToolBar setupTextCountItemWithCount:  self.richEditor.attributedText.plainTextString.length - 1];
+    [self.editorToolBar setupTextCountItemWithCount:self.richEditor.attributedText.plainTextString.length - 1];
     [self.richEditor setInputView:self.editorMoreView animated:YES];
 }
 
 -(void)richTextEditorCloseMoreView {
-    [self.editorToolBar closeMoreView];
+    [self.richEditor setInputView:nil animated:YES];
 }
 
 #pragma mark - QSRichTextEditorImageViewDelegate
@@ -873,6 +875,9 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 
 -(void)insertDateAttachment {
     DTDateAttachement *attachment = [[DTDateAttachement alloc]init];
+    CGFloat w = [UIScreen mainScreen].bounds.size.width;
+    CGSize size = CGSizeMake(w-40, 35);
+    attachment.displaySize = size;
     [self.richEditor insertAttachment:attachment];
 }
 

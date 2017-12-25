@@ -23,7 +23,7 @@
 @implementation RichTextEditorToolBar
 
 -(instancetype)initWithFrame:(CGRect)frame {
-	if (self = [super initWithFrame:frame]) {
+    if (self = [super initWithFrame:frame]) {
         
         self.beginTextEditorButton = [UIBarButtonItem qs_setBarButtonItem:@"toolbar_style" target:self action:@selector(beginTextEditor:)];
         self.fontStyleButton = [UIBarButtonItem qs_setBarButtonItem:@"toolbar_font_style1" target:self action:@selector(setFontStyle:)];
@@ -41,11 +41,11 @@
         self.fontStyleButton.tag = QSRichEditorTextStyleNormal;
         self.alignButton.tag = kCTTextAlignmentLeft;
         self.orderedListButton.tag = DTCSSListStyleTypeNone;
-		
+        
         [self setupTextCountItemWithCount:0];
         [self initEditorBarItems];
-	}
-	return self;
+    }
+    return self;
 }
 
 -(void)setupTextCountItemWithCount:(NSUInteger)count {
@@ -84,20 +84,20 @@
         [self endTextEditor];
         return;
     }
-
-	[self setItems:@[self.beginTextEditorButton,
-					 self.boldButton,
-					 self.italicButton,
-					 self.strikeThroughButton,
-					 self.textEditorCloseButton] animated:YES];
+    
+    [self setItems:@[self.beginTextEditorButton,
+                     self.boldButton,
+                     self.italicButton,
+                     self.strikeThroughButton,
+                     self.textEditorCloseButton] animated:YES];
 }
 
 -(void)endTextEditor {
-	[self initEditorBarItems];
+    [self initEditorBarItems];
 }
 
 -(void)editorMoreViewToolBarItems {
-     UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     [self setItems:@[self.textCountButton, flexibleSpace, self.moreViewCloseButton] animated:YES];
 }
 
@@ -141,27 +141,36 @@
 
 //加粗
 - (void)setBold {
-	if ([self.formatDelegate respondsToSelector:@selector(formatDidToggleBold)]) {
-		[self.formatDelegate formatDidToggleBold];
-	}
+    self.boldButton.image = [self.boldButton.image qmui_imageWithTintColor:UIColorBlue];
+    self.italicButton.image = self.italicButton.originalImage;
+    self.strikeThroughButton.image = self.strikeThroughButton.originalImage;
+    if ([self.formatDelegate respondsToSelector:@selector(formatDidToggleBold)]) {
+        [self.formatDelegate formatDidToggleBold];
+    }
 }
 
 //斜体
 - (void)setItalic {
-	if ([self.formatDelegate respondsToSelector:@selector(formatDidToggleItalic)]) {
-		[self.formatDelegate formatDidToggleItalic];
-	}
+    self.boldButton.image = self.boldButton.originalImage;
+    self.italicButton.image = [self.italicButton.image qmui_imageWithTintColor:UIColorBlue];
+    self.strikeThroughButton.image = self.strikeThroughButton.originalImage;
+    if ([self.formatDelegate respondsToSelector:@selector(formatDidToggleItalic)]) {
+        [self.formatDelegate formatDidToggleItalic];
+    }
 }
 
 //下滑线
 - (void)setUnderline {
-	if ([self.formatDelegate respondsToSelector:@selector(formatDidToggleUnderline)]) {
-		[self.formatDelegate formatDidToggleUnderline];
-	}
+    if ([self.formatDelegate respondsToSelector:@selector(formatDidToggleUnderline)]) {
+        [self.formatDelegate formatDidToggleUnderline];
+    }
 }
 
 //中划线
 - (void)setStrikeThrough {
+    self.boldButton.image = self.boldButton.originalImage;
+    self.italicButton.image = self.italicButton.originalImage;
+    self.strikeThroughButton.image = [self.strikeThroughButton.image qmui_imageWithTintColor:UIColorBlue];
     if ([self.formatDelegate respondsToSelector:@selector(formatDidToggleStrikethrough)]) {
         [self.formatDelegate formatDidToggleStrikethrough];
     }
@@ -172,25 +181,25 @@
     
     if (sender.tag == DTCSSListStyleTypeNone) {
         sender.image = [UIImageMake(@"toolbar_order_number") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-        sender.tag = DTCSSListStyleTypeDecimal;
+        sender.tag = (NSInteger)DTCSSListStyleTypeDecimal;
     } else if (sender.tag == DTCSSListStyleTypeCircle) {
         sender.image = [UIImageMake(@"toolbar_order") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-        sender.tag = DTCSSListStyleTypeNone;
+        sender.tag = (NSInteger)DTCSSListStyleTypeNone;
     } else if (sender.tag == DTCSSListStyleTypeDecimal) {
         sender.image = [UIImageMake(@"toolbar_order_dot") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-        sender.tag = DTCSSListStyleTypeCircle;
+        sender.tag = (NSInteger)DTCSSListStyleTypeCircle;
     }
     
-	if ([self.formatDelegate respondsToSelector:@selector(toggleListType:)]) {
-		[self.formatDelegate toggleListType:sender.tag];
-	}
+    if ([self.formatDelegate respondsToSelector:@selector(toggleListType:)]) {
+        [self.formatDelegate toggleListType:sender.tag];
+    }
 }
 
 //引用
 -(void)setBlockquote {
-	if ([self.formatDelegate respondsToSelector:@selector(formatDidToggleBlockquote)]) {
-		[self.formatDelegate formatDidToggleBlockquote];
-	}
+    if ([self.formatDelegate respondsToSelector:@selector(formatDidToggleBlockquote)]) {
+        [self.formatDelegate formatDidToggleBlockquote];
+    }
 }
 
 //打开
@@ -213,6 +222,65 @@
 -(void)insertImage:(id)sender {
     if ([self.formatDelegate respondsToSelector:@selector(replaceCurrentSelectionWithPhoto)]) {
         [self.formatDelegate replaceCurrentSelectionWithPhoto];
+    }
+}
+
+-(void)updateStateWithTypingAttributes:(NSDictionary *)attributes {
+    BOOL isBlod = attributes.isBold;
+    BOOL isItalic = attributes.isItalic;
+    BOOL isStrikeThrough = attributes.isStrikethrough;
+    
+    NSArray *styles = attributes[@"DTTextLists"];
+    DTCSSListStyle *listStyle = styles.firstObject;
+    if (listStyle) {
+        switch (listStyle.type) {
+            case DTCSSListStyleTypeNone:
+                self.orderedListButton.image = [UIImageMake(@"toolbar_order") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+                break;
+                
+            case DTCSSListStyleTypeDecimal:
+                self.orderedListButton.image = [UIImageMake(@"toolbar_order_number") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+                break;
+                
+            case DTCSSListStyleTypeCircle:
+                self.orderedListButton.image = [UIImageMake(@"toolbar_order_dot") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+                break;
+                
+            default:
+                break;
+        }
+    } else {
+        self.orderedListButton.image = [UIImageMake(@"toolbar_order") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    }
+    
+    CTTextAlignment alignmanet = attributes.paragraphStyle.alignment;
+    switch (alignmanet) {
+        case kCTTextAlignmentLeft:
+            self.alignButton.image = [UIImageMake(@"toolbar_align_left") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+            break;
+            
+        case kCTTextAlignmentRight:
+            self.alignButton.image = [UIImageMake(@"toolbar_align_right") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+            break;
+            
+        case kCTTextAlignmentCenter:
+            self.alignButton.image = [UIImageMake(@"toolbar_align_center") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+            break;
+        default: break;
+    }
+    
+    if (isBlod) {
+        self.boldButton.image = [self.boldButton.image qmui_imageWithTintColor:UIColorBlue];
+        self.italicButton.image = self.italicButton.originalImage;
+        self.strikeThroughButton.image = self.strikeThroughButton.originalImage;
+    } else if (isItalic) {
+        self.boldButton.image = self.boldButton.originalImage;
+        self.italicButton.image = [self.italicButton.image qmui_imageWithTintColor:UIColorBlue];
+        self.strikeThroughButton.image = self.strikeThroughButton.originalImage;
+    } else if (isStrikeThrough) {
+        self.boldButton.image = self.boldButton.originalImage;
+        self.italicButton.image = self.italicButton.originalImage;
+        self.strikeThroughButton.image = [self.strikeThroughButton.image qmui_imageWithTintColor:UIColorBlue];
     }
 }
 
