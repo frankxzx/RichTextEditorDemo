@@ -142,6 +142,8 @@
 
 //加粗
 - (void)setBold {
+    
+    [self initEditorBarItems];
     self.boldButton.image = [self.boldButton.image qmui_imageWithTintColor:UIColorBlue];
     self.italicButton.image = self.italicButton.originalImage;
     self.strikeThroughButton.image = self.strikeThroughButton.originalImage;
@@ -152,6 +154,8 @@
 
 //斜体
 - (void)setItalic {
+    
+    [self initEditorBarItems];
     self.boldButton.image = self.boldButton.originalImage;
     self.italicButton.image = [self.italicButton.image qmui_imageWithTintColor:UIColorBlue];
     self.strikeThroughButton.image = self.strikeThroughButton.originalImage;
@@ -162,6 +166,8 @@
 
 //下滑线
 - (void)setUnderline {
+    
+    [self initEditorBarItems];
     self.boldButton.image = self.boldButton.originalImage;
     self.italicButton.image = self.italicButton.originalImage;
     self.strikeThroughButton.image = [self.strikeThroughButton.image qmui_imageWithTintColor:UIColorBlue];
@@ -172,6 +178,8 @@
 
 //中划线
 - (void)setStrikeThrough {
+    
+    [self initEditorBarItems];
     self.boldButton.image = self.boldButton.originalImage;
     self.italicButton.image = self.italicButton.originalImage;
     self.strikeThroughButton.image = [self.strikeThroughButton.image qmui_imageWithTintColor:UIColorBlue];

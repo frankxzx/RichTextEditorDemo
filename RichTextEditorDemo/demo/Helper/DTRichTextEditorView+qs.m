@@ -69,6 +69,7 @@ static UITextRange * _Nullable extracted(DTRichTextEditorView *object) {
     QSRichEditorFontStyle *fontStyle = [[QSRichEditorFontStyle alloc]initWithStyle:style];
     NSMutableAttributedString *attributeString = [[self attributedSubstringForRange:range]mutableCopy];
     [attributeString addAttribute:@"QSRichEditorFontStyle" value:fontStyle range:attributeString.yy_rangeOfAll];
+    [self replaceRange:range withText:attributeString];
     [self configStyle:fontStyle inRange:range];
 }
 
@@ -80,7 +81,7 @@ static UITextRange * _Nullable extracted(DTRichTextEditorView *object) {
     CFRelease(ctFont);
     
     [self setForegroundColor:style.textColor inRange:range];
-    [self updateFontInRange:range withFontFamilyName:fontDescriptor.fontFamily  pointSize:20];
+    [self updateFontInRange:range withFontFamilyName:fontDescriptor.fontFamily  pointSize:font.pointSize];
 }
 
 //插入多媒体

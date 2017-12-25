@@ -27,6 +27,7 @@
 #import "QSRichTextEditorVideoView.h"
 #import "ZFPlayer.h"
 #import "DTDateAttachement.h"
+#import "QSImageAttachment.h"
 
 CGFloat const toolBarHeight = 44;
 CGFloat const editorMoreViewHeight = 200;
@@ -73,7 +74,7 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 @property(nonatomic, strong) DTRichTextEditorView *richEditor;
 @property(nonatomic, strong) QMUITextView *titleTextView;
 @property(nonatomic, strong) QMUIButton *coverButton;
-@property(nonatomic, weak) DTImageTextAttachment *currentEditingAttachment;
+@property(nonatomic, weak) QSImageAttachment *currentEditingAttachment;
 @property(nonatomic, strong) UIBarButtonItem *doneItem;
 @property(nonatomic, strong) NSCache *imageCache;
 @property(nonatomic, strong) QMUIKeyboardManager *keyboardManager;
@@ -90,7 +91,7 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
     [self.richEditor becomeFirstResponder];
     
     NSMutableDictionary *defaults = [NSMutableDictionary dictionary];
-    DTCSSStylesheet *styleSheet = [[DTCSSStylesheet alloc] initWithStyleBlock:@"p {line-height:27px;}"];
+    DTCSSStylesheet *styleSheet = [[DTCSSStylesheet alloc] initWithStyleBlock:@"p {line-height:27px;} image {width:100%}"];
     [defaults setObject:styleSheet forKey:DTDefaultStyleSheet];
     self.richEditor.textDefaults = defaults;
 }
@@ -181,7 +182,7 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 -(void)editImageCaption:(QMUIButton *)sender {
     NSString *captionText = sender.titleLabel.text;
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"captionText == %@", captionText];
-    DTImageTextAttachment *attchment = [self.richEditor.attributedText textAttachmentsWithPredicate:predicate class:[DTImageTextAttachment class]].firstObject;
+    QSImageAttachment *attchment = [self.richEditor.attributedText textAttachmentsWithPredicate:predicate class:[QSImageAttachment class]].firstObject;
     [self editorViewCaptionImage:nil attachment:attchment];
 }
 
@@ -273,18 +274,18 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 	
 }
 
--(NSArray <DTImageTextAttachment *>*)imagAttachments {
+-(NSArray <QSImageAttachment *>*)imagAttachments {
 	
-	NSArray *images = [self.richEditor.attributedText textAttachmentsWithPredicate:nil class:[DTImageTextAttachment class]];
+	NSArray *images = [self.richEditor.attributedText textAttachmentsWithPredicate:nil class:[QSImageAttachment class]];
 	return images;
 }
 
 -(void)uploadImageAttachments {
 	
-	NSArray <DTImageTextAttachment *>*images = [self imagAttachments];
+	NSArray <QSImageAttachment *>*images = [self imagAttachments];
 	if ([images count])
 	{
-		for (DTImageTextAttachment *oneAttachment in images)
+		for (QSImageAttachment *oneAttachment in images)
 		{
 			NSData *imageData = UIImageJPEGRepresentation(oneAttachment.image, 0.8);
 		}
@@ -460,10 +461,10 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 
 - (UIView *)attributedTextContentView:(DTAttributedTextContentView *)attributedTextContentView viewForAttachment:(DTTextAttachment *)attachment frame:(CGRect)frame
 {
-    if ([attachment isKindOfClass:[DTImageTextAttachment class]]) {
+    if ([attachment isKindOfClass:[QSImageAttachment class]]) {
         
         QSRichTextEditorImageView *imageView = [[QSRichTextEditorImageView alloc]initWithFrame:frame];
-        imageView.attachment = (DTImageTextAttachment *)attachment;
+        imageView.attachment = (QSImageAttachment *)attachment;
         imageView.actionDelegate = self;
         [imageView setImage:[UIImage qmui_imageWithColor:[UIColor qmui_randomColor]]];
         return imageView;
@@ -578,7 +579,7 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 - (void)replaceCurrentSelectionWithPhoto
 {
 	// make an attachment
-	DTImageTextAttachment *attachment = [[DTImageTextAttachment alloc] initWithElement:nil options:nil];
+	QSImageAttachment *attachment = [[QSImageAttachment alloc] initWithElement:nil options:nil];
 //    attachment.captionRange = [self.richEditor selectedTextRange offse]
     attachment.image = (id)[UIImage qmui_imageWithColor:[UIColor qmui_randomColor]];
 	CGFloat w = [UIScreen mainScreen].bounds.size.width;
@@ -719,17 +720,17 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 
 #pragma mark - QSRichTextEditorImageViewDelegate
 //删除
--(void)editorViewDeleteImage:(UIButton *)sender attachment:(DTImageTextAttachment *)attachment{
+-(void)editorViewDeleteImage:(UIButton *)sender attachment:(QSImageAttachment *)attachment{
     [self deleteAttachment: attachment];
 }
 
 //编辑
--(void)editorViewEditImage:(UIButton *)sender attachment:(DTImageTextAttachment *)attachment {
+-(void)editorViewEditImage:(UIButton *)sender attachment:(QSImageAttachment *)attachment {
     DTTextRange *range = [self.richEditor qs_rangeOfAttachment:attachment];
 }
 
 //注释
--(void)editorViewCaptionImage:(UIButton *)sender attachment:(DTImageTextAttachment *)attachment {
+-(void)editorViewCaptionImage:(UIButton *)sender attachment:(QSImageAttachment *)attachment {
     self.currentEditingAttachment = attachment;
     QMUIDialogTextFieldViewController *captionInputController = [[QMUIDialogTextFieldViewController alloc]init];
     captionInputController.title = @"图片注释";
@@ -771,8 +772,8 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 }
 
 //替换
--(void)editorViewReplaceImage:(UIButton *)sender attachment:(DTImageTextAttachment *)attachment {
-    DTImageTextAttachment *replaceAttachment = [[DTImageTextAttachment alloc] initWithElement:nil options:nil];
+-(void)editorViewReplaceImage:(UIButton *)sender attachment:(QSImageAttachment *)attachment {
+    QSImageAttachment *replaceAttachment = [[QSImageAttachment alloc] initWithElement:nil options:nil];
     replaceAttachment.image = (id)[UIImage qmui_imageWithColor:[UIColor qmui_randomColor]];
     CGFloat w = [UIScreen mainScreen].bounds.size.width;
     CGFloat h = [UIScreen mainScreen].bounds.size.height / 3;

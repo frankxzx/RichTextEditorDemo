@@ -310,7 +310,7 @@
 		}
 		
 		// this rect is the place where lines where removed, to be relayouted
-		CGRect replacedLinesRect = [self _frameCoveringLines:replacedLines];
+        CGRect replacedLinesRect = [self _frameCoveringLines:replacedLines];
 		
 		// remove paragraph ranges
 		_paragraphRanges = nil;
