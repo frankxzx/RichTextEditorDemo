@@ -63,7 +63,8 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
                                           RichTextEditorAction,
 										  QMUIKeyboardManagerDelegate,
                                           QSRichTextEditorImageViewDelegate,
-                                          QMUITextViewDelegate>
+                                          QMUITextViewDelegate,
+                                          ZFPlayerDelegate>
 
 @property(nonatomic, assign) QSRichEditorState state;
 @property(nonatomic, assign) QSImageAttachmentState editImageState;
@@ -513,36 +514,16 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
         
     } else if ([attachment isKindOfClass:[DTVideoTextAttachment class]]) {
         
-//        self.playerView = [[ZFPlayerView alloc] init];
-//        [self.view addSubview:self.playerView];
-//        [self.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.top.equalTo(self.view).offset(20);
-//            make.left.right.equalTo(self.view);
-//            // Here a 16:9 aspect ratio, can customize the video aspect ratio
-//            make.height.equalTo(self.playerView.mas_width).multipliedBy(9.0f/16.0f);
-//        }];
-//        // control view（you can custom）
-//        ZFPlayerControlView *controlView = [[ZFPlayerControlView alloc] init];
-//        // model
-//        ZFPlayerModel *playerModel = [[ZFPlayerModel alloc]init];
-//        playerModel.fatherView = ...
-//        playerModel.videoURL = ...
-//        playerModel.title = ...
-//        [self.playerView playerControlView:controlView playerModel:playerModel];
-//
-//        // delegate
-//        self.playerView.delegate = self;
-//        // auto play the video
-//        [self.playerView autoPlayTheVideo];
+        ZFPlayerView *videoPlayer = [[ZFPlayerView alloc] init];
+        videoPlayer.frame = frame;
+        ZFPlayerModel *playerModel = [[ZFPlayerModel alloc]init];
+        playerModel.fatherView = self.richEditor.attributedTextContentView;
+        NSURL *videoURL = attachment.contentURL;
+        playerModel.videoURL = videoURL;
+        [videoPlayer playerControlView:nil playerModel:playerModel];
+        videoPlayer.delegate = self;
         
-        QMUIButton *linkButon = [[QMUIButton alloc]initWithFrame:frame];
-        linkButon.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
-        [linkButon setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-        linkButon.titleLabel.font = ((DTImageCaptionAttachment *) attachment).titleFont;
-        [linkButon setTitle:((DTImageCaptionAttachment *) attachment).text forState:UIControlStateNormal];
-        [linkButon addTarget:self action:@selector(editImageCaption:) forControlEvents:UIControlEventTouchUpInside];
-        return linkButon;
-        
+        return videoPlayer;
     }
     
     return nil;
@@ -593,7 +574,6 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
     line.displaySize = size;
     line.originalSize = size;
     [self.richEditor replaceRange:self.richEditor.selectedTextRange withAttachment:line inParagraph:YES];
-    [self.richEditor insertText:@"\n"];
 }
 
 //插入图片
@@ -622,6 +602,7 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
     CGSize size = CGSizeMake(w-40, h);
     attachment.displaySize = size;
     attachment.originalSize = size;
+    attachment.contentURL = [NSURL URLWithString:@"http://baobab.wdjcdn.com/1453449211052451530564.mp4"];
     
     UITextRange * _Nullable extractedExpr = [self.richEditor selectedTextRange];
     [self.richEditor replaceRange:extractedExpr withAttachment:attachment inParagraph:YES];

@@ -33,6 +33,11 @@
         self.seperatorButton.imagePosition = QMUIButtonImagePositionTop;
         self.hyperlinkButton.imagePosition = QMUIButtonImagePositionTop;
         
+        self.seperatorButton.titleLabel.font = UIFontMake(15);
+        self.audioButton.titleLabel.font = UIFontMake(15);
+        self.hyperlinkButton.titleLabel.font = UIFontMake(15);
+        self.videoButton.titleLabel.font = UIFontMake(15);
+        
         [self.videoButton addTarget:self action:@selector(insertVideo) forControlEvents:UIControlEventTouchUpInside];
         [self.audioButton addTarget:self action:@selector(insertAudio) forControlEvents:UIControlEventTouchUpInside];
         [self.seperatorButton addTarget:self action:@selector(insertSeperator) forControlEvents:UIControlEventTouchUpInside];
@@ -70,18 +75,21 @@
     
 	if ([self.actionDelegate respondsToSelector:@selector(insertVideo)]) {
 		[self.actionDelegate insertVideo];
+        [self.actionDelegate richTextEditorCloseMoreView];
 	}
 }
 
 -(void)insertAudio {
 	if ([self.actionDelegate respondsToSelector:@selector(insertAudio)]) {
 		[self.actionDelegate insertAudio];
+        [self.actionDelegate richTextEditorCloseMoreView];
 	}
 }
 
 -(void)insertSeperator {
 	if ([self.actionDelegate respondsToSelector:@selector(insertSeperator)]) {
 		[self.actionDelegate insertSeperator];
+        [self.actionDelegate richTextEditorCloseMoreView];
 	}
 }
 
