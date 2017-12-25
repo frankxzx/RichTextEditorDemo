@@ -26,14 +26,9 @@
 		016CCCE21FD92A7E000493F7 /* RichTextEditor.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 016CCCDA1FD92A7E000493F7 /* RichTextEditor.xcassets */; };
 		016CCCE31FD92A7E000493F7 /* RichTextEditorMoreView.m in Sources */ = {isa = PBXBuildFile; fileRef = 016CCCDC1FD92A7E000493F7 /* RichTextEditorMoreView.m */; };
 		016CCCE41FD92A7E000493F7 /* RichTextEditorToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 016CCCDE1FD92A7E000493F7 /* RichTextEditorToolBar.m */; };
-		016CCCEA1FDA6BEC000493F7 /* QSRichTextEditorCoverCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 016CCCE91FDA6BEC000493F7 /* QSRichTextEditorCoverCell.m */; };
-		016CCCED1FDA6C08000493F7 /* QSRichTextEditorTitleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 016CCCEC1FDA6C08000493F7 /* QSRichTextEditorTitleCell.m */; };
-		016CCCF01FDA6C2E000493F7 /* QSRichTextEditorBodyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 016CCCEF1FDA6C2E000493F7 /* QSRichTextEditorBodyCell.m */; };
-		016CCCF31FDA790B000493F7 /* QSRichTextEditorCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 016CCCF21FDA790B000493F7 /* QSRichTextEditorCell.m */; };
 		016F49DD1FE3B8ED00768E73 /* QSRichTextSeperatorAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 016F49DC1FE3B8ED00768E73 /* QSRichTextSeperatorAttachment.m */; };
 		016F49E01FE3BE5300768E73 /* QSHyperlinkAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 016F49DF1FE3BE5300768E73 /* QSHyperlinkAttachment.m */; };
 		01957E4C1FE515F200F1281D /* DTImageTextAttachment+qs.m in Sources */ = {isa = PBXBuildFile; fileRef = 01957E4B1FE515F200F1281D /* DTImageTextAttachment+qs.m */; };
-		01F9E4F51FEBAC77000D915F /* htmlText.html in Resources */ = {isa = PBXBuildFile; fileRef = 01F9E4F41FEBAC77000D915F /* htmlText.html */; };
 		01F9E4F81FEC97BC000D915F /* UIBarButtonItem+qs.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F9E4F71FEC97BC000D915F /* UIBarButtonItem+qs.m */; };
 		01F9E4FE1FECF01D000D915F /* QSTextBlockView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F9E4FD1FECF01D000D915F /* QSTextBlockView.m */; };
 		84490411E7C9011FDFD429B4 /* Pods_RichTextEditorDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B54ABF0B1BDED20575A5DA49 /* Pods_RichTextEditorDemo.framework */; };
@@ -76,21 +71,12 @@
 		016CCCDD1FD92A7E000493F7 /* RichTextEditorToolBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RichTextEditorToolBar.h; sourceTree = "<group>"; };
 		016CCCDE1FD92A7E000493F7 /* RichTextEditorToolBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RichTextEditorToolBar.m; sourceTree = "<group>"; };
 		016CCCE51FD92C22000493F7 /* RichTextEditorAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RichTextEditorAction.h; sourceTree = "<group>"; };
-		016CCCE81FDA6BEC000493F7 /* QSRichTextEditorCoverCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSRichTextEditorCoverCell.h; sourceTree = "<group>"; };
-		016CCCE91FDA6BEC000493F7 /* QSRichTextEditorCoverCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSRichTextEditorCoverCell.m; sourceTree = "<group>"; };
-		016CCCEB1FDA6C08000493F7 /* QSRichTextEditorTitleCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSRichTextEditorTitleCell.h; sourceTree = "<group>"; };
-		016CCCEC1FDA6C08000493F7 /* QSRichTextEditorTitleCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSRichTextEditorTitleCell.m; sourceTree = "<group>"; };
-		016CCCEE1FDA6C2E000493F7 /* QSRichTextEditorBodyCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSRichTextEditorBodyCell.h; sourceTree = "<group>"; };
-		016CCCEF1FDA6C2E000493F7 /* QSRichTextEditorBodyCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSRichTextEditorBodyCell.m; sourceTree = "<group>"; };
-		016CCCF11FDA790B000493F7 /* QSRichTextEditorCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSRichTextEditorCell.h; sourceTree = "<group>"; };
-		016CCCF21FDA790B000493F7 /* QSRichTextEditorCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSRichTextEditorCell.m; sourceTree = "<group>"; };
 		016F49DB1FE3B8ED00768E73 /* QSRichTextSeperatorAttachment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSRichTextSeperatorAttachment.h; sourceTree = "<group>"; };
 		016F49DC1FE3B8ED00768E73 /* QSRichTextSeperatorAttachment.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSRichTextSeperatorAttachment.m; sourceTree = "<group>"; };
 		016F49DE1FE3BE5300768E73 /* QSHyperlinkAttachment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSHyperlinkAttachment.h; sourceTree = "<group>"; };
 		016F49DF1FE3BE5300768E73 /* QSHyperlinkAttachment.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSHyperlinkAttachment.m; sourceTree = "<group>"; };
 		01957E4A1FE515F200F1281D /* DTImageTextAttachment+qs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DTImageTextAttachment+qs.h"; sourceTree = "<group>"; };
 		01957E4B1FE515F200F1281D /* DTImageTextAttachment+qs.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "DTImageTextAttachment+qs.m"; sourceTree = "<group>"; };
-		01F9E4F41FEBAC77000D915F /* htmlText.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = htmlText.html; sourceTree = "<group>"; };
 		01F9E4F61FEC97BC000D915F /* UIBarButtonItem+qs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+qs.h"; sourceTree = "<group>"; };
 		01F9E4F71FEC97BC000D915F /* UIBarButtonItem+qs.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIBarButtonItem+qs.m"; sourceTree = "<group>"; };
 		01F9E4FC1FECF01D000D915F /* QSTextBlockView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSTextBlockView.h; sourceTree = "<group>"; };
@@ -112,6 +98,62 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0120313F1FF08C5E0058323B /* Attachment */ = {
+			isa = PBXGroup;
+			children = (
+				016F49DB1FE3B8ED00768E73 /* QSRichTextSeperatorAttachment.h */,
+				016F49DC1FE3B8ED00768E73 /* QSRichTextSeperatorAttachment.m */,
+				016F49DE1FE3BE5300768E73 /* QSHyperlinkAttachment.h */,
+				016F49DF1FE3BE5300768E73 /* QSHyperlinkAttachment.m */,
+				015168171FEA5B1500F2F1C7 /* DTTextPlaceholderAttachment.h */,
+				015168181FEA5B1500F2F1C7 /* DTTextPlaceholderAttachment.m */,
+				015167DB1FE76B6D00F2F1C7 /* DTImageCaptionAttachment.h */,
+				015167DC1FE76B6D00F2F1C7 /* DTImageCaptionAttachment.m */,
+				015168101FE8DC4A00F2F1C7 /* DTTextBlockAttachment.h */,
+				015168111FE8DC4A00F2F1C7 /* DTTextBlockAttachment.m */,
+				01957E4A1FE515F200F1281D /* DTImageTextAttachment+qs.h */,
+				01957E4B1FE515F200F1281D /* DTImageTextAttachment+qs.m */,
+			);
+			path = Attachment;
+			sourceTree = "<group>";
+		};
+		012031401FF08C840058323B /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				0168006A1FDFC39800C66E28 /* DTRichTextEditorView+qs.h */,
+				0168006B1FDFC39800C66E28 /* DTRichTextEditorView+qs.m */,
+				015168131FE8E20000F2F1C7 /* NSString+YYAdd.h */,
+				015168141FE8E20100F2F1C7 /* NSString+YYAdd.m */,
+				01F9E4F61FEC97BC000D915F /* UIBarButtonItem+qs.h */,
+				01F9E4F71FEC97BC000D915F /* UIBarButtonItem+qs.m */,
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
+		012031411FF08CDD0058323B /* RichTextEditor */ = {
+			isa = PBXGroup;
+			children = (
+				016CCCD41FD92A7E000493F7 /* QSRichEditorConfig.h */,
+				016CCCD51FD92A7E000493F7 /* QSRichEditorConfig.m */,
+				016CCCD71FD92A7E000493F7 /* QSRichEditorViewController+keyboard.m */,
+				016CCCD61FD92A7E000493F7 /* QSRichEditorViewController+keyboard.h */,
+				016CCCD81FD92A7E000493F7 /* QSRichEditorViewController.h */,
+				016CCCD91FD92A7E000493F7 /* QSRichEditorViewController.m */,
+				01F9E4FC1FECF01D000D915F /* QSTextBlockView.h */,
+				01F9E4FD1FECF01D000D915F /* QSTextBlockView.m */,
+				016800721FE106AE00C66E28 /* QSRichTextEditorImageView.h */,
+				016800731FE106AE00C66E28 /* QSRichTextEditorImageView.m */,
+				016CCCDB1FD92A7E000493F7 /* RichTextEditorMoreView.h */,
+				016CCCDC1FD92A7E000493F7 /* RichTextEditorMoreView.m */,
+				016800881FE36B0F00C66E28 /* QSTextFieldsViewController.h */,
+				016800891FE36B0F00C66E28 /* QSTextFieldsViewController.m */,
+				016CCCDD1FD92A7E000493F7 /* RichTextEditorToolBar.h */,
+				016CCCDE1FD92A7E000493F7 /* RichTextEditorToolBar.m */,
+				016CCCE51FD92C22000493F7 /* RichTextEditorAction.h */,
+			);
+			path = RichTextEditor;
+			sourceTree = "<group>";
+		};
 		016CCCB11FD92905000493F7 = {
 			isa = PBXGroup;
 			children = (
@@ -150,50 +192,9 @@
 		016CCCD31FD92A7E000493F7 /* demo */ = {
 			isa = PBXGroup;
 			children = (
-				016CCCD41FD92A7E000493F7 /* QSRichEditorConfig.h */,
-				016CCCD51FD92A7E000493F7 /* QSRichEditorConfig.m */,
-				016CCCD71FD92A7E000493F7 /* QSRichEditorViewController+keyboard.m */,
-				016CCCD61FD92A7E000493F7 /* QSRichEditorViewController+keyboard.h */,
-				016CCCD81FD92A7E000493F7 /* QSRichEditorViewController.h */,
-				016CCCD91FD92A7E000493F7 /* QSRichEditorViewController.m */,
-				01F9E4FC1FECF01D000D915F /* QSTextBlockView.h */,
-				01F9E4FD1FECF01D000D915F /* QSTextBlockView.m */,
-				01F9E4F41FEBAC77000D915F /* htmlText.html */,
-				016CCCE81FDA6BEC000493F7 /* QSRichTextEditorCoverCell.h */,
-				016CCCE91FDA6BEC000493F7 /* QSRichTextEditorCoverCell.m */,
-				016CCCEB1FDA6C08000493F7 /* QSRichTextEditorTitleCell.h */,
-				016CCCEC1FDA6C08000493F7 /* QSRichTextEditorTitleCell.m */,
-				016CCCEE1FDA6C2E000493F7 /* QSRichTextEditorBodyCell.h */,
-				016CCCEF1FDA6C2E000493F7 /* QSRichTextEditorBodyCell.m */,
-				016800721FE106AE00C66E28 /* QSRichTextEditorImageView.h */,
-				016800731FE106AE00C66E28 /* QSRichTextEditorImageView.m */,
-				016CCCF11FDA790B000493F7 /* QSRichTextEditorCell.h */,
-				016CCCF21FDA790B000493F7 /* QSRichTextEditorCell.m */,
-				016CCCDB1FD92A7E000493F7 /* RichTextEditorMoreView.h */,
-				016CCCDC1FD92A7E000493F7 /* RichTextEditorMoreView.m */,
-				016800881FE36B0F00C66E28 /* QSTextFieldsViewController.h */,
-				016800891FE36B0F00C66E28 /* QSTextFieldsViewController.m */,
-				016CCCDD1FD92A7E000493F7 /* RichTextEditorToolBar.h */,
-				016CCCDE1FD92A7E000493F7 /* RichTextEditorToolBar.m */,
-				016CCCE51FD92C22000493F7 /* RichTextEditorAction.h */,
-				016F49DB1FE3B8ED00768E73 /* QSRichTextSeperatorAttachment.h */,
-				016F49DC1FE3B8ED00768E73 /* QSRichTextSeperatorAttachment.m */,
-				016F49DE1FE3BE5300768E73 /* QSHyperlinkAttachment.h */,
-				016F49DF1FE3BE5300768E73 /* QSHyperlinkAttachment.m */,
-				015168171FEA5B1500F2F1C7 /* DTTextPlaceholderAttachment.h */,
-				015168181FEA5B1500F2F1C7 /* DTTextPlaceholderAttachment.m */,
-				015167DB1FE76B6D00F2F1C7 /* DTImageCaptionAttachment.h */,
-				015167DC1FE76B6D00F2F1C7 /* DTImageCaptionAttachment.m */,
-				015168101FE8DC4A00F2F1C7 /* DTTextBlockAttachment.h */,
-				015168111FE8DC4A00F2F1C7 /* DTTextBlockAttachment.m */,
-				01957E4A1FE515F200F1281D /* DTImageTextAttachment+qs.h */,
-				01957E4B1FE515F200F1281D /* DTImageTextAttachment+qs.m */,
-				0168006A1FDFC39800C66E28 /* DTRichTextEditorView+qs.h */,
-				0168006B1FDFC39800C66E28 /* DTRichTextEditorView+qs.m */,
-				015168131FE8E20000F2F1C7 /* NSString+YYAdd.h */,
-				015168141FE8E20100F2F1C7 /* NSString+YYAdd.m */,
-				01F9E4F61FEC97BC000D915F /* UIBarButtonItem+qs.h */,
-				01F9E4F71FEC97BC000D915F /* UIBarButtonItem+qs.m */,
+				012031411FF08CDD0058323B /* RichTextEditor */,
+				0120313F1FF08C5E0058323B /* Attachment */,
+				012031401FF08C840058323B /* Helper */,
 				016CCCDA1FD92A7E000493F7 /* RichTextEditor.xcassets */,
 			);
 			path = demo;
@@ -278,7 +279,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				016CCCCA1FD92905000493F7 /* LaunchScreen.storyboard in Resources */,
-				01F9E4F51FEBAC77000D915F /* htmlText.html in Resources */,
 				016CCCE21FD92A7E000493F7 /* RichTextEditor.xcassets in Resources */,
 				016CCCC71FD92905000493F7 /* Assets.xcassets in Resources */,
 				016CCCC51FD92905000493F7 /* Main.storyboard in Resources */,
@@ -362,21 +362,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				016CCCEA1FDA6BEC000493F7 /* QSRichTextEditorCoverCell.m in Sources */,
 				01957E4C1FE515F200F1281D /* DTImageTextAttachment+qs.m in Sources */,
 				0168006C1FDFC39800C66E28 /* DTRichTextEditorView+qs.m in Sources */,
 				015168121FE8DC4A00F2F1C7 /* DTTextBlockAttachment.m in Sources */,
-				016CCCF01FDA6C2E000493F7 /* QSRichTextEditorBodyCell.m in Sources */,
 				0168008A1FE36B0F00C66E28 /* QSTextFieldsViewController.m in Sources */,
 				016CCCC21FD92905000493F7 /* ViewController.m in Sources */,
 				016F49E01FE3BE5300768E73 /* QSHyperlinkAttachment.m in Sources */,
-				016CCCED1FDA6C08000493F7 /* QSRichTextEditorTitleCell.m in Sources */,
 				016CCCE31FD92A7E000493F7 /* RichTextEditorMoreView.m in Sources */,
 				016F49DD1FE3B8ED00768E73 /* QSRichTextSeperatorAttachment.m in Sources */,
 				01F9E4FE1FECF01D000D915F /* QSTextBlockView.m in Sources */,
 				016CCCE11FD92A7E000493F7 /* QSRichEditorViewController.m in Sources */,
 				016CCCE01FD92A7E000493F7 /* QSRichEditorViewController+keyboard.m in Sources */,
-				016CCCF31FDA790B000493F7 /* QSRichTextEditorCell.m in Sources */,
 				016CCCCD1FD92905000493F7 /* main.m in Sources */,
 				015168191FEA5B1500F2F1C7 /* DTTextPlaceholderAttachment.m in Sources */,
 				01F9E4F81FEC97BC000D915F /* UIBarButtonItem+qs.m in Sources */,

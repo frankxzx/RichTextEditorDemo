@@ -13,9 +13,6 @@
 #import "RichTextEditorToolBar.h"
 #import "RichTextEditorMoreView.h"
 #import "RichTextEditorAction.h"
-#import "QSRichTextEditorCoverCell.h"
-#import "QSRichTextEditorTitleCell.h"
-#import "QSRichTextEditorBodyCell.h"
 #import <YYText/YYText.h>
 #import "QSRichTextEditorImageView.h"
 #import "QSRichTextSeperatorAttachment.h"
@@ -27,7 +24,7 @@
 #import "DTTextPlaceholderAttachment.h"
 #import "UIBarButtonItem+qs.h"
 #import "QSTextBlockView.h"
-#import <ZFPlayer/ZFPlayer.h>
+#import "ZFPlayer.h"
 
 CGFloat const toolBarHeight = 44;
 CGFloat const editorMoreViewHeight = 200;
