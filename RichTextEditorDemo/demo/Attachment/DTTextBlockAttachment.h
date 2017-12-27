@@ -8,8 +8,9 @@
 
 #import <DTCoreText/DTCoreText.h>
 
-@interface DTTextBlockAttachment : DTTextAttachment
+@interface DTTextBlockAttachment : DTTextAttachment <DTTextAttachmentHTMLPersistence>
 
 @property(nonatomic, copy) NSString *text;
+@property(nonatomic, weak) UIView *textView;
 
 @end

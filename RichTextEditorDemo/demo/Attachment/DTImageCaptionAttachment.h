@@ -8,7 +8,7 @@
 
 #import <DTCoreText/DTCoreText.h>
 
-@interface DTImageCaptionAttachment : DTTextAttachment
+@interface DTImageCaptionAttachment : DTTextAttachment <DTTextAttachmentHTMLPersistence>
 
 @property(nonatomic, copy) NSString *text;
 @property(nonatomic, strong) UIFont *titleFont;

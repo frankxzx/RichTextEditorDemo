@@ -66,9 +66,9 @@
     }
 
     [styleString appendFormat:@"display:block;"];
-    [styleString appendFormat:@"width:100%;"];
+    [styleString appendString:@"width:100%;"];
     [styleString appendFormat:@"height:0.5px;"];
-    [styleString appendFormat:@"background-color:#454242;"];
+    [styleString appendFormat:@"background-color:#EDEEF0;"];
     
     // add local style for size, since sizes might vary quite a bit
     if ([styleString length])

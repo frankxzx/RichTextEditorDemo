@@ -22,6 +22,7 @@
         self.qmui_borderColor = UIColorGray;
         self.layer.cornerRadius = 2;
         self.textAlignment = NSTextAlignmentCenter;
+//        self.font = UIFontMake(16);
         self.attachment = attachment;
     }
     return self;

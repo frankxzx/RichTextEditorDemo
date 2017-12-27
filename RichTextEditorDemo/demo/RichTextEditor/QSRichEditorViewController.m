@@ -436,13 +436,18 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 	QMUILog(@"editorViewDidChangeSelection:");
     DTTextRange *selectedRange = (DTTextRange *)editorView.selectedTextRange;
     NSUInteger textCount = [self.richEditor attributedSubstringForRange:selectedRange].plainTextString.length;
+    
+    if (self.richEditor.qs_selectedTextRange.length > 0) {
+        [self.editorToolBar.blockquoteButton qs_setEnable:YES];
+    } else {
+        [self.editorToolBar.blockquoteButton qs_setEnable:NO];
+    }
+    
     if (textCount > 0) {
         [self.editorToolBar.beginTextEditorButton qs_setEnable:YES];
-        [self.editorToolBar.blockquoteButton qs_setEnable:YES];
         [self.editorToolBar.photoButton  qs_setEnable:NO];
     } else {
         [self.editorToolBar.beginTextEditorButton qs_setEnable:NO];
-        [self.editorToolBar.blockquoteButton qs_setEnable:NO];
         [self.editorToolBar.photoButton  qs_setEnable:YES];
     }
     NSAttributedString *text = [self.richEditor attributedSubstringForRange:selectedRange];
@@ -512,6 +517,7 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
         textView.text = ((DTTextBlockAttachment *)attachment).text;
         textView.backgroundColor = LightenPlaceholderColor;
         textView.delegate = self;
+        ((DTTextBlockAttachment *)attachment).textView = textView;
         
         return textView;
         
@@ -582,7 +588,9 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 
 //插入分割线
 -(void)insertSeperator {
-    QSRichTextSeperatorAttachment *line = [[QSRichTextSeperatorAttachment alloc]init];
+    DTHTMLElement *style = [[DTHTMLElement alloc]init];
+    style.backgroundColor = [[UIColor lightGrayColor]colorWithAlphaComponent:0.5];
+    QSRichTextSeperatorAttachment *line = [[QSRichTextSeperatorAttachment alloc]initWithElement:style options:nil];
     CGFloat w = [UIScreen mainScreen].bounds.size.width - 1;
     CGFloat h = 0.5;
     CGSize size = CGSizeMake(w-40, h);
@@ -642,14 +650,17 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 
 -(void)formatDidToggleBlockquote {
     DTTextBlockAttachment *attachment = [[DTTextBlockAttachment alloc]init];
-    NSString *text = [self.richEditor attributedSubstringForRange:self.richEditor.selectedTextRange].string;
-    UIFont *font = [self.richEditor attributedSubstringForRange:self.richEditor.selectedTextRange].yy_font;
-    CGFloat textMaxWidth = SCREEN_WIDTH - 40;
-    CGFloat textHeight = [text heightForFont:font width:textMaxWidth] + 20;
+    NSString *text = [self.richEditor attributedSubstringForRange:self.richEditor.qs_selectedTextRange].string;
+    UIFont *font = [QMUITextView appearance].font;
+    CGFloat textMaxWidth = SCREEN_WIDTH - 40 - 1;
+    CGFloat textHeight = [text heightForFont:font width:textMaxWidth];
     attachment.displaySize = CGSizeMake(textMaxWidth, textHeight);
     attachment.text = text;
     [self.richEditor replaceRange:self.richEditor.qs_selectedTextRange withAttachment:attachment inParagraph:YES];
     [self.richEditor applyTextAlignment:kCTTextAlignmentCenter toParagraphsContainingRange:self.richEditor.qs_selectedTextRange];
+    
+    DTTextBlockAttachment *attchment = [self.richEditor.attributedText textAttachmentsWithPredicate:nil class:[DTTextBlockAttachment class]].lastObject;
+    [attchment.textView becomeFirstResponder];
 }
 
 //加粗

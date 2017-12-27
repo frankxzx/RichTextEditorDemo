@@ -36,7 +36,7 @@
 {
     NSMutableString *retString = [NSMutableString string];
     
-    [retString appendString:@"<a"];
+    [retString appendString:@"<a "];
     
     // attach the attributes dictionary
     NSMutableDictionary *tmpAttributes = [_attributes mutableCopy];

@@ -8,7 +8,7 @@
 
 #import <DTCoreText/DTCoreText.h>
 
-@interface DTDateAttachement : DTTextAttachment
+@interface DTDateAttachement : DTTextAttachment <DTTextAttachmentHTMLPersistence>
 
 @property(nonatomic, strong) NSDate *date;
 @property(nonatomic, copy) NSString *dateString;

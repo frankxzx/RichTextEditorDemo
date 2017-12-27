@@ -9,7 +9,7 @@
 #import "QSRichTextEditorImageView.h"
 #import <QMUIKit/QMUIKit.h>
 
-@interface QSRichTextEditorImageView()
+@interface QSRichTextEditorImageView() <UIGestureRecognizerDelegate>
 
 @property(nonatomic, strong) UIImageView *imageView;
 @property(nonatomic, strong) QMUIFillButton *captionButton;
@@ -46,10 +46,11 @@
         [self.replaceButton addTarget:self action:@selector(replaceImage:) forControlEvents:UIControlEventTouchUpInside];
         [self.closeButton addTarget:self action:@selector(deleteImage:) forControlEvents:UIControlEventTouchUpInside];
         
-        UIGestureRecognizer *tap = [[UIGestureRecognizer alloc]initWithTarget:self action:@selector(showButtons:)];
+//        UIGestureRecognizer *tap = [[UIGestureRecognizer alloc]initWithTarget:self action:@selector(showButtons:)];
+//        tap.delegate = self;
         self.imageView = [[UIImageView alloc]init];
         [self.imageView setUserInteractionEnabled:YES];
-        [self.imageView addGestureRecognizer:tap];
+//        [self.imageView addGestureRecognizer:tap];
         [self addSubview:self.imageView];
         
         self.contentView = [[UIControl alloc]init];
@@ -114,6 +115,10 @@
 
 -(void)setImage:(UIImage *)image {
     self.imageView.image = image;
+}
+
+-(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [self.contentView setHidden:NO];
 }
 
 @end
