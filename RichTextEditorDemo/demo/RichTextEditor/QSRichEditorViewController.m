@@ -137,6 +137,7 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 			break;
 		case QSRichEditorStateScrolling:
 			self.doneItem.enabled = NO;
+            [self.editorToolBar closeMoreView];
             [self.view endEditing:YES];
 			break;
 		case QSRichEditorStateDidFinishEditing:
@@ -412,10 +413,21 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 // RichTextEditor 选中文本生命周期
 - (BOOL)editorView:(DTRichTextEditorView *)editorView shouldChangeTextInRange:(NSRange)range replacementText:(NSAttributedString *)text {
     
-//    DTTextAttachment *attchment = [self.richEditor qs_attachmentWithRange:[DTTextRange rangeWithNSRange:range]];
-//    if (attchment) {
-//        return NO;
-//    }
+    //重置一下样式
+    if ([text.string isEqualToString:@"\n"]) {
+        NSDictionary *typingAttributes = [self.richEditor typingAttributesForRange:[DTTextRange rangeWithNSRange:range]];
+        if(typingAttributes.isStrikethrough) {
+         [self.richEditor toggleStrikethroughInRange:[DTTextRange rangeWithNSRange:range]];
+        }
+        
+        if(typingAttributes.isBold) {
+            [self.richEditor toggleBoldInRange:[DTTextRange rangeWithNSRange:range]];
+        }
+        
+        if(typingAttributes.isItalic) {
+            [self.richEditor toggleItalicInRange:[DTTextRange rangeWithNSRange:range]];
+        }
+    }
 	return YES;
 }
 
@@ -433,9 +445,14 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
         [self.editorToolBar.blockquoteButton qs_setEnable:NO];
         [self.editorToolBar.photoButton  qs_setEnable:YES];
     }
-    
-    NSDictionary *typingAttributes = [self.richEditor typingAttributesForRange:selectedRange];
-    [self.editorToolBar updateStateWithTypingAttributes:typingAttributes];
+    NSAttributedString *text = [self.richEditor attributedSubstringForRange:selectedRange];
+
+    NSDictionary *attributes = [text typingAttributesForRange:text.yy_rangeOfAll];
+    [self.editorToolBar updateStateWithTypingAttributes:attributes];
+    if (text.string.length <1) {
+        [self.editorToolBar closeMoreView];
+        return;
+    }
 }
 
 - (void)editorViewDidChange:(DTRichTextEditorView *)editorView
@@ -566,7 +583,7 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 //插入分割线
 -(void)insertSeperator {
     QSRichTextSeperatorAttachment *line = [[QSRichTextSeperatorAttachment alloc]init];
-    CGFloat w = [UIScreen mainScreen].bounds.size.width;
+    CGFloat w = [UIScreen mainScreen].bounds.size.width - 1;
     CGFloat h = 0.5;
     CGSize size = CGSizeMake(w-40, h);
     line.displaySize = size;
@@ -580,9 +597,9 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 {
 	// make an attachment
 	QSImageAttachment *attachment = [[QSImageAttachment alloc] initWithElement:nil options:nil];
-//    attachment.captionRange = [self.richEditor selectedTextRange offse]
+
     attachment.image = (id)[UIImage qmui_imageWithColor:[UIColor qmui_randomColor]];
-	CGFloat w = [UIScreen mainScreen].bounds.size.width;
+	CGFloat w = [UIScreen mainScreen].bounds.size.width - 1;
 	CGFloat h = [UIScreen mainScreen].bounds.size.height / 3;
 	CGSize size = CGSizeMake(w-40, h);
 	attachment.displaySize = size;
@@ -595,7 +612,7 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 -(void)insertVideo {
     
     DTVideoTextAttachment *attachment = [[DTVideoTextAttachment alloc] initWithElement:nil options:nil];
-    CGFloat w = [UIScreen mainScreen].bounds.size.width;
+    CGFloat w = [UIScreen mainScreen].bounds.size.width - 1;
     CGFloat h = [UIScreen mainScreen].bounds.size.height / 3;
     CGSize size = CGSizeMake(w-40, h);
     attachment.displaySize = size;
@@ -638,25 +655,47 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 //加粗
 - (void)formatDidToggleBold
 {
-	[self.richEditor toggleBoldInRange:self.richEditor.qs_selectedTextRange];
+    DTTextRange *range = self.richEditor.qs_selectedTextRange;
+    NSDictionary *typingAttributes = [self.richEditor typingAttributesForRange:range];
+    BOOL isBlod = typingAttributes.isBold;
+    if (isBlod) {
+        self.editorToolBar.boldButton.image = [self.editorToolBar.boldButton.image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    }
+    
+	[self.richEditor toggleBoldInRange:range];
 }
 
 //斜体
 - (void)formatDidToggleItalic
 {
-	[self.richEditor toggleItalicInRange:self.richEditor.qs_selectedTextRange];
+    DTTextRange *range = self.richEditor.qs_selectedTextRange;
+    NSDictionary *typingAttributes = [self.richEditor typingAttributesForRange:range];
+    BOOL isItalic = typingAttributes.isItalic;
+    if (isItalic) {
+        self.editorToolBar.boldButton.image = [self.editorToolBar.italicButton.image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    }
+    
+    [self.richEditor toggleItalicInRange:range];
 }
 
 //下划线
 - (void)formatDidToggleUnderline
 {
-	[self.richEditor toggleUnderlineInRange:self.richEditor.qs_selectedTextRange];
+    DTTextRange *range = self.richEditor.qs_selectedTextRange;
+    [self.richEditor toggleUnderlineInRange:range];
 }
 
 //中划线
 - (void)formatDidToggleStrikethrough
 {
-	[self.richEditor toggleStrikethroughInRange:self.richEditor.qs_selectedTextRange];
+    DTTextRange *range = self.richEditor.qs_selectedTextRange;
+    NSDictionary *typingAttributes = [self.richEditor typingAttributesForRange:range];
+    BOOL isStrikethrough = typingAttributes.isStrikethrough;
+    if (isStrikethrough) {
+        self.editorToolBar.boldButton.image = [self.editorToolBar.strikeThroughButton.image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    }
+    
+    [self.richEditor toggleStrikethroughInRange:range];
 }
 
 //对齐
@@ -695,18 +734,17 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 //设置超链接
 - (void)insertHyperlink:(HyperlinkModel *)link
 {
-	UITextRange *range = self.richEditor.selectedTextRange;
     NSURL *url = [NSURL URLWithString:link.link];
     NSString *title = link.title;
     QSHyperlinkAttachment *linkAttachment = [[QSHyperlinkAttachment alloc]init];
     UIFont *buttonTextFont = [UIFont systemFontOfSize:16];
     linkAttachment.titleFont = buttonTextFont;
-    CGSize maxSize = CGSizeMake(SCREEN_WIDTH - 40, HUGE);
+    CGSize maxSize = CGSizeMake(SCREEN_WIDTH - 40 - 1, HUGE);
     CGSize textRect = [title sizeForFont:buttonTextFont size:maxSize mode:NSLineBreakByWordWrapping];
     linkAttachment.displaySize = textRect;
     linkAttachment.title = title;
     linkAttachment.hyperLinkURL = url;
-    [self.richEditor replaceRange:range withAttachment:linkAttachment inParagraph:NO];
+    [self.richEditor insertAttachment:linkAttachment];
 }
 
 -(void)richTextEditorOpenMoreView {
@@ -748,7 +786,7 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
         caption.titleFont = captionTitleFont;
         caption.text = text;
         CGFloat captionHeight = [text heightForFont:captionTitleFont width:SCREEN_WIDTH - 40];
-        CGSize captionSize = CGSizeMake(SCREEN_WIDTH - 40, captionHeight);
+        CGSize captionSize = CGSizeMake(SCREEN_WIDTH - 40 - 1, captionHeight);
         caption.displaySize = captionSize;
         if (attachment.isCaption) {
             DTImageCaptionAttachment *oldVal = attachment.captionAttachment;
@@ -775,13 +813,12 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 -(void)editorViewReplaceImage:(UIButton *)sender attachment:(QSImageAttachment *)attachment {
     QSImageAttachment *replaceAttachment = [[QSImageAttachment alloc] initWithElement:nil options:nil];
     replaceAttachment.image = (id)[UIImage qmui_imageWithColor:[UIColor qmui_randomColor]];
-    CGFloat w = [UIScreen mainScreen].bounds.size.width;
+    CGFloat w = [UIScreen mainScreen].bounds.size.width - 1;
     CGFloat h = [UIScreen mainScreen].bounds.size.height / 3;
     CGSize size = CGSizeMake(w-40, h);
     replaceAttachment.displaySize = size;
     replaceAttachment.originalSize = size;
     
-//    DTTextRange *range = [self rangeOfAttachment:sender];
     DTTextRange *range = [self.richEditor qs_rangeOfAttachment:attachment];
     [self.richEditor replaceRange:range withAttachment:replaceAttachment inParagraph:YES];
 }
@@ -876,7 +913,7 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 
 -(void)insertDateAttachment {
     DTDateAttachement *attachment = [[DTDateAttachement alloc]init];
-    CGFloat w = [UIScreen mainScreen].bounds.size.width;
+    CGFloat w = [UIScreen mainScreen].bounds.size.width-1;
     CGSize size = CGSizeMake(w-40, 35);
     attachment.displaySize = size;
     [self.richEditor insertAttachment:attachment];

@@ -176,7 +176,7 @@
 
 - (CGRect)_frameCoveringLines:(NSArray *)array
 {
-	NSAssert([array count], @"cannot pass empty array");
+    NSAssert([array count], @"cannot pass empty array");
 	
 	DTCoreTextLayoutLine *firstLine = [array objectAtIndex:0];
 	CGRect rect = firstLine.frame;

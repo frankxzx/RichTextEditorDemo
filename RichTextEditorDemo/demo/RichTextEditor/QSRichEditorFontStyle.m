@@ -37,6 +37,7 @@
     
     if (self)
     {
+        self.style = style;
         switch (style) {
             case QSRichEditorTextStylePlaceholder:
                 self.font = UIFontMake(15);

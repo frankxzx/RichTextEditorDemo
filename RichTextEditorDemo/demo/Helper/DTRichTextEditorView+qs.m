@@ -67,6 +67,7 @@ static UITextRange * _Nullable extracted(DTRichTextEditorView *object) {
 - (void)updateTextStyle:(QSRichEditorTextStyle)style inRange:(UITextRange *)range {
 
     QSRichEditorFontStyle *fontStyle = [[QSRichEditorFontStyle alloc]initWithStyle:style];
+    QMUILog(@"=== QSRichEditorFontStyle: %@",fontStyle);
     NSMutableAttributedString *attributeString = [[self attributedSubstringForRange:range]mutableCopy];
     [attributeString addAttribute:@"QSRichEditorFontStyle" value:fontStyle range:attributeString.yy_rangeOfAll];
     [self replaceRange:range withText:attributeString];

@@ -144,9 +144,8 @@
 - (void)setBold {
     
     [self initEditorBarItems];
+    
     self.boldButton.image = [self.boldButton.image qmui_imageWithTintColor:UIColorBlue];
-    self.italicButton.image = self.italicButton.originalImage;
-    self.strikeThroughButton.image = self.strikeThroughButton.originalImage;
     if ([self.formatDelegate respondsToSelector:@selector(formatDidToggleBold)]) {
         [self.formatDelegate formatDidToggleBold];
     }
@@ -156,9 +155,7 @@
 - (void)setItalic {
     
     [self initEditorBarItems];
-    self.boldButton.image = self.boldButton.originalImage;
     self.italicButton.image = [self.italicButton.image qmui_imageWithTintColor:UIColorBlue];
-    self.strikeThroughButton.image = self.strikeThroughButton.originalImage;
     if ([self.formatDelegate respondsToSelector:@selector(formatDidToggleItalic)]) {
         [self.formatDelegate formatDidToggleItalic];
     }
@@ -168,8 +165,6 @@
 - (void)setUnderline {
     
     [self initEditorBarItems];
-    self.boldButton.image = self.boldButton.originalImage;
-    self.italicButton.image = self.italicButton.originalImage;
     self.strikeThroughButton.image = [self.strikeThroughButton.image qmui_imageWithTintColor:UIColorBlue];
     if ([self.formatDelegate respondsToSelector:@selector(formatDidToggleUnderline)]) {
         [self.formatDelegate formatDidToggleUnderline];
@@ -243,18 +238,23 @@
     BOOL isStrikeThrough = attributes.isStrikethrough;
     
     QSRichEditorFontStyle *fontStyle = attributes[@"QSRichEditorFontStyle"];
-    switch (fontStyle.style) {
-        case QSRichEditorTextStylePlaceholder:
-            self.fontStyleButton.image = [UIImageMake(@"toolbar_font_style1") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-            break;
-            
-        case QSRichEditorTextStyleNormal:
-            self.fontStyleButton.image = [UIImageMake(@"toolbar_font_style2") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-            break;
-            
-        case QSRichEditorTextStyleLarger:
-            self.fontStyleButton.image = [UIImageMake(@"toolbar_font_style3") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-            break;
+    if (fontStyle) {
+        QMUILog(@"=== QSRichEditorFontStyle: %@",fontStyle);
+        switch (fontStyle.style) {
+            case QSRichEditorTextStyleNormal:
+                self.fontStyleButton.image = [UIImageMake(@"toolbar_font_style1") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+                break;
+                
+            case QSRichEditorTextStylePlaceholder:
+                self.fontStyleButton.image = [UIImageMake(@"toolbar_font_style2") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+                break;
+                
+            case QSRichEditorTextStyleLarger:
+                self.fontStyleButton.image = [UIImageMake(@"toolbar_font_style3") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+                break;
+        }
+    } else {
+         self.fontStyleButton.image = [UIImageMake(@"toolbar_font_style1") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     }
     
     NSArray *styles = attributes[@"DTTextLists"];
@@ -298,25 +298,25 @@
     
     if (isBlod) {
         self.boldButton.image = [self.boldButton.image qmui_imageWithTintColor:UIColorBlue];
-        self.italicButton.image = self.italicButton.originalImage;
-        self.strikeThroughButton.image = self.strikeThroughButton.originalImage;
-    } else if (isItalic) {
-        self.boldButton.image = self.boldButton.originalImage;
+    } else {
+        self.boldButton.image = [UIImageMake(@"toolbar_bold") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    }
+    
+    if (isItalic) {
         self.italicButton.image = [self.italicButton.image qmui_imageWithTintColor:UIColorBlue];
-        self.strikeThroughButton.image = self.strikeThroughButton.originalImage;
-    } else if (isStrikeThrough) {
-        self.boldButton.image = self.boldButton.originalImage;
-        self.italicButton.image = self.italicButton.originalImage;
+    } else {
+        self.italicButton.image = [UIImageMake(@"toolbar_italic") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    }
+    
+    if (isStrikeThrough) {
         self.strikeThroughButton.image = [self.strikeThroughButton.image qmui_imageWithTintColor:UIColorBlue];
+    } else {
+        self.strikeThroughButton.image = [UIImageMake(@"toolbar_strikethrough") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     }
 }
 
 -(BOOL)isTextEditor {
     return  [self.items containsObject:self.textEditorCloseButton];
 }
-
-#pragma mark - Lazy subviews
-
-#pragma mark - Helpers
 
 @end
