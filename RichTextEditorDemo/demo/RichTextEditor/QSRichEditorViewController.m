@@ -669,9 +669,7 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
     DTTextRange *range = self.richEditor.qs_selectedTextRange;
     NSDictionary *typingAttributes = [self.richEditor typingAttributesForRange:range];
     BOOL isBlod = typingAttributes.isBold;
-    if (isBlod) {
-        self.editorToolBar.boldButton.image = [self.editorToolBar.boldButton.image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    }
+    [self.editorToolBar.boldButton qs_setSelected:isBlod];
     
 	[self.richEditor toggleBoldInRange:range];
 }
@@ -682,9 +680,7 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
     DTTextRange *range = self.richEditor.qs_selectedTextRange;
     NSDictionary *typingAttributes = [self.richEditor typingAttributesForRange:range];
     BOOL isItalic = typingAttributes.isItalic;
-    if (isItalic) {
-        self.editorToolBar.boldButton.image = [self.editorToolBar.italicButton.image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    }
+    [self.editorToolBar.italicButton qs_setSelected:isItalic];
     
     [self.richEditor toggleItalicInRange:range];
 }
@@ -702,9 +698,7 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
     DTTextRange *range = self.richEditor.qs_selectedTextRange;
     NSDictionary *typingAttributes = [self.richEditor typingAttributesForRange:range];
     BOOL isStrikethrough = typingAttributes.isStrikethrough;
-    if (isStrikethrough) {
-        self.editorToolBar.boldButton.image = [self.editorToolBar.strikeThroughButton.image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    }
+    [self.editorToolBar.strikeThroughButton qs_setSelected:isStrikethrough];
     
     [self.richEditor toggleStrikethroughInRange:range];
 }

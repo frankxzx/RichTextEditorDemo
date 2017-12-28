@@ -10,12 +10,24 @@
 
 @interface UIBarButtonItem (qs)
 
-+(UIBarButtonItem *)qs_setBarButtonItemWithImage:(UIImage *)iconImage target:(id)target action:(SEL)selector;
++(UIBarButtonItem *)qs_setBarButtonItemWithImage:(UIImage *)iconImage
+                                   selectedImage:(UIImage *)selectedImage
+                                          target:(id)target
+                                          action:(SEL)selector;
 
-+(UIBarButtonItem *)qs_setBarButtonItem:(NSString *)imageName target:(id)target action:(SEL)selector;
++(UIBarButtonItem *)qs_setBarButtonItemWithImage:(UIImage *)iconImage
+                                          target:(id)target
+                                          action:(SEL)selector;
 
 -(void)qs_setEnable:(BOOL)isEnable;
+-(void)qs_setSelected:(BOOL)isSelected;
 
-@property(nonatomic, strong) UIImage *originalImage;
+@property(nonatomic, strong, readonly) UIImage *originalImage;
+
+@end
+
+@interface UIImage (qs)
+
+@property(nonatomic, strong, readonly) UIImage *originalImage;
 
 @end

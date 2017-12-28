@@ -12,22 +12,29 @@
 @interface UIBarButtonItem ()
 
 @property(nonatomic, strong) UIImage *disableImage;
+@property(nonatomic, strong) UIImage *originalImage;
+@property(nonatomic, strong) UIImage *selectedImage;
 
 @end
 
 @implementation UIBarButtonItem (qs)
 
-+(UIBarButtonItem *)qs_setBarButtonItem:(NSString *)imageName target:(id)target action:(SEL)selector {
-    UIImage *iconImage = [UIImageMake(imageName) imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    return [UIBarButtonItem qs_setBarButtonItemWithImage:iconImage target:target action:selector];
-}
-
-+(UIBarButtonItem *)qs_setBarButtonItemWithImage:(UIImage *)iconImage target:(id)target action:(SEL)selector {
++(UIBarButtonItem *)qs_setBarButtonItemWithImage:(UIImage *)iconImage
+                                   selectedImage:(UIImage *)selectedImage
+                                          target:(id)target
+                                          action:(SEL)selector {
     UIBarButtonItem *item = [QMUIToolbarButton barButtonItemWithImage:iconImage target:target action:selector];
     [item setTitleTextAttributes:@{NSForegroundColorAttributeName: UIColorGray} forState:UIControlStateDisabled];
     item.originalImage = iconImage;
     item.disableImage = [iconImage qmui_imageWithAlpha:0.9];
+    item.selectedImage = selectedImage;
     return item;
+}
+
++(UIBarButtonItem *)qs_setBarButtonItemWithImage:(UIImage *)iconImage
+                                          target:(id)target
+                                          action:(SEL)selector {
+    return [UIBarButtonItem qs_setBarButtonItemWithImage:iconImage selectedImage:iconImage target:target action:selector];
 }
 
 static char kOriginalImage;
@@ -48,6 +55,14 @@ static char kDisableImage;
     return (UIImage *)objc_getAssociatedObject(self, &kDisableImage);
 }
 
+static char kSelectedImage;
+-(void)setSelectedImage:(UIImage *)selectedImage {
+    objc_setAssociatedObject(self, &kSelectedImage, selectedImage, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+-(UIImage *)selectedImage {
+    return (UIImage *)objc_getAssociatedObject(self, &kSelectedImage);
+}
 
 -(void)qs_setEnable:(BOOL)isEnable {
     if (isEnable) {
@@ -56,6 +71,22 @@ static char kDisableImage;
         [self setImage: self.disableImage];
     }
     self.enabled = isEnable;
+}
+
+-(void)qs_setSelected:(BOOL)isSelected {
+    if (isSelected) {
+        [self setImage:self.selectedImage];
+    } else {
+        [self setImage: self.originalImage];
+    }
+}
+
+@end
+
+@implementation UIImage (qs)
+
+-(UIImage *)originalImage {
+    return [self imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
 }
 
 @end

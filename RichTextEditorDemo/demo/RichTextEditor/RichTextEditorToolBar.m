@@ -26,18 +26,29 @@
 -(instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         
-        self.beginTextEditorButton = [UIBarButtonItem qs_setBarButtonItem:@"toolbar_style" target:self action:@selector(beginTextEditor:)];
-        self.fontStyleButton = [UIBarButtonItem qs_setBarButtonItem:@"toolbar_font_style1" target:self action:@selector(setFontStyle:)];
-        self.boldButton = [UIBarButtonItem qs_setBarButtonItem:@"toolbar_bold" target:self action:@selector(setBold)];
-        self.italicButton = [UIBarButtonItem qs_setBarButtonItem:@"toolbar_italic" target:self action:@selector(setItalic)];
-        self.strikeThroughButton = [UIBarButtonItem qs_setBarButtonItem:@"toolbar_strikethrough" target:self action:@selector(setStrikeThrough)];
-        self.alignButton = [UIBarButtonItem qs_setBarButtonItem:@"toolbar_align_left" target:self action:@selector(align:)];
-        self.orderedListButton = [UIBarButtonItem qs_setBarButtonItem:@"toolbar_order" target:self action:@selector(setOrderedList:)];
-        self.photoButton = [UIBarButtonItem qs_setBarButtonItem:@"toolbar_image" target:self action:@selector(insertImage:)];
-        self.blockquoteButton = [UIBarButtonItem qs_setBarButtonItem:@"toolbar_blockquote" target:self action:@selector(setBlockquote)];
-        self.moreButton = [UIBarButtonItem qs_setBarButtonItem:@"toolbar_more" target:self action:@selector(openMoreView:)];
-        self.textEditorCloseButton = [UIBarButtonItem qs_setBarButtonItem:@"toolbar_close" target:self action:@selector(endTextEditor)];
-        self.moreViewCloseButton = [UIBarButtonItem qs_setBarButtonItem:@"icon_close" target:self action:@selector(closeMoreView)];
+        self.beginTextEditorButton = [UIBarButtonItem qs_setBarButtonItemWithImage:UIImageMake(@"toolbar_style").originalImage target:self action:@selector(beginTextEditor:)];;
+        self.fontStyleButton = [UIBarButtonItem qs_setBarButtonItemWithImage:UIImageMake(@"toolbar_font_style1") target:self action:@selector(setFontStyle:)];
+        
+        self.boldButton = [UIBarButtonItem qs_setBarButtonItemWithImage:UIImageMake(@"toolbar_bold")
+                                                          selectedImage:[UIImageMake(@"toolbar_bold") qmui_imageWithTintColor:UIColorBlue]
+                                                                 target:self action:@selector(setBold)];
+        
+        self.italicButton = [UIBarButtonItem qs_setBarButtonItemWithImage:UIImageMake(@"toolbar_italic")
+                                                                 selectedImage:[UIImageMake(@"toolbar_italic") qmui_imageWithTintColor:UIColorBlue]
+                                                                   target:self
+                                                                   action:@selector(setItalic)];
+        
+        self.strikeThroughButton = [UIBarButtonItem qs_setBarButtonItemWithImage:UIImageMake(@"toolbar_strikethrough")
+                                                                        selectedImage:[UIImageMake(@"toolbar_strikethrough") qmui_imageWithTintColor:UIColorBlue]
+                                                                          target:self action:@selector(setStrikeThrough)];
+        
+        self.alignButton = [UIBarButtonItem qs_setBarButtonItemWithImage:UIImageMake(@"toolbar_align_left") target:self action:@selector(align:)];
+        self.orderedListButton = [UIBarButtonItem qs_setBarButtonItemWithImage:UIImageMake(@"toolbar_order") target:self action:@selector(setOrderedList:)];
+        self.photoButton = [UIBarButtonItem qs_setBarButtonItemWithImage:UIImageMake(@"toolbar_image") target:self action:@selector(insertImage:)];
+        self.blockquoteButton = [UIBarButtonItem qs_setBarButtonItemWithImage:UIImageMake(@"toolbar_blockquote") target:self action:@selector(setBlockquote)];
+        self.moreButton = [UIBarButtonItem qs_setBarButtonItemWithImage:UIImageMake(@"toolbar_more") target:self action:@selector(openMoreView:)];
+        self.textEditorCloseButton = [UIBarButtonItem qs_setBarButtonItemWithImage:UIImageMake(@"toolbar_close") target:self action:@selector(endTextEditor)];
+        self.moreViewCloseButton = [UIBarButtonItem qs_setBarButtonItemWithImage:UIImageMake(@"icon_close") target:self action:@selector(closeMoreView)];
         
         self.fontStyleButton.tag = QSRichEditorTextStyleNormal;
         self.alignButton.tag = kCTTextAlignmentLeft;
@@ -106,13 +117,13 @@
 -(void)setFontStyle:(UIBarButtonItem *)sender {
     
     if (sender.tag == QSRichEditorTextStyleNormal) {
-        sender.image = [UIImageMake(@"toolbar_font_style2") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        sender.image = UIImageMake(@"toolbar_font_style2").originalImage;
         sender.tag = QSRichEditorTextStyleLarger;
     } else if (sender.tag == QSRichEditorTextStyleLarger) {
-        sender.image = [UIImageMake(@"toolbar_font_style3") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        sender.image = UIImageMake(@"toolbar_font_style3").originalImage;
         sender.tag = QSRichEditorTextStylePlaceholder;
     } else if (sender.tag == QSRichEditorTextStylePlaceholder) {
-        sender.image = [UIImageMake(@"toolbar_font_style1") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        sender.image = UIImageMake(@"toolbar_font_style1").originalImage;
         sender.tag = QSRichEditorTextStyleNormal;
     }
     
@@ -125,13 +136,13 @@
 - (void)align:(UIBarButtonItem *)sender {
     
     if (sender.tag == kCTTextAlignmentLeft) {
-        sender.image = [UIImageMake(@"toolbar_align_center") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        sender.image = UIImageMake(@"toolbar_align_center").originalImage;
         sender.tag = kCTTextAlignmentCenter;
     } else if (sender.tag == kCTTextAlignmentCenter) {
-        sender.image = [UIImageMake(@"toolbar_align_right") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        sender.image = UIImageMake(@"toolbar_align_right").originalImage;
         sender.tag = kCTTextAlignmentRight;
     } else if (sender.tag == kCTTextAlignmentRight) {
-        sender.image = [UIImageMake(@"toolbar_align_left") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        sender.image = UIImageMake(@"toolbar_align_left").originalImage;
         sender.tag = kCTTextAlignmentLeft;
     }
     
@@ -145,7 +156,7 @@
     
     [self initEditorBarItems];
     
-    self.boldButton.image = [self.boldButton.image qmui_imageWithTintColor:UIColorBlue];
+    [self.boldButton qs_setSelected:YES];
     if ([self.formatDelegate respondsToSelector:@selector(formatDidToggleBold)]) {
         [self.formatDelegate formatDidToggleBold];
     }
@@ -155,19 +166,10 @@
 - (void)setItalic {
     
     [self initEditorBarItems];
-    self.italicButton.image = [self.italicButton.image qmui_imageWithTintColor:UIColorBlue];
+    
+    [self.italicButton qs_setSelected:YES];
     if ([self.formatDelegate respondsToSelector:@selector(formatDidToggleItalic)]) {
         [self.formatDelegate formatDidToggleItalic];
-    }
-}
-
-//下滑线
-- (void)setUnderline {
-    
-    [self initEditorBarItems];
-    self.strikeThroughButton.image = [self.strikeThroughButton.image qmui_imageWithTintColor:UIColorBlue];
-    if ([self.formatDelegate respondsToSelector:@selector(formatDidToggleUnderline)]) {
-        [self.formatDelegate formatDidToggleUnderline];
     }
 }
 
@@ -175,9 +177,9 @@
 - (void)setStrikeThrough {
     
     [self initEditorBarItems];
-    self.boldButton.image = self.boldButton.originalImage;
-    self.italicButton.image = self.italicButton.originalImage;
-    self.strikeThroughButton.image = [self.strikeThroughButton.image qmui_imageWithTintColor:UIColorBlue];
+    
+    [self.strikeThroughButton qs_setSelected:YES];
+    
     if ([self.formatDelegate respondsToSelector:@selector(formatDidToggleStrikethrough)]) {
         [self.formatDelegate formatDidToggleStrikethrough];
     }
@@ -187,13 +189,13 @@
 - (void)setOrderedList:(UIBarButtonItem *)sender {
     
     if (sender.tag == DTCSSListStyleTypeNone) {
-        sender.image = [UIImageMake(@"toolbar_order_number") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        sender.image = UIImageMake(@"toolbar_order_number").originalImage;
         sender.tag = (NSInteger)DTCSSListStyleTypeDecimal;
     } else if (sender.tag == DTCSSListStyleTypeCircle) {
-        sender.image = [UIImageMake(@"toolbar_order") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        sender.image = UIImageMake(@"toolbar_order").originalImage;
         sender.tag = (NSInteger)DTCSSListStyleTypeNone;
     } else if (sender.tag == DTCSSListStyleTypeDecimal) {
-        sender.image = [UIImageMake(@"toolbar_order_dot") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        sender.image = UIImageMake(@"toolbar_order_dot").originalImage;
         sender.tag = (NSInteger)DTCSSListStyleTypeCircle;
     }
     
@@ -239,22 +241,21 @@
     
     QSRichEditorFontStyle *fontStyle = attributes[@"QSRichEditorFontStyle"];
     if (fontStyle) {
-        QMUILog(@"=== QSRichEditorFontStyle: %@",fontStyle);
         switch (fontStyle.style) {
             case QSRichEditorTextStyleNormal:
-                self.fontStyleButton.image = [UIImageMake(@"toolbar_font_style1") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+                self.fontStyleButton.image = UIImageMake(@"toolbar_font_style1").originalImage;
                 break;
                 
             case QSRichEditorTextStylePlaceholder:
-                self.fontStyleButton.image = [UIImageMake(@"toolbar_font_style2") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+                self.fontStyleButton.image = UIImageMake(@"toolbar_font_style2").originalImage;
                 break;
                 
             case QSRichEditorTextStyleLarger:
-                self.fontStyleButton.image = [UIImageMake(@"toolbar_font_style3") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+                self.fontStyleButton.image = UIImageMake(@"toolbar_font_style3").originalImage;
                 break;
         }
     } else {
-         self.fontStyleButton.image = [UIImageMake(@"toolbar_font_style1") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+         self.fontStyleButton.image = UIImageMake(@"toolbar_font_style1").originalImage;
     }
     
     NSArray *styles = attributes[@"DTTextLists"];
@@ -262,57 +263,43 @@
     if (listStyle) {
         switch (listStyle.type) {
             case DTCSSListStyleTypeNone:
-                self.orderedListButton.image = [UIImageMake(@"toolbar_order") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+                self.orderedListButton.image = UIImageMake(@"toolbar_order").originalImage;
                 break;
                 
             case DTCSSListStyleTypeDecimal:
-                self.orderedListButton.image = [UIImageMake(@"toolbar_order_number") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+                self.orderedListButton.image = UIImageMake(@"toolbar_order_number").originalImage;
                 break;
                 
             case DTCSSListStyleTypeCircle:
-                self.orderedListButton.image = [UIImageMake(@"toolbar_order_dot") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+                self.orderedListButton.image = UIImageMake(@"toolbar_order_dot").originalImage;
                 break;
                 
             default:
                 break;
         }
     } else {
-        self.orderedListButton.image = [UIImageMake(@"toolbar_order") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        self.orderedListButton.image = UIImageMake(@"toolbar_order").originalImage;
     }
     
     CTTextAlignment alignmanet = attributes.paragraphStyle.alignment;
     switch (alignmanet) {
         case kCTTextAlignmentLeft:
-            self.alignButton.image = [UIImageMake(@"toolbar_align_left") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+            self.alignButton.image = UIImageMake(@"toolbar_align_left").originalImage;
             break;
             
         case kCTTextAlignmentRight:
-            self.alignButton.image = [UIImageMake(@"toolbar_align_right") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+            self.alignButton.image = UIImageMake(@"toolbar_align_right").originalImage;
             break;
             
         case kCTTextAlignmentCenter:
-            self.alignButton.image = [UIImageMake(@"toolbar_align_center") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+            self.alignButton.image = UIImageMake(@"toolbar_align_center").originalImage;
             break;
         default: break;
     }
     
-    if (isBlod) {
-        self.boldButton.image = [self.boldButton.image qmui_imageWithTintColor:UIColorBlue];
-    } else {
-        self.boldButton.image = [UIImageMake(@"toolbar_bold") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    }
-    
-    if (isItalic) {
-        self.italicButton.image = [self.italicButton.image qmui_imageWithTintColor:UIColorBlue];
-    } else {
-        self.italicButton.image = [UIImageMake(@"toolbar_italic") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    }
-    
-    if (isStrikeThrough) {
-        self.strikeThroughButton.image = [self.strikeThroughButton.image qmui_imageWithTintColor:UIColorBlue];
-    } else {
-        self.strikeThroughButton.image = [UIImageMake(@"toolbar_strikethrough") imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    }
+    [self.boldButton qs_setSelected:isBlod];
+    [self.italicButton qs_setSelected:isItalic];
+    [self.strikeThroughButton qs_setSelected:isStrikeThrough];
 }
 
 -(BOOL)isTextEditor {
