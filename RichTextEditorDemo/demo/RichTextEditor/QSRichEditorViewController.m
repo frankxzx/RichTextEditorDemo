@@ -81,6 +81,8 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 @property(nonatomic, strong) UIBarButtonItem *doneItem;
 @property(nonatomic, strong) NSCache *imageCache;
 @property(nonatomic, strong) QMUIKeyboardManager *keyboardManager;
+@property(nonatomic, assign) BOOL isTexBlockEditing;
+@property(nonatomic, weak) QSTextBlockView *currentTextBlockView;
 
 @end
 
@@ -97,6 +99,28 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
     DTCSSStylesheet *styleSheet = [[DTCSSStylesheet alloc] initWithStyleBlock:@"p {line-height:27px;} image {width:100%}"];
     [defaults setObject:styleSheet forKey:DTDefaultStyleSheet];
     self.richEditor.textDefaults = defaults;
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(didBeginEditingInTextBlockView:) name:@"kDidSelectedTextBlockView" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(didEndEditingInTextBlockView:) name:@"kDidResignTextBlockView" object:nil];
+}
+
+//开始 TextBlock 编辑 禁掉 插入图片， 排序， 对齐
+-(void)didBeginEditingInTextBlockView:(NSNotification *)notification {
+    
+    QSTextBlockView *textView = (QSTextBlockView *)notification.object;
+    self.currentTextBlockView = textView;
+    self.isTexBlockEditing = YES;
+    [self.editorToolBar.alignButton qs_setEnable:NO];
+    [self.editorToolBar.orderedListButton qs_setEnable:NO];
+    [self.editorToolBar.photoButton qs_setEnable:NO];
+}
+
+//结束 TextBlock 编辑 恢复 插入图片， 排序， 对齐
+-(void)didEndEditingInTextBlockView:(QSTextBlockView *)textView {
+    self.isTexBlockEditing = NO;
+    [self.editorToolBar.alignButton qs_setEnable:YES];
+    [self.editorToolBar.orderedListButton qs_setEnable:YES];
+    [self.editorToolBar.photoButton qs_setEnable:YES];
 }
 
 -(void)initSubviews {
@@ -638,15 +662,22 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 
 //插入 块
 -(void)formatDidToggleBlockquote {
-    DTTextBlockAttachment *attachment = [[DTTextBlockAttachment alloc]init];
-    NSString *text = [self.richEditor attributedSubstringForRange:self.richEditor.qs_selectedTextRange].string;
-    UIFont *font = [QSTextBlockView font];
-    CGFloat textMaxWidth = SCREEN_WIDTH - 40 - 1;
-    CGFloat textHeight = [text heightForFont:font width:textMaxWidth];
-    attachment.displaySize = CGSizeMake(textMaxWidth, textHeight);
-    attachment.text = text;
-    attachment.range = self.richEditor.qs_selectedTextRange;
-    [self.richEditor replaceRange:self.richEditor.qs_selectedTextRange withAttachment:attachment inParagraph:YES];
+    if (self.isTexBlockEditing) {
+        //删除 块 的样式
+        [self.currentTextBlockView removeFromSuperview];
+        NSString *replaceString = self.currentTextBlockView.text;
+        [self deleteAttachment:self.currentTextBlockView.attachment replaceWithText:replaceString];
+    } else {
+        DTTextBlockAttachment *attachment = [[DTTextBlockAttachment alloc]init];
+        NSString *text = [self.richEditor attributedSubstringForRange:self.richEditor.qs_selectedTextRange].string;
+        UIFont *font = [QSTextBlockView font];
+        CGFloat textMaxWidth = SCREEN_WIDTH - 40 - 1;
+        CGFloat textHeight = [text heightForFont:font width:textMaxWidth];
+        attachment.displaySize = CGSizeMake(textMaxWidth, textHeight);
+        attachment.text = text;
+        attachment.range = self.richEditor.qs_selectedTextRange;
+        [self.richEditor replaceRange:self.richEditor.qs_selectedTextRange withAttachment:attachment inParagraph:YES];
+    }
 }
 
 //插入语音
@@ -912,13 +943,17 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 #pragma mark - QSTextBlockViewDelegate
 - (void)qsTextFieldDeleteBackward:(QSTextBlockView *)textView {
     [textView removeFromSuperview];
-//    [self.richEditor removeAttachment:textView.attachment];
+    [self deleteAttachment:textView.attachment];
 }
 
 #pragma mark - Helper
 -(void)deleteAttachment:(DTTextAttachment *)attachment {
+    [self deleteAttachment:attachment replaceWithText:@""];
+}
+
+-(void)deleteAttachment:(DTTextAttachment *)attachment replaceWithText:(NSString *)text {
     DTTextRange *range = [self.richEditor qs_rangeOfAttachment:attachment];
-    [self.richEditor replaceRange:range withText:@""];
+    [self.richEditor replaceRange:range withText:text];
 }
 
 - (void)dealloc {
@@ -937,13 +972,6 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 // letting iOS set the insets automatically interferes with
 - (BOOL)automaticallyAdjustsScrollViewInsets {
 	return NO;
-}
-
--(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    UITouch *touch = touches.allObjects.firstObject;
-    if ([touch.view isKindOfClass:[QSTextBlockView class]]) {
-        [self.editorToolBar.photoButton qs_setEnable:NO];
-    }
 }
 
 @end

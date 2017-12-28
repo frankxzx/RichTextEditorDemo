@@ -12,6 +12,7 @@
 #import <YYText/YYText.h>
 #import "UIBarButtonItem+qs.h"
 #import "QSRichEditorFontStyle.h"
+#import "UIResponder+qs.h"
 
 @interface RichTextEditorToolBar()
 
@@ -57,6 +58,7 @@
         [self setupTextCountItemWithCount:0];
         [self initEditorBarItems];
     }
+    
     return self;
 }
 
@@ -303,6 +305,14 @@
     [self.boldButton qs_setSelected:isBlod];
     [self.italicButton qs_setSelected:isItalic];
     [self.strikeThroughButton qs_setSelected:isStrikeThrough];
+    
+    UIResponder *currentFirstResponder = [UIResponder currentFirstResponder];
+    if ([currentFirstResponder isKindOfClass:NSClassFromString(@"QSTextBlockView")]) {
+        [self.alignButton qs_setEnable:NO];
+    } else {
+        [self.alignButton qs_setEnable:NO];
+    }
+    
 }
 
 -(BOOL)isTextEditor {

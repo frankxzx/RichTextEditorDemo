@@ -44,4 +44,14 @@
     }
 }
 
+-(BOOL)becomeFirstResponder {
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"kDidSelectedTextBlockView" object:self];
+    return [super becomeFirstResponder];
+}
+
+-(BOOL)resignFirstResponder {
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"kDidResignTextBlockView" object:self];
+    return [super resignFirstResponder];
+}
+
 @end

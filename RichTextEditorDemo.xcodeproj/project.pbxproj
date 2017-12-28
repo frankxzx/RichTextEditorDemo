@@ -34,6 +34,7 @@
 		016F49E01FE3BE5300768E73 /* QSHyperlinkAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 016F49DF1FE3BE5300768E73 /* QSHyperlinkAttachment.m */; };
 		017761881FF48DE400B75C67 /* NSDictionary+qsRIchTextStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 017761871FF48DE400B75C67 /* NSDictionary+qsRIchTextStyle.m */; };
 		0177618B1FF4C22F00B75C67 /* DTTextAttachment+qs.m in Sources */ = {isa = PBXBuildFile; fileRef = 0177618A1FF4C22F00B75C67 /* DTTextAttachment+qs.m */; };
+		0177618E1FF4CF5900B75C67 /* UIResponder+qs.m in Sources */ = {isa = PBXBuildFile; fileRef = 0177618D1FF4CF5900B75C67 /* UIResponder+qs.m */; };
 		01957E4C1FE515F200F1281D /* DTImageTextAttachment+qs.m in Sources */ = {isa = PBXBuildFile; fileRef = 01957E4B1FE515F200F1281D /* DTImageTextAttachment+qs.m */; };
 		01F9E4F81FEC97BC000D915F /* UIBarButtonItem+qs.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F9E4F71FEC97BC000D915F /* UIBarButtonItem+qs.m */; };
 		01F9E4FE1FECF01D000D915F /* QSTextBlockView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F9E4FD1FECF01D000D915F /* QSTextBlockView.m */; };
@@ -93,6 +94,8 @@
 		017761871FF48DE400B75C67 /* NSDictionary+qsRIchTextStyle.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+qsRIchTextStyle.m"; sourceTree = "<group>"; };
 		017761891FF4C22F00B75C67 /* DTTextAttachment+qs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DTTextAttachment+qs.h"; sourceTree = "<group>"; };
 		0177618A1FF4C22F00B75C67 /* DTTextAttachment+qs.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "DTTextAttachment+qs.m"; sourceTree = "<group>"; };
+		0177618C1FF4CF5900B75C67 /* UIResponder+qs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIResponder+qs.h"; sourceTree = "<group>"; };
+		0177618D1FF4CF5900B75C67 /* UIResponder+qs.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIResponder+qs.m"; sourceTree = "<group>"; };
 		01957E4A1FE515F200F1281D /* DTImageTextAttachment+qs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DTImageTextAttachment+qs.h"; sourceTree = "<group>"; };
 		01957E4B1FE515F200F1281D /* DTImageTextAttachment+qs.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "DTImageTextAttachment+qs.m"; sourceTree = "<group>"; };
 		01F9E4F61FEC97BC000D915F /* UIBarButtonItem+qs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+qs.h"; sourceTree = "<group>"; };
@@ -152,6 +155,8 @@
 				01F9E4F71FEC97BC000D915F /* UIBarButtonItem+qs.m */,
 				017761861FF48DE400B75C67 /* NSDictionary+qsRIchTextStyle.h */,
 				017761871FF48DE400B75C67 /* NSDictionary+qsRIchTextStyle.m */,
+				0177618C1FF4CF5900B75C67 /* UIResponder+qs.h */,
+				0177618D1FF4CF5900B75C67 /* UIResponder+qs.m */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -395,6 +400,7 @@
 				017761881FF48DE400B75C67 /* NSDictionary+qsRIchTextStyle.m in Sources */,
 				01957E4C1FE515F200F1281D /* DTImageTextAttachment+qs.m in Sources */,
 				0168006C1FDFC39800C66E28 /* DTRichTextEditorView+qs.m in Sources */,
+				0177618E1FF4CF5900B75C67 /* UIResponder+qs.m in Sources */,
 				015168121FE8DC4A00F2F1C7 /* DTTextBlockAttachment.m in Sources */,
 				012031441FF08D4D0058323B /* QSRichTextEditorVideoView.m in Sources */,
 				0168008A1FE36B0F00C66E28 /* QSTextFieldsViewController.m in Sources */,
