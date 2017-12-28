@@ -8,7 +8,9 @@
 
 #import "QSTextBlockView.h"
 
-@interface QSTextBlockView()
+@interface QSTextBlockView() {
+    BOOL isClear; // QMUITextView text.length 永远等于 1, 所以加个标识做判断
+}
 
 @end
 
@@ -21,11 +23,25 @@
         self.qmui_borderPosition = QMUIBorderViewPositionTop|QMUIBorderViewPositionLeft|QMUIBorderViewPositionRight|QMUIBorderViewPositionBottom;
         self.qmui_borderColor = UIColorGray;
         self.layer.cornerRadius = 2;
-        self.textAlignment = NSTextAlignmentCenter;
-//        self.font = UIFontMake(16);
+        self.font = [QSTextBlockView font];
         self.attachment = attachment;
+        isClear = NO;
     }
     return self;
+}
+
++(UIFont *)font {
+    return [UIFont systemFontOfSize:13];
+}
+
+- (void)deleteBackward {
+    [super deleteBackward];
+    if (isClear && [self.qs_delegate respondsToSelector:@selector(qsTextFieldDeleteBackward:)]) {
+        [self.qs_delegate qsTextFieldDeleteBackward:self];
+    }
+    if (self.text.length == 1) {
+        isClear = YES;
+    }
 }
 
 @end

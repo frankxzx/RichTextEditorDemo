@@ -29,6 +29,7 @@
 #import "DTDateAttachement.h"
 #import "QSImageAttachment.h"
 #import "QSRichEditorFontStyle.h"
+#import "DTTextAttachment+qs.h"
 
 CGFloat const toolBarHeight = 44;
 CGFloat const editorMoreViewHeight = 200;
@@ -66,7 +67,8 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
                                           QSRichTextEditorImageViewDelegate,
                                           QMUITextViewDelegate,
                                           ZFPlayerDelegate,
-                                          QSRichTextEditorVideoViewDelegate>
+                                          QSRichTextEditorVideoViewDelegate,
+                                          QSTextBlockViewDelegate>
 
 @property(nonatomic, assign) QSRichEditorState state;
 @property(nonatomic, assign) QSImageAttachmentState editImageState;
@@ -430,15 +432,6 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
         }
         
         [self.richEditor updateTextStyle:QSRichEditorTextStyleNormal inRange:[DTTextRange rangeWithNSRange:range]];
-        
-//        CTForegroundColor = "<CGColor 0x103db5fb0> [<CGColorSpace 0x103db4d40> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1; extended range)] ( 0 0 0 1 )";
-//        NSFont = "<UICTFont: 0x10ac90500> font-family: \".SFUIText\"; font-weight: normal; font-style: normal; font-size: 16.00pt";
-//        NSParagraphStyle = "<CTParagraphStyle: 0x10ab4e9a0>{base writing direction = -1, alignment = 4, line break mode = 0, default tab interval = 36\nfirst line head indent = 0, head indent = 0, tail indent = 0\nline height multiple = 0, maximum line height = 27, minimum line height = 27\nline spacing adjustment = 0, paragraph spacing = 16, paragraph spacing before = 0\n}";
-//        QSRichEditorFontStyle
-        
-//        NSMutableDictionary *defaultStyles = [NSMutableDictionary dictionary];
-//
-//        self.richEditor.overrideInsertionAttributes = defaultStyles;
     }
 	return YES;
 }
@@ -525,6 +518,7 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
     } else if ([attachment isKindOfClass:[DTTextBlockAttachment class]]) {
         
         QSTextBlockView *textView = [[QSTextBlockView alloc]initWithAttachment:(DTTextBlockAttachment *)attachment];
+        textView.qs_delegate = self;
         textView.frame = frame;
         textView.text = ((DTTextBlockAttachment *)attachment).text;
         textView.backgroundColor = LightenPlaceholderColor;
@@ -642,6 +636,19 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
     [self.editorToolBar closeMoreView];
 }
 
+//插入 块
+-(void)formatDidToggleBlockquote {
+    DTTextBlockAttachment *attachment = [[DTTextBlockAttachment alloc]init];
+    NSString *text = [self.richEditor attributedSubstringForRange:self.richEditor.qs_selectedTextRange].string;
+    UIFont *font = [QSTextBlockView font];
+    CGFloat textMaxWidth = SCREEN_WIDTH - 40 - 1;
+    CGFloat textHeight = [text heightForFont:font width:textMaxWidth];
+    attachment.displaySize = CGSizeMake(textMaxWidth, textHeight);
+    attachment.text = text;
+    attachment.range = self.richEditor.qs_selectedTextRange;
+    [self.richEditor replaceRange:self.richEditor.qs_selectedTextRange withAttachment:attachment inParagraph:YES];
+}
+
 //插入语音
 -(void)insertAudio {
     
@@ -658,21 +665,6 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 //当前设置了三种默认字体的样式
 -(void)formatDidSelectTextStyle:(QSRichEditorTextStyle)style {
     [self.richEditor updateTextStyle:style inRange:self.richEditor.qs_selectedTextRange];
-}
-
--(void)formatDidToggleBlockquote {
-    DTTextBlockAttachment *attachment = [[DTTextBlockAttachment alloc]init];
-    NSString *text = [self.richEditor attributedSubstringForRange:self.richEditor.qs_selectedTextRange].string;
-    UIFont *font = [QMUITextView appearance].font;
-    CGFloat textMaxWidth = SCREEN_WIDTH - 40 - 1;
-    CGFloat textHeight = [text heightForFont:font width:textMaxWidth];
-    attachment.displaySize = CGSizeMake(textMaxWidth, textHeight);
-    attachment.text = text;
-    [self.richEditor replaceRange:self.richEditor.qs_selectedTextRange withAttachment:attachment inParagraph:YES];
-    [self.richEditor applyTextAlignment:kCTTextAlignmentCenter toParagraphsContainingRange:self.richEditor.qs_selectedTextRange];
-    
-    DTTextBlockAttachment *attchment = [self.richEditor.attributedText textAttachmentsWithPredicate:nil class:[DTTextBlockAttachment class]].lastObject;
-    [attchment.textView becomeFirstResponder];
 }
 
 //加粗
@@ -892,9 +884,9 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 
 #pragma mark - UIScrollView Delegate
 //上下滑动取消键盘响应
--(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-	self.state = QSRichEditorStateScrolling;
-}
+//-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+//    self.state = QSRichEditorStateScrolling;
+//}
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
@@ -915,6 +907,12 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
     if (newVal == [NSNull null]) newVal = nil;
     
     QMUILog(@"change selectedTextRange %@",newVal);
+}
+
+#pragma mark - QSTextBlockViewDelegate
+- (void)qsTextFieldDeleteBackward:(QSTextBlockView *)textView {
+    [textView removeFromSuperview];
+//    [self.richEditor removeAttachment:textView.attachment];
 }
 
 #pragma mark - Helper
@@ -939,6 +937,13 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 // letting iOS set the insets automatically interferes with
 - (BOOL)automaticallyAdjustsScrollViewInsets {
 	return NO;
+}
+
+-(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    UITouch *touch = touches.allObjects.firstObject;
+    if ([touch.view isKindOfClass:[QSTextBlockView class]]) {
+        [self.editorToolBar.photoButton qs_setEnable:NO];
+    }
 }
 
 @end

@@ -25,4 +25,8 @@
 
 -(void)insertAttachment:(DTTextAttachment *)attchment;
 
+-(void)removeAttachment:(DTTextAttachment *)attchment;
+
+-(void)resetDefaultTextStyle;
+
 @end
