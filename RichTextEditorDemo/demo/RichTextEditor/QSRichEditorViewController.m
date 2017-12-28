@@ -97,7 +97,11 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
     
     NSMutableDictionary *defaults = [NSMutableDictionary dictionary];
     DTCSSStylesheet *styleSheet = [[DTCSSStylesheet alloc] initWithStyleBlock:@"p {line-height:27px;} image {width:100%}"];
+    
+//    [tmpDict setObject:DTNSNumberFromCGFloat(self.paragraphStyle.paragraphSpacing) forKey:DTAttachmentParagraphSpacingAttribute];
+//     self.richEditor.attributedStringAttributesForTextDefaults =
     [defaults setObject:styleSheet forKey:DTDefaultStyleSheet];
+    
     self.richEditor.textDefaults = defaults;
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(didBeginEditingInTextBlockView:) name:@"kDidSelectedTextBlockView" object:nil];
@@ -793,6 +797,7 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 }
 
 -(void)richTextEditorCloseMoreView {
+    [self.editorToolBar initEditorBarItems];
     [self.richEditor setInputView:nil animated:YES];
 }
 

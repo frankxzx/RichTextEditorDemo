@@ -110,6 +110,19 @@
     
     __weak __typeof(QSTextFieldsViewController *)weakDialog = dialogViewController;
     [dialogViewController addSubmitButtonWithText:@"确定" block:^(QMUIDialogViewController *aDialogViewController) {
+        
+        if (self.actionDelegate) {
+            [self.actionDelegate richTextEditorCloseMoreView];
+        }
+        
+        NSString *regEx = @"[a-zA-z]+://[^\\s]*";
+        NSPredicate *checkURL = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",regEx];
+        BOOL isVaild = [checkURL evaluateWithObject:weakDialog.textField2.text];
+        if (!isVaild) {
+            
+            return;
+        }
+        
         [aDialogViewController hide];
         if ([self.actionDelegate respondsToSelector:@selector(insertHyperlink:)]) {
             HyperlinkModel *link = [[HyperlinkModel alloc]init];

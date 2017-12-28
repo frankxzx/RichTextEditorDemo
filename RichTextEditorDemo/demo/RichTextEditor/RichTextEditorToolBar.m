@@ -224,7 +224,6 @@
 
 //关闭
 -(void)closeMoreView {
-    [self initEditorBarItems];
     if ([self.formatDelegate respondsToSelector:@selector(richTextEditorCloseMoreView)]) {
         [self.formatDelegate richTextEditorCloseMoreView];
     }

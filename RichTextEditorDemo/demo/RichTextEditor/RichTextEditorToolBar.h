@@ -48,4 +48,6 @@
 
 -(void)updateStateWithTypingAttributes:(NSDictionary *)attributes;
 
+-(void)initEditorBarItems;
+
 @end
