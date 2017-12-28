@@ -92,6 +92,7 @@
 }
 
 -(void)beginTextEditor:(UIBarButtonItem *)sender {
+    //先关闭 『更多』
     if ([self isTextEditor]) {
         [self endTextEditor];
         return;
@@ -277,8 +278,10 @@
             default:
                 break;
         }
+        [self.photoButton qs_setEnable:NO];
     } else {
         self.orderedListButton.image = UIImageMake(@"toolbar_order").originalImage;
+        [self.photoButton qs_setEnable:YES];
     }
     
     CTTextAlignment alignmanet = attributes.paragraphStyle.alignment;

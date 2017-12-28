@@ -7,7 +7,7 @@
 //
 
 #import <DTRichTextEditor/DTRichTextEditor.h>
-#import "RichTextEditorAction.h"
+#import "QSRichEditorFontStyle.h"
 
 @interface DTRichTextEditorView (qs)
 

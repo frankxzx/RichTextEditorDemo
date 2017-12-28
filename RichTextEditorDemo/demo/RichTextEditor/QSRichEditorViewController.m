@@ -28,6 +28,7 @@
 #import "ZFPlayer.h"
 #import "DTDateAttachement.h"
 #import "QSImageAttachment.h"
+#import "QSRichEditorFontStyle.h"
 
 CGFloat const toolBarHeight = 44;
 CGFloat const editorMoreViewHeight = 200;
@@ -217,7 +218,7 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 //Html 打印
 -(void)showHtmlString:(UIBarButtonItem *)sender {
 	NSString *htmlString = [self.richEditor HTMLStringWithOptions:DTHTMLWriterOptionDocument];
-	NSLog(@"======= \n %@ \n ======\n======= \n %@ \n ======",self.richEditor.attributedText, htmlString);
+	QMUILog(@"======= \n %@ \n ======\n======= \n %@ \n ======",self.richEditor.attributedText, htmlString);
     UIView *contentView = [[UIView alloc] initWithFrame:self.view.bounds];
     contentView.backgroundColor = UIColorWhite;
     
@@ -427,6 +428,17 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
         if(typingAttributes.isItalic) {
             [self.richEditor toggleItalicInRange:[DTTextRange rangeWithNSRange:range]];
         }
+        
+        [self.richEditor updateTextStyle:QSRichEditorTextStyleNormal inRange:[DTTextRange rangeWithNSRange:range]];
+        
+//        CTForegroundColor = "<CGColor 0x103db5fb0> [<CGColorSpace 0x103db4d40> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1; extended range)] ( 0 0 0 1 )";
+//        NSFont = "<UICTFont: 0x10ac90500> font-family: \".SFUIText\"; font-weight: normal; font-style: normal; font-size: 16.00pt";
+//        NSParagraphStyle = "<CTParagraphStyle: 0x10ab4e9a0>{base writing direction = -1, alignment = 4, line break mode = 0, default tab interval = 36\nfirst line head indent = 0, head indent = 0, tail indent = 0\nline height multiple = 0, maximum line height = 27, minimum line height = 27\nline spacing adjustment = 0, paragraph spacing = 16, paragraph spacing before = 0\n}";
+//        QSRichEditorFontStyle
+        
+//        NSMutableDictionary *defaultStyles = [NSMutableDictionary dictionary];
+//
+//        self.richEditor.overrideInsertionAttributes = defaultStyles;
     }
 	return YES;
 }
@@ -434,7 +446,7 @@ static UIEdgeInsets const kInsets = {16, 20, 16, 20};
 - (void)editorViewDidChangeSelection:(DTRichTextEditorView *)editorView
 {
 	QMUILog(@"editorViewDidChangeSelection:");
-    DTTextRange *selectedRange = (DTTextRange *)editorView.selectedTextRange;
+    DTTextRange *selectedRange = (DTTextRange *)editorView.qs_selectedTextRange;
     NSUInteger textCount = [self.richEditor attributedSubstringForRange:selectedRange].plainTextString.length;
     
     if (self.richEditor.qs_selectedTextRange.length > 0) {

@@ -13,6 +13,8 @@
 #define QSRichEditorLargerColor UIColorBlack
 #define QSRichEditorNormalColor UIColorBlack
 
+NSString * const QSRichEditorTextStyleKey = @"QSRichEditorTextStyle";
+
 @implementation QSRichEditorFontStyle
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -31,8 +33,7 @@
     [aCoder encodeObject:_font forKey:@"font"];
 }
 
-- (id)initWithStyle:(QSRichEditorTextStyle)style
-{
+- (id)initWithStyle:(QSRichEditorTextStyle)style {
     self = [super init];
     
     if (self)

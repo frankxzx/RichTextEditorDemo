@@ -7,7 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "RichTextEditorAction.h"
+
+typedef NS_OPTIONS(NSUInteger, QSRichEditorTextStyle) {
+    QSRichEditorTextStylePlaceholder,
+    QSRichEditorTextStyleNormal,
+    QSRichEditorTextStyleLarger
+};
+
+extern NSString * const QSRichEditorTextStyleKey;
 
 @interface QSRichEditorFontStyle : NSObject <NSCoding>
 

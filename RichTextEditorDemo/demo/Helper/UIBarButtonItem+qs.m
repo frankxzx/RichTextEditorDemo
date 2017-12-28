@@ -23,9 +23,9 @@
                                    selectedImage:(UIImage *)selectedImage
                                           target:(id)target
                                           action:(SEL)selector {
-    UIBarButtonItem *item = [QMUIToolbarButton barButtonItemWithImage:iconImage target:target action:selector];
+    UIBarButtonItem *item = [QMUIToolbarButton barButtonItemWithImage:iconImage.originalImage target:target action:selector];
     [item setTitleTextAttributes:@{NSForegroundColorAttributeName: UIColorGray} forState:UIControlStateDisabled];
-    item.originalImage = iconImage;
+    item.originalImage = iconImage.originalImage;
     item.disableImage = [iconImage qmui_imageWithAlpha:0.9];
     item.selectedImage = selectedImage;
     return item;

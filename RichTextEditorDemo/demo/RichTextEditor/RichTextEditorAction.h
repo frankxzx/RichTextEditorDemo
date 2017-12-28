@@ -8,12 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <DTCoreText/DTCoreText.h>
-
-typedef NS_OPTIONS(NSUInteger, QSRichEditorTextStyle) {
-    QSRichEditorTextStylePlaceholder,
-    QSRichEditorTextStyleNormal,
-    QSRichEditorTextStyleLarger
-};
+#import "QSRichEditorFontStyle.h"
 
 @interface HyperlinkModel: NSObject
 

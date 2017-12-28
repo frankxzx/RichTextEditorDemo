@@ -32,6 +32,7 @@
 		016CCCE41FD92A7E000493F7 /* RichTextEditorToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 016CCCDE1FD92A7E000493F7 /* RichTextEditorToolBar.m */; };
 		016F49DD1FE3B8ED00768E73 /* QSRichTextSeperatorAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 016F49DC1FE3B8ED00768E73 /* QSRichTextSeperatorAttachment.m */; };
 		016F49E01FE3BE5300768E73 /* QSHyperlinkAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 016F49DF1FE3BE5300768E73 /* QSHyperlinkAttachment.m */; };
+		017761881FF48DE400B75C67 /* NSDictionary+qsRIchTextStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 017761871FF48DE400B75C67 /* NSDictionary+qsRIchTextStyle.m */; };
 		01957E4C1FE515F200F1281D /* DTImageTextAttachment+qs.m in Sources */ = {isa = PBXBuildFile; fileRef = 01957E4B1FE515F200F1281D /* DTImageTextAttachment+qs.m */; };
 		01F9E4F81FEC97BC000D915F /* UIBarButtonItem+qs.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F9E4F71FEC97BC000D915F /* UIBarButtonItem+qs.m */; };
 		01F9E4FE1FECF01D000D915F /* QSTextBlockView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F9E4FD1FECF01D000D915F /* QSTextBlockView.m */; };
@@ -87,6 +88,8 @@
 		016F49DC1FE3B8ED00768E73 /* QSRichTextSeperatorAttachment.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSRichTextSeperatorAttachment.m; sourceTree = "<group>"; };
 		016F49DE1FE3BE5300768E73 /* QSHyperlinkAttachment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSHyperlinkAttachment.h; sourceTree = "<group>"; };
 		016F49DF1FE3BE5300768E73 /* QSHyperlinkAttachment.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSHyperlinkAttachment.m; sourceTree = "<group>"; };
+		017761861FF48DE400B75C67 /* NSDictionary+qsRIchTextStyle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+qsRIchTextStyle.h"; sourceTree = "<group>"; };
+		017761871FF48DE400B75C67 /* NSDictionary+qsRIchTextStyle.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+qsRIchTextStyle.m"; sourceTree = "<group>"; };
 		01957E4A1FE515F200F1281D /* DTImageTextAttachment+qs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DTImageTextAttachment+qs.h"; sourceTree = "<group>"; };
 		01957E4B1FE515F200F1281D /* DTImageTextAttachment+qs.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "DTImageTextAttachment+qs.m"; sourceTree = "<group>"; };
 		01F9E4F61FEC97BC000D915F /* UIBarButtonItem+qs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+qs.h"; sourceTree = "<group>"; };
@@ -142,6 +145,8 @@
 				015168141FE8E20100F2F1C7 /* NSString+YYAdd.m */,
 				01F9E4F61FEC97BC000D915F /* UIBarButtonItem+qs.h */,
 				01F9E4F71FEC97BC000D915F /* UIBarButtonItem+qs.m */,
+				017761861FF48DE400B75C67 /* NSDictionary+qsRIchTextStyle.h */,
+				017761871FF48DE400B75C67 /* NSDictionary+qsRIchTextStyle.m */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -382,6 +387,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				017761881FF48DE400B75C67 /* NSDictionary+qsRIchTextStyle.m in Sources */,
 				01957E4C1FE515F200F1281D /* DTImageTextAttachment+qs.m in Sources */,
 				0168006C1FDFC39800C66E28 /* DTRichTextEditorView+qs.m in Sources */,
 				015168121FE8DC4A00F2F1C7 /* DTTextBlockAttachment.m in Sources */,
