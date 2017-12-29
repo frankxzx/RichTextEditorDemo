@@ -7,6 +7,7 @@
 //
 
 #import "QSRichTextViewModel.h"
+#import "QSRichTextController.h"
 
 @interface QSRichTextViewModel()
 
@@ -21,6 +22,34 @@
     model.cellType = cellType;
     model.attributedString = [[NSMutableAttributedString alloc]initWithString:@"大爷就是大爷， 大爷就是大爷 大爷就是大爷很好 🧟‍♂️  🧟‍♂️ 🧟‍♂️ 🧟‍♂️ 🧟‍♂️ 🧟‍♂️ 🧟‍♂️ 🧟‍♂️ 🧟‍♂️ 🧟‍♂️ hhh  franknknknkn"];
     [self.models addObject:model];
+    UITableView *tableView = self.viewController.tableView;
+    [tableView beginUpdates];
+    [tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.models.count-1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+    [tableView endUpdates];
+}
+
+-(void)removeLineAtIndex:(NSInteger)index {
+    QSRichTextModel *model = self.models[index];
+    
+    [self.models removeObject:model];
+    UITableView *tableView = self.viewController.tableView;
+    [tableView beginUpdates];
+    [tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+    [tableView endUpdates];
+}
+
+-(void)removeLinesAtIndexPaths:(NSArray <NSIndexPath *>*)indexPaths {
+    
+    NSMutableArray <QSRichTextModel *>* models = [NSMutableArray array];
+    for (NSIndexPath *indexPath in indexPaths) {
+        [models addObject:self.models[indexPath.row]];
+    }
+    
+    [self.models removeObjectsInArray:models];
+    UITableView *tableView = self.viewController.tableView;
+    [tableView beginUpdates];
+    [tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
+    [tableView endUpdates];
 }
 
 -(NSArray<QSRichTextModel *> *)models {

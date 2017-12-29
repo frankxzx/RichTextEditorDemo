@@ -9,10 +9,14 @@
 #import <Foundation/Foundation.h>
 #import "QSRichTextModel.h"
 
+@class QSRichTextController;
 @interface QSRichTextViewModel : NSObject
 
 @property(nonatomic, strong, readonly) NSMutableArray <QSRichTextModel *>* models;
+@property(nonatomic, weak) QSRichTextController *viewController;
 
 -(void)addNewLine:(QSRichTextCellType)cellType;
+
+-(void)removeLineAtIndex:(NSInteger)index;
 
 @end

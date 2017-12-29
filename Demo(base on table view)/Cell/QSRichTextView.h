@@ -17,6 +17,6 @@
 
 @interface QSRichTextView : YYTextView
 
-@property (nonatomic,weak) id <QSTextBlockViewDelegate> qs_delegate;
+@property (nonatomic,weak) id <QSRichTextViewDelegate> qs_delegate;
 
 @end

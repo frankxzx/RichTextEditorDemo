@@ -63,6 +63,7 @@
 		01DC220B1FF60AC300A7E5F3 /* QSRichTextViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 01DC220A1FF60AC300A7E5F3 /* QSRichTextViewModel.m */; };
 		01DC220F1FF6186500A7E5F3 /* QSRichTextImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01DC220E1FF6186500A7E5F3 /* QSRichTextImageView.m */; };
 		01DC22121FF623B900A7E5F3 /* QSRichTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01DC22111FF623B900A7E5F3 /* QSRichTextView.m */; };
+		01DC22131FF62C7C00A7E5F3 /* RichTextEditor.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 016CCCDA1FD92A7E000493F7 /* RichTextEditor.xcassets */; };
 		01F9E4F81FEC97BC000D915F /* UIBarButtonItem+qs.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F9E4F71FEC97BC000D915F /* UIBarButtonItem+qs.m */; };
 		01F9E4FE1FECF01D000D915F /* QSTextBlockView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F9E4FD1FECF01D000D915F /* QSTextBlockView.m */; };
 		84490411E7C9011FDFD429B4 /* Pods_RichTextEditorDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B54ABF0B1BDED20575A5DA49 /* Pods_RichTextEditorDemo.framework */; };
@@ -523,6 +524,7 @@
 			files = (
 				01DC21CD1FF5D54200A7E5F3 /* LaunchScreen.storyboard in Resources */,
 				01DC21EC1FF5DDF400A7E5F3 /* RichTextStyle.css in Resources */,
+				01DC22131FF62C7C00A7E5F3 /* RichTextEditor.xcassets in Resources */,
 				01DC21CA1FF5D54200A7E5F3 /* Assets.xcassets in Resources */,
 				01DC21C81FF5D54200A7E5F3 /* Main.storyboard in Resources */,
 			);
@@ -542,6 +544,7 @@
 				"${BUILT_PRODUCTS_DIR}/QMUIKit/QMUIKit.framework",
 				"${BUILT_PRODUCTS_DIR}/YYText/YYText.framework",
 				"${BUILT_PRODUCTS_DIR}/ZFPlayer/ZFPlayer.framework",
+				"${BUILT_PRODUCTS_DIR}/IQKeyboardManager/IQKeyboardManager.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -549,6 +552,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/QMUIKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YYText.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZFPlayer.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManager.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

@@ -71,25 +71,25 @@
 
 -(void)captionImage:(id)sender {
     if ([self.actionDelegate respondsToSelector:@selector(editorViewCaptionImage:)]) {
-        [self.actionDelegate editorViewCaptionImage:sender];
+        [self.actionDelegate editorViewCaptionImage:self];
     }
 }
 
 -(void)editorImage:(id)sender {
     if ([self.actionDelegate respondsToSelector:@selector(editorViewEditImage:)]) {
-        [self.actionDelegate editorViewEditImage:sender];
+        [self.actionDelegate editorViewEditImage:self];
     }
 }
 
 -(void)deleteImage:(id)sender {
     if ([self.actionDelegate respondsToSelector:@selector(editorViewDeleteImage:)]) {
-        [self.actionDelegate editorViewDeleteImage:sender];
+        [self.actionDelegate editorViewDeleteImage:self];
     }
 }
 
 -(void)replaceImage:(id)sender {
     if ([self.actionDelegate respondsToSelector:@selector(editorViewReplaceImage:)]) {
-        [self.actionDelegate editorViewReplaceImage:sender];
+        [self.actionDelegate editorViewReplaceImage:self];
     }
 }
 

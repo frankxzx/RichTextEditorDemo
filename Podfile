@@ -15,6 +15,7 @@ target 'Demo(base on table view)' do
     pod 'QMUIKit'
     pod 'YYText'
     pod 'ZFPlayer'
+    pod 'IQKeyboardManager'
     
 end
 

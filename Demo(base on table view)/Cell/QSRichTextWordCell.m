@@ -10,7 +10,7 @@
 
 @interface QSRichTextWordCell ()
 
-@property(nonatomic, strong, readwrite) YYTextView * textView;
+@property(nonatomic, strong, readwrite) QSRichTextView * textView;
 
 @end
 
@@ -46,12 +46,10 @@
     return resultSize;
 }
 
-- (void)renderRichText:(NSString *)text {
+- (void)renderRichText:(NSAttributedString *)text {
     
-    self.textView.text = text;
-    self.textView.attributedText = [self attributeStringWithString:text lineHeight:26];
+    self.textView.attributedText = text;
     self.textView.textAlignment = NSTextAlignmentJustified;
-    
     [self setNeedsLayout];
 }
 
@@ -61,9 +59,10 @@
     return attriString;
 }
 
--(YYTextView *)textView {
+-(QSRichTextView *)textView {
     if (!_textView) {
-        _textView = [YYTextView new];
+        _textView = [QSRichTextView new];
+        _textView.scrollEnabled = NO;
     }
     return _textView;
 }

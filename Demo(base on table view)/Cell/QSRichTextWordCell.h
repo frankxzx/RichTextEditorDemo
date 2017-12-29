@@ -7,12 +7,12 @@
 //
 
 #import "QSRichTextCell.h"
-#import <YYText/YYText.h>
+#import "QSRichTextView.h"
 
 @interface QSRichTextWordCell : QSRichTextCell
 
-@property(nonatomic, strong, readonly) YYTextView * textView;
+@property(nonatomic, strong, readonly) QSRichTextView * textView;
 
-- (void)renderRichText:(NSString *)text;
+- (void)renderRichText:(NSAttributedString *)text;
 
 @end
