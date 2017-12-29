@@ -7,7 +7,11 @@
 //
 
 #import "QSRichTextCell.h"
+#import "QSRichTextImageView.h"
 
 @interface QSRichTextImageCell : QSRichTextCell
+
+@property(nonatomic, strong) UIImage *attchmentImage;
+@property(nonatomic, strong, readonly) QSRichTextImageView *attchmentImageView;
 
 @end

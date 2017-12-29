@@ -7,18 +7,51 @@
 //
 
 #import "QSRichTextImageCell.h"
+#import <QMUIKit/QMUIKit.h>
+
+@interface QSRichTextImageCell()
+
+@property(nonatomic, strong, readwrite) QSRichTextImageView *attchmentImageView;
+
+@end
 
 @implementation QSRichTextImageCell
 
-- (void)awakeFromNib {
-    [super awakeFromNib];
-    // Initialization code
+-(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        [self makeUI];
+    }
+    return self;
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
+-(void)makeUI {
+    [self.contentView addSubview:self.attchmentImageView];
+}
 
-    // Configure the view for the selected state
+-(void)layoutSubviews {
+    [super layoutSubviews];
+    self.attchmentImageView.frame = CGRectFlatMake(0, 0, SCREEN_WIDTH, self.attchmentImage.size.height);
+}
+
+-(CGSize)sizeThatFits:(CGSize)size {
+    CGSize resultSize = CGSizeMake(SCREEN_WIDTH, 0);
+    CGFloat resultHeight = 0;
+    CGSize imageSize = self.attchmentImage.size;
+    resultHeight += imageSize.height;
+    resultSize.height = resultHeight;
+    return resultSize;
+}
+
+-(QSRichTextImageView *)attchmentImageView {
+    if (!_attchmentImageView) {
+        _attchmentImageView = [[QSRichTextImageView alloc]init];
+    }
+    return _attchmentImageView;
+}
+
+-(void)setAttchmentImage:(UIImage *)attchmentImage {
+    _attchmentImage = attchmentImage;
+    self.attchmentImageView.image = attchmentImage;
 }
 
 @end
