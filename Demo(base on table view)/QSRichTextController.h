@@ -1,5 +1,5 @@
 //
-//  QSRichTextCell.h
+//  QSRichTextController.h
 //  Demo(base on table view)
 //
 //  Created by Xuzixiang on 2017/12/29.
@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "QSRichTextHtmlWriter.h"
+#import <QMUIKit/QMUIKit.h>
 
-@interface QSRichTextCell : UITableViewCell
+@interface QSRichTextController :QMUICommonTableViewController
 
 @end
