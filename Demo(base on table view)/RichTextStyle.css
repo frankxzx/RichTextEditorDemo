@@ -1,0 +1,51 @@
+body {
+    font-size: 16px;
+    color: #7E7E7E;
+}
+
+p {
+    margin: 8px 25px 8px 25px;
+}
+
+hr {
+    margin: 8px 25px 8px 25px
+}
+
+p.imageDes {
+    font-size: 12px;font-size: 12px;
+    color: #e2e2e2;
+    margin: 8px;
+    text-align: center;
+}
+
+p.title {
+    line-height: 36px;
+    font-size: 26px;
+    color: #121212;
+    margin: 20px 0px 20px 0px;
+    text-align: center;
+}
+
+p.block {
+    padding: 20px;
+    border-radius: 3px;
+    background-color: #F0F0F0;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #E0E0E0;
+    font-size: 18px;
+    color: #656565;
+}
+
+p.quote {
+    padding: 12px;
+    border-radius: 3px;
+    background-color: #F2F2F2;
+    font-size: 14px;
+    color: #656565;
+    color: #656565;
+}
+
+p.bottom {
+    padding: 20px
+}

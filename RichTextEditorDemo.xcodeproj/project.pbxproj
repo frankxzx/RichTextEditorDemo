@@ -48,6 +48,8 @@
 		01DC21DF1FF5D7D700A7E5F3 /* QSRichTextVideoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 01DC21DE1FF5D7D700A7E5F3 /* QSRichTextVideoCell.m */; };
 		01DC21E31FF5D84400A7E5F3 /* QSRichTextSeparatorCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 01DC21E21FF5D84400A7E5F3 /* QSRichTextSeparatorCell.m */; };
 		01DC21E61FF5D95300A7E5F3 /* QSRichTextAddCoverCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 01DC21E51FF5D95300A7E5F3 /* QSRichTextAddCoverCell.m */; };
+		01DC21EA1FF5DC5E00A7E5F3 /* QSRichTextHtmlWriterManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 01DC21E91FF5DC5E00A7E5F3 /* QSRichTextHtmlWriterManager.m */; };
+		01DC21EC1FF5DDF400A7E5F3 /* RichTextStyle.css in Resources */ = {isa = PBXBuildFile; fileRef = 01DC21EB1FF5DDF400A7E5F3 /* RichTextStyle.css */; };
 		01F9E4F81FEC97BC000D915F /* UIBarButtonItem+qs.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F9E4F71FEC97BC000D915F /* UIBarButtonItem+qs.m */; };
 		01F9E4FE1FECF01D000D915F /* QSTextBlockView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F9E4FD1FECF01D000D915F /* QSTextBlockView.m */; };
 		84490411E7C9011FDFD429B4 /* Pods_RichTextEditorDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B54ABF0B1BDED20575A5DA49 /* Pods_RichTextEditorDemo.framework */; };
@@ -133,6 +135,10 @@
 		01DC21E21FF5D84400A7E5F3 /* QSRichTextSeparatorCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSRichTextSeparatorCell.m; sourceTree = "<group>"; };
 		01DC21E41FF5D95300A7E5F3 /* QSRichTextAddCoverCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSRichTextAddCoverCell.h; sourceTree = "<group>"; };
 		01DC21E51FF5D95300A7E5F3 /* QSRichTextAddCoverCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSRichTextAddCoverCell.m; sourceTree = "<group>"; };
+		01DC21E71FF5DADA00A7E5F3 /* QSRichTextHtmlWriter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSRichTextHtmlWriter.h; sourceTree = "<group>"; };
+		01DC21E81FF5DC5E00A7E5F3 /* QSRichTextHtmlWriterManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSRichTextHtmlWriterManager.h; sourceTree = "<group>"; };
+		01DC21E91FF5DC5E00A7E5F3 /* QSRichTextHtmlWriterManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSRichTextHtmlWriterManager.m; sourceTree = "<group>"; };
+		01DC21EB1FF5DDF400A7E5F3 /* RichTextStyle.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = RichTextStyle.css; sourceTree = "<group>"; };
 		01F9E4F61FEC97BC000D915F /* UIBarButtonItem+qs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+qs.h"; sourceTree = "<group>"; };
 		01F9E4F71FEC97BC000D915F /* UIBarButtonItem+qs.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIBarButtonItem+qs.m"; sourceTree = "<group>"; };
 		01F9E4FC1FECF01D000D915F /* QSTextBlockView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSTextBlockView.h; sourceTree = "<group>"; };
@@ -290,6 +296,10 @@
 				01DC21C11FF5D54200A7E5F3 /* AppDelegate.m */,
 				01DC21C31FF5D54200A7E5F3 /* ViewController.h */,
 				01DC21C41FF5D54200A7E5F3 /* ViewController.m */,
+				01DC21E71FF5DADA00A7E5F3 /* QSRichTextHtmlWriter.h */,
+				01DC21E81FF5DC5E00A7E5F3 /* QSRichTextHtmlWriterManager.h */,
+				01DC21E91FF5DC5E00A7E5F3 /* QSRichTextHtmlWriterManager.m */,
+				01DC21EB1FF5DDF400A7E5F3 /* RichTextStyle.css */,
 				01DC21E01FF5D81200A7E5F3 /* Cell */,
 				01DC21C61FF5D54200A7E5F3 /* Main.storyboard */,
 				01DC21C91FF5D54200A7E5F3 /* Assets.xcassets */,
@@ -437,6 +447,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				01DC21CD1FF5D54200A7E5F3 /* LaunchScreen.storyboard in Resources */,
+				01DC21EC1FF5DDF400A7E5F3 /* RichTextStyle.css in Resources */,
 				01DC21CA1FF5D54200A7E5F3 /* Assets.xcassets in Resources */,
 				01DC21C81FF5D54200A7E5F3 /* Main.storyboard in Resources */,
 			);
@@ -616,6 +627,7 @@
 				01DC21D01FF5D54200A7E5F3 /* main.m in Sources */,
 				01DC21E31FF5D84400A7E5F3 /* QSRichTextSeparatorCell.m in Sources */,
 				01DC21D61FF5D68800A7E5F3 /* QSRichTextCell.m in Sources */,
+				01DC21EA1FF5DC5E00A7E5F3 /* QSRichTextHtmlWriterManager.m in Sources */,
 				01DC21C21FF5D54200A7E5F3 /* AppDelegate.m in Sources */,
 				01DC21D91FF5D7B100A7E5F3 /* QSRichTextWordCell.m in Sources */,
 				01DC21E61FF5D95300A7E5F3 /* QSRichTextAddCoverCell.m in Sources */,

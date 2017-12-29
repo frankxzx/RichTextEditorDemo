@@ -8,11 +8,19 @@
 
 #import "QSRichTextWordCell.h"
 
+@interface QSRichTextWordCell ()
+
+@property(nonatomic, strong, readwrite) YYTextView * textView;
+
+@end
+
 @implementation QSRichTextWordCell
 
-- (void)awakeFromNib {
-    [super awakeFromNib];
-    // Initialization code
+-(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        
+    }
+    return self;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

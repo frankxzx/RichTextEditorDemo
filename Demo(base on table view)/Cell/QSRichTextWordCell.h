@@ -7,7 +7,10 @@
 //
 
 #import "QSRichTextCell.h"
+#import <YYText/YYText.h>
 
 @interface QSRichTextWordCell : QSRichTextCell
+
+@property(nonatomic, strong, readonly) YYTextView * textView;
 
 @end
