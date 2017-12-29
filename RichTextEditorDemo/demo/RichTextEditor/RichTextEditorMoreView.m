@@ -115,11 +115,11 @@
             [self.actionDelegate richTextEditorCloseMoreView];
         }
         
-        NSString *regEx = @"[a-zA-z]+://[^\\s]*";
-        NSPredicate *checkURL = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",regEx];
+        NSString *urlRegEx = @"http(s)?://([\\w-]+\\.)+[\\w-]+(/[\\w- ./?%&amp;=]*)?";
+        NSPredicate *checkURL = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", urlRegEx];
         BOOL isVaild = [checkURL evaluateWithObject:weakDialog.textField2.text];
+        
         if (!isVaild) {
-            
             return;
         }
         

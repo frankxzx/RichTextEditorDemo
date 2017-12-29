@@ -35,13 +35,13 @@
 }
 
 - (void)deleteBackward {
-    [super deleteBackward];
     if (isClear && [self.qs_delegate respondsToSelector:@selector(qsTextFieldDeleteBackward:)]) {
         [self.qs_delegate qsTextFieldDeleteBackward:self];
     }
     if (self.text.length == 1) {
         isClear = YES;
     }
+    [super deleteBackward];
 }
 
 -(BOOL)becomeFirstResponder {

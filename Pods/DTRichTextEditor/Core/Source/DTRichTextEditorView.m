@@ -2328,6 +2328,8 @@ typedef enum
 			}
 		}
 		
+        [attributes updateParagraphSpacing:0];
+        
 		// need to replace attributes with typing attributes
 		text = [[NSAttributedString alloc] initWithString:text attributes:attributes];
 	}
