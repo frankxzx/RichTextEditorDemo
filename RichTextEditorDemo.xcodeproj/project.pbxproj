@@ -42,9 +42,16 @@
 		01DC21CA1FF5D54200A7E5F3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 01DC21C91FF5D54200A7E5F3 /* Assets.xcassets */; };
 		01DC21CD1FF5D54200A7E5F3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 01DC21CB1FF5D54200A7E5F3 /* LaunchScreen.storyboard */; };
 		01DC21D01FF5D54200A7E5F3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 01DC21CF1FF5D54200A7E5F3 /* main.m */; };
+		01DC21D61FF5D68800A7E5F3 /* QSRichTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 01DC21D51FF5D68800A7E5F3 /* QSRichTextCell.m */; };
+		01DC21D91FF5D7B100A7E5F3 /* QSRichTextWordCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 01DC21D81FF5D7B100A7E5F3 /* QSRichTextWordCell.m */; };
+		01DC21DC1FF5D7C800A7E5F3 /* QSRichTextImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 01DC21DB1FF5D7C800A7E5F3 /* QSRichTextImageCell.m */; };
+		01DC21DF1FF5D7D700A7E5F3 /* QSRichTextVideoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 01DC21DE1FF5D7D700A7E5F3 /* QSRichTextVideoCell.m */; };
+		01DC21E31FF5D84400A7E5F3 /* QSRichTextSeparatorCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 01DC21E21FF5D84400A7E5F3 /* QSRichTextSeparatorCell.m */; };
+		01DC21E61FF5D95300A7E5F3 /* QSRichTextAddCoverCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 01DC21E51FF5D95300A7E5F3 /* QSRichTextAddCoverCell.m */; };
 		01F9E4F81FEC97BC000D915F /* UIBarButtonItem+qs.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F9E4F71FEC97BC000D915F /* UIBarButtonItem+qs.m */; };
 		01F9E4FE1FECF01D000D915F /* QSTextBlockView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F9E4FD1FECF01D000D915F /* QSTextBlockView.m */; };
 		84490411E7C9011FDFD429B4 /* Pods_RichTextEditorDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B54ABF0B1BDED20575A5DA49 /* Pods_RichTextEditorDemo.framework */; };
+		EFB66E7B16FC560E7786DFC2 /* Pods_Demo_base_on_table_view_.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42521A6B573750C71260429C /* Pods_Demo_base_on_table_view_.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -114,11 +121,26 @@
 		01DC21CC1FF5D54200A7E5F3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		01DC21CE1FF5D54200A7E5F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		01DC21CF1FF5D54200A7E5F3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		01DC21D41FF5D68800A7E5F3 /* QSRichTextCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSRichTextCell.h; sourceTree = "<group>"; };
+		01DC21D51FF5D68800A7E5F3 /* QSRichTextCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSRichTextCell.m; sourceTree = "<group>"; };
+		01DC21D71FF5D7B100A7E5F3 /* QSRichTextWordCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSRichTextWordCell.h; sourceTree = "<group>"; };
+		01DC21D81FF5D7B100A7E5F3 /* QSRichTextWordCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSRichTextWordCell.m; sourceTree = "<group>"; };
+		01DC21DA1FF5D7C800A7E5F3 /* QSRichTextImageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSRichTextImageCell.h; sourceTree = "<group>"; };
+		01DC21DB1FF5D7C800A7E5F3 /* QSRichTextImageCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSRichTextImageCell.m; sourceTree = "<group>"; };
+		01DC21DD1FF5D7D700A7E5F3 /* QSRichTextVideoCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSRichTextVideoCell.h; sourceTree = "<group>"; };
+		01DC21DE1FF5D7D700A7E5F3 /* QSRichTextVideoCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSRichTextVideoCell.m; sourceTree = "<group>"; };
+		01DC21E11FF5D84400A7E5F3 /* QSRichTextSeparatorCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSRichTextSeparatorCell.h; sourceTree = "<group>"; };
+		01DC21E21FF5D84400A7E5F3 /* QSRichTextSeparatorCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSRichTextSeparatorCell.m; sourceTree = "<group>"; };
+		01DC21E41FF5D95300A7E5F3 /* QSRichTextAddCoverCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSRichTextAddCoverCell.h; sourceTree = "<group>"; };
+		01DC21E51FF5D95300A7E5F3 /* QSRichTextAddCoverCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSRichTextAddCoverCell.m; sourceTree = "<group>"; };
 		01F9E4F61FEC97BC000D915F /* UIBarButtonItem+qs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+qs.h"; sourceTree = "<group>"; };
 		01F9E4F71FEC97BC000D915F /* UIBarButtonItem+qs.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIBarButtonItem+qs.m"; sourceTree = "<group>"; };
 		01F9E4FC1FECF01D000D915F /* QSTextBlockView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSTextBlockView.h; sourceTree = "<group>"; };
 		01F9E4FD1FECF01D000D915F /* QSTextBlockView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSTextBlockView.m; sourceTree = "<group>"; };
+		2519346A218FFFF4A41AF629 /* Pods-Demo(base on table view).release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Demo(base on table view).release.xcconfig"; path = "Pods/Target Support Files/Pods-Demo(base on table view)/Pods-Demo(base on table view).release.xcconfig"; sourceTree = "<group>"; };
+		42521A6B573750C71260429C /* Pods_Demo_base_on_table_view_.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Demo_base_on_table_view_.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4295F660BADBD64DB65E20C2 /* Pods-RichTextEditorDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RichTextEditorDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-RichTextEditorDemo/Pods-RichTextEditorDemo.release.xcconfig"; sourceTree = "<group>"; };
+		718248E75CC75C4256983A2F /* Pods-Demo(base on table view).debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Demo(base on table view).debug.xcconfig"; path = "Pods/Target Support Files/Pods-Demo(base on table view)/Pods-Demo(base on table view).debug.xcconfig"; sourceTree = "<group>"; };
 		B54ABF0B1BDED20575A5DA49 /* Pods_RichTextEditorDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RichTextEditorDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF97F62057F5CFBB40AA3EB3 /* Pods-RichTextEditorDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RichTextEditorDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RichTextEditorDemo/Pods-RichTextEditorDemo.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -136,6 +158,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EFB66E7B16FC560E7786DFC2 /* Pods_Demo_base_on_table_view_.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -267,6 +290,7 @@
 				01DC21C11FF5D54200A7E5F3 /* AppDelegate.m */,
 				01DC21C31FF5D54200A7E5F3 /* ViewController.h */,
 				01DC21C41FF5D54200A7E5F3 /* ViewController.m */,
+				01DC21E01FF5D81200A7E5F3 /* Cell */,
 				01DC21C61FF5D54200A7E5F3 /* Main.storyboard */,
 				01DC21C91FF5D54200A7E5F3 /* Assets.xcassets */,
 				01DC21CB1FF5D54200A7E5F3 /* LaunchScreen.storyboard */,
@@ -276,11 +300,32 @@
 			path = "Demo(base on table view)";
 			sourceTree = "<group>";
 		};
+		01DC21E01FF5D81200A7E5F3 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				01DC21D41FF5D68800A7E5F3 /* QSRichTextCell.h */,
+				01DC21D51FF5D68800A7E5F3 /* QSRichTextCell.m */,
+				01DC21D71FF5D7B100A7E5F3 /* QSRichTextWordCell.h */,
+				01DC21D81FF5D7B100A7E5F3 /* QSRichTextWordCell.m */,
+				01DC21DA1FF5D7C800A7E5F3 /* QSRichTextImageCell.h */,
+				01DC21DB1FF5D7C800A7E5F3 /* QSRichTextImageCell.m */,
+				01DC21DD1FF5D7D700A7E5F3 /* QSRichTextVideoCell.h */,
+				01DC21DE1FF5D7D700A7E5F3 /* QSRichTextVideoCell.m */,
+				01DC21E11FF5D84400A7E5F3 /* QSRichTextSeparatorCell.h */,
+				01DC21E21FF5D84400A7E5F3 /* QSRichTextSeparatorCell.m */,
+				01DC21E41FF5D95300A7E5F3 /* QSRichTextAddCoverCell.h */,
+				01DC21E51FF5D95300A7E5F3 /* QSRichTextAddCoverCell.m */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
 		4FE52EF13E21F39E2711D0B8 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
 				DF97F62057F5CFBB40AA3EB3 /* Pods-RichTextEditorDemo.debug.xcconfig */,
 				4295F660BADBD64DB65E20C2 /* Pods-RichTextEditorDemo.release.xcconfig */,
+				718248E75CC75C4256983A2F /* Pods-Demo(base on table view).debug.xcconfig */,
+				2519346A218FFFF4A41AF629 /* Pods-Demo(base on table view).release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -289,6 +334,7 @@
 			isa = PBXGroup;
 			children = (
 				B54ABF0B1BDED20575A5DA49 /* Pods_RichTextEditorDemo.framework */,
+				42521A6B573750C71260429C /* Pods_Demo_base_on_table_view_.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -320,9 +366,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 01DC21D31FF5D54200A7E5F3 /* Build configuration list for PBXNativeTarget "Demo(base on table view)" */;
 			buildPhases = (
+				6797CCFF64FDC8AF27F77959 /* [CP] Check Pods Manifest.lock */,
 				01DC21BA1FF5D54200A7E5F3 /* Sources */,
 				01DC21BB1FF5D54200A7E5F3 /* Frameworks */,
 				01DC21BC1FF5D54200A7E5F3 /* Resources */,
+				3BFA19D1508AC66046387C2C /* [CP] Embed Pods Frameworks */,
+				B17E38FF6F569DFCBA3BB7F3 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -396,6 +445,30 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		3BFA19D1508AC66046387C2C /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Demo(base on table view)/Pods-Demo(base on table view)-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Masonry/Masonry.framework",
+				"${BUILT_PRODUCTS_DIR}/QMUIKit/QMUIKit.framework",
+				"${BUILT_PRODUCTS_DIR}/YYText/YYText.framework",
+				"${BUILT_PRODUCTS_DIR}/ZFPlayer/ZFPlayer.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Masonry.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/QMUIKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YYText.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZFPlayer.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Demo(base on table view)/Pods-Demo(base on table view)-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		49FC9A3FE01C79AF704CB6EB /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -428,6 +501,39 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RichTextEditorDemo/Pods-RichTextEditorDemo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6797CCFF64FDC8AF27F77959 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Demo(base on table view)-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B17E38FF6F569DFCBA3BB7F3 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Demo(base on table view)/Pods-Demo(base on table view)-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		D3CD1D07FE0E9793F3CA3C48 /* [CP] Check Pods Manifest.lock */ = {
@@ -504,9 +610,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				01DC21DC1FF5D7C800A7E5F3 /* QSRichTextImageCell.m in Sources */,
+				01DC21DF1FF5D7D700A7E5F3 /* QSRichTextVideoCell.m in Sources */,
 				01DC21C51FF5D54200A7E5F3 /* ViewController.m in Sources */,
 				01DC21D01FF5D54200A7E5F3 /* main.m in Sources */,
+				01DC21E31FF5D84400A7E5F3 /* QSRichTextSeparatorCell.m in Sources */,
+				01DC21D61FF5D68800A7E5F3 /* QSRichTextCell.m in Sources */,
 				01DC21C21FF5D54200A7E5F3 /* AppDelegate.m in Sources */,
+				01DC21D91FF5D7B100A7E5F3 /* QSRichTextWordCell.m in Sources */,
+				01DC21E61FF5D95300A7E5F3 /* QSRichTextAddCoverCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -684,6 +796,7 @@
 		};
 		01DC21D11FF5D54200A7E5F3 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 718248E75CC75C4256983A2F /* Pods-Demo(base on table view).debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -698,6 +811,7 @@
 		};
 		01DC21D21FF5D54200A7E5F3 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2519346A218FFFF4A41AF629 /* Pods-Demo(base on table view).release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
