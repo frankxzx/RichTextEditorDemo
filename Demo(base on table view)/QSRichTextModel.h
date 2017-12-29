@@ -10,10 +10,20 @@
 #import "QSRichTextLayout.h"
 #import "QSRichTextHtmlWriter.h"
 
+typedef NS_ENUM(NSInteger, QSRichTextCellType)
+{
+    QSRichTextCellTypeText = 0,
+    QSRichTextCellTypeImage,
+    QSRichTextCellTypeVideo,
+    QSRichTextCellTypeSeparator
+};
+
 @interface QSRichTextModel : NSObject <QSRichTextHtmlWriter>
 
 @property(nonatomic, strong) NSMutableAttributedString *attributedString;
 @property(nonatomic, strong) UIImage *image;
 @property(nonatomic, strong) QSRichTextLayout *layout;
+@property(nonatomic, copy) NSString *reuseID;
+@property(nonatomic, assign) QSRichTextCellType cellType;
 
 @end

@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "QSRichTextCell.h"
 
-@interface QSRichTextSeparatorCell : UITableViewCell
+@interface QSRichTextSeparatorCell : QSRichTextCell
 
 @end

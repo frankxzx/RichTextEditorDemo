@@ -8,17 +8,15 @@
 
 #import "QSRichTextController.h"
 #import "QSRichTextModel.h"
-
-typedef NS_ENUM(NSInteger, QSRichTextCellType)
-{
-    QSRichTextCellTypeText = 0,
-    QSRichTextCellTypeImage,
-    QSRichTextCellTypeVideo,
-};
+#import "QSRichTextWordCell.h"
+#import "QSRichTextImageCell.h"
+#import "QSRichTextVideoCell.h"
+#import "QSRichTextSeparatorCell.h"
+#import "QSRichTextAddCoverCell.h"
 
 @interface QSRichTextController ()
 
-@property(nonatomic, strong) NSMutableArray <QSRichTextModel *>models;
+@property(nonatomic, strong) NSMutableArray <QSRichTextModel *>* models;
 
 @end
 
@@ -39,14 +37,29 @@ typedef NS_ENUM(NSInteger, QSRichTextCellType)
 
 -(UITableViewCell *)qmui_tableView:(UITableView *)tableView cellWithIdentifier:(NSString *)identifier {
     
+    QSRichTextCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+    if (!cell) {
+        cell = [[QSRichTextCell alloc]initForTableView:tableView withReuseIdentifier:identifier];
+    }
+    return cell;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
+    QSRichTextModel *model = self.models[indexPath.row];
+    QSRichTextCell *cell = [self qmui_tableView:tableView cellWithIdentifier:model.reuseID];
+    
+    return  cell;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.models.count;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
+    QSRichTextModel *model = self.models[indexPath.row];
+    return model.layout.cellHeight;
 }
 
 @end

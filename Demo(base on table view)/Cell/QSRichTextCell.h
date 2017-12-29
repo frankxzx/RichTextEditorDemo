@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <QMUIKit/QMUIKit.h>
 #import "QSRichTextHtmlWriter.h"
 
-@interface QSRichTextCell : UITableViewCell
+@interface QSRichTextCell : QMUITableViewCell
 
 @end

@@ -10,4 +10,20 @@
 
 @implementation QSRichTextModel
 
+-(NSString *)reuseID {
+    switch (self.cellType) {
+        case QSRichTextCellTypeText:
+            return @"QSRichTextCellTypeText";
+            
+        case QSRichTextCellTypeSeparator:
+            return @"QSRichTextCellTypeSeparator";
+            
+        case QSRichTextCellTypeImage:
+            return @"QSRichTextCellTypeImage";
+            
+        case QSRichTextCellTypeVideo:
+            return @"QSRichTextCellTypeVideo";
+    }
+}
+
 @end
