@@ -13,16 +13,16 @@
 -(NSString *)reuseID {
     switch (self.cellType) {
         case QSRichTextCellTypeText:
-            return @"QSRichTextCellTypeText";
+            return @"QSRichTextWordCell";
             
         case QSRichTextCellTypeSeparator:
-            return @"QSRichTextCellTypeSeparator";
+            return @"QSRichTextSeparatorCell";
             
         case QSRichTextCellTypeImage:
-            return @"QSRichTextCellTypeImage";
+            return @"QSRichTextImageCell";
             
         case QSRichTextCellTypeVideo:
-            return @"QSRichTextCellTypeVideo";
+            return @"QSRichTextVideoCell";
     }
 }
 

@@ -16,8 +16,10 @@
 
 @implementation QSRichTextViewModel
 
--(void)addNewLine {
+-(void)addNewLine:(QSRichTextCellType)cellType {
     QSRichTextModel *model = [[QSRichTextModel alloc]init];
+    model.cellType = cellType;
+    model.attributedString = [[NSMutableAttributedString alloc]initWithString:@"大爷就是大爷， 大爷就是大爷 大爷就是大爷很好 🧟‍♂️  🧟‍♂️ 🧟‍♂️ 🧟‍♂️ 🧟‍♂️ 🧟‍♂️ 🧟‍♂️ 🧟‍♂️ 🧟‍♂️ 🧟‍♂️ hhh  franknknknkn"];
     [self.models addObject:model];
 }
 

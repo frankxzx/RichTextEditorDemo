@@ -13,4 +13,6 @@
 
 @property(nonatomic, strong, readonly) YYTextView * textView;
 
+- (void)renderRichText:(NSString *)text;
+
 @end

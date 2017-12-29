@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "QSRichEditorViewController.h"
+#import "QSRichTextController.h"
 
 @interface AppDelegate ()
 
@@ -21,7 +21,7 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor blackColor];
     
-    QSRichEditorViewController *controller = [[QSRichEditorViewController alloc]init];
+    QSRichTextController *controller = [[QSRichTextController alloc]init];
     UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:controller];
     
     self.window.rootViewController = nav;

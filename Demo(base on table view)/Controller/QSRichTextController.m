@@ -32,12 +32,12 @@
 }
 
 -(void)addTextCell {
-    [self.viewModel addNewLine];
+    [self.viewModel addNewLine:QSRichTextCellTypeText];
     [self.tableView reloadData];
 }
 
 -(void)addImagCell {
-    [self.viewModel addNewLine];
+    [self.viewModel addNewLine:QSRichTextCellTypeImage];
     [self.tableView reloadData];
 }
 
@@ -66,15 +66,16 @@
     
     switch (model.cellType) {
         case QSRichTextCellTypeText:
+            [(QSRichTextWordCell *)cell renderRichText:model.attributedString.string];
             break;
         
         case QSRichTextCellTypeImage:
-            <#statements#>
+            ((QSRichTextImageCell *)cell).attchmentImage = [UIImage qmui_imageWithColor:[UIColor qmui_randomColor] size:CGSizeMake(SCREEN_WIDTH, SCREEN_HEIGHT / 4) cornerRadius:0];
             break;
         
-        case QSRichTextCellTypeVideo:
-            <#statements#>
-            break;
+//        case QSRichTextCellTypeVideo:
+//            <#statements#>
+//            break;
             
         default:
             break;
@@ -88,9 +89,28 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     QSRichTextModel *model = self.models[indexPath.row];
-    return model.layout.cellHeight;
+    switch (model.cellType) {
+        case QSRichTextCellTypeText:
+            return [self.tableView qmui_heightForCellWithIdentifier:model.reuseID cacheByIndexPath:indexPath configuration:^(id cell) {
+                [cell renderRichText:model.attributedString.string];
+            }];
+            
+        case QSRichTextCellTypeImage:
+            return [self.tableView qmui_heightForCellWithIdentifier:model.reuseID cacheByIndexPath:indexPath configuration:^(id cell) {
+                ((QSRichTextImageCell *)cell).attchmentImage = [UIImage qmui_imageWithColor:[UIColor qmui_randomColor] size:CGSizeMake(SCREEN_WIDTH, SCREEN_HEIGHT / 4) cornerRadius:0];
+            }];
+            
+        default:
+            return 0;
+    }
+}
+
+-(QSRichTextViewModel *)viewModel {
+    if (!_viewModel) {
+        _viewModel = [[QSRichTextViewModel alloc]init];
+    }
+    return _viewModel;
 }
 
 -(NSArray <QSRichTextModel *>*)models {

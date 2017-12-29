@@ -13,6 +13,6 @@
 
 @property(nonatomic, strong, readonly) NSMutableArray <QSRichTextModel *>* models;
 
--(void)addNewLine;
+-(void)addNewLine:(QSRichTextCellType)cellType;
 
 @end
