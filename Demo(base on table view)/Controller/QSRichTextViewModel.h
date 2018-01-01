@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "QSRichTextModel.h"
+#import "UIResponder+qs.h"
 
 @class QSRichTextController;
 @interface QSRichTextViewModel : NSObject
@@ -17,6 +18,8 @@
 
 -(void)addNewLine:(QSRichTextCellType)cellType;
 
--(void)removeLineAtIndex:(NSInteger)index;
+-(void)removeLineAtIndexPath:(NSIndexPath *)indexPath;
+
+-(void)removeLinesAtIndexPaths:(NSArray <NSIndexPath *>*)indexPaths;
 
 @end

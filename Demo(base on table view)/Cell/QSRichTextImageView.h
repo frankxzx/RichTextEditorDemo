@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+@class QSRichTextImageView;
 @protocol QSRichTextImageViewDelegate <NSObject>
 
 -(void)editorViewDeleteImage:(QSRichTextImageView *)imageView;

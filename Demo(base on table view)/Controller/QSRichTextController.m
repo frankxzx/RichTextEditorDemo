@@ -125,12 +125,13 @@
 - (void)qsTextFieldDeleteBackward:(QSRichTextView *)textView {
     
     NSIndexPath *indexPath = [self.tableView qmui_indexPathForRowAtView:textView];
-    
     NSInteger index = indexPath.row;
     if (index > 0 && self.models[index-1].cellType == QSRichTextCellTypeImage) {
-        <#statements#>
+        NSIndexPath *previousIndexPath = [NSIndexPath indexPathForRow:index - 1 inSection:0];
+        [self.viewModel removeLinesAtIndexPaths:@[previousIndexPath, indexPath]];
+    } else {
+        [self.viewModel removeLineAtIndexPath:indexPath];
     }
-    [self.viewModel removeLineAtIndex:index];
 }
 
 #pragma mark -
@@ -138,7 +139,7 @@
 -(void)editorViewDeleteImage:(QSRichTextImageView *)imageView {
     
     NSIndexPath *indexPath = [self.tableView qmui_indexPathForRowAtView:imageView];
-    [self.viewModel removeLineAtIndex:indexPath.row];
+    [self.viewModel removeLineAtIndexPath:indexPath];
 }
 
 @end

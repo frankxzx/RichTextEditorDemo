@@ -28,14 +28,18 @@
     [tableView endUpdates];
 }
 
--(void)removeLineAtIndex:(NSInteger)index {
-    QSRichTextModel *model = self.models[index];
-    
-    [self.models removeObject:model];
+-(void)addEmptyTextViewLine {
+    QSRichTextModel *model = [[QSRichTextModel alloc]init];
+    model.cellType = QSRichTextCellTypeText;
+    [self.models addObject:model];
     UITableView *tableView = self.viewController.tableView;
     [tableView beginUpdates];
-    [tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+    [tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.models.count-1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
     [tableView endUpdates];
+}
+
+-(void)removeLineAtIndexPath:(NSIndexPath *)indexPath {
+    [self removeLinesAtIndexPaths:@[indexPath]];
 }
 
 -(void)removeLinesAtIndexPaths:(NSArray <NSIndexPath *>*)indexPaths {
