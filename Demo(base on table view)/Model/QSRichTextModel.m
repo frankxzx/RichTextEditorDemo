@@ -23,6 +23,15 @@
             
         case QSRichTextCellTypeVideo:
             return @"QSRichTextVideoCell";
+            
+        case QSRichTextCellTypeImageCaption:
+            return @"QSRichTextWordCell";
+            
+        case QSRichTextCellTypeCover:
+            return @"QSRichTextAddCoverCell";
+            
+        case QSRichTextCellTypeTitle:
+            return @"QSRichTextWordCell";
     }
 }
 

@@ -24,4 +24,6 @@
 
 -(void)removeLinesAtIndexPaths:(NSArray <NSIndexPath *>*)indexPaths;
 
+-(void)removeLineWithModel:(QSRichTextModel *)model;
+
 @end

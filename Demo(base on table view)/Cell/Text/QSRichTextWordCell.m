@@ -201,8 +201,30 @@ CGFloat const editorMoreViewHeight = 200;
 }
 
 -(void)richTextEditorCloseMoreView {
+    [self.toolBar initEditorBarItems];
     self.textView.inputView = nil;
     [self.textView reloadInputViews];
+}
+
+-(void)setBodyTextStyle {
+    self.textView.font = UIFontMake(16);
+    self.textView.textColor = [UIColor darkTextColor];
+    self.textView.textAlignment = NSTextAlignmentLeft;
+}
+
+-(void)setArticleStyle {
+    self.textView.placeholderTextColor = UIColorGrayLighten;
+    self.textView.placeholderFont = UIFontBoldMake(20);
+    self.textView.font = UIFontMake(20);
+    self.textView.placeholderText = @"请输入标题";
+    self.textView.textColor = UIColorBlack;
+    self.textView.textAlignment = NSTextAlignmentCenter;
+}
+
+-(void)setImageCaptionStyle {
+    self.textView.font = UIFontMake(15);
+    self.textView.textAlignment = NSTextAlignmentCenter;
+    self.textView.textColor = UIColorGrayLighten;
 }
 
 @end

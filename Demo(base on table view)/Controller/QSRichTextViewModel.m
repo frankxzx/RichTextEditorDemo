@@ -51,6 +51,22 @@
     [self removeLinesAtIndexPaths:@[indexPath]];
 }
 
+//删除图片时 连带删除注释
+-(void)removeLineWithModel:(QSRichTextModel *)model {
+    
+    NSInteger index = [self.models indexOfObject:model];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+    NSIndexPath *previousIndexPath = [NSIndexPath indexPathForRow:index+1 inSection:0];
+    
+    if (model.cellType == QSRichTextCellTypeImage && model != self.models.lastObject) {
+        if (self.models[index+1].cellType == QSRichTextCellTypeImageCaption) {
+             [self removeLinesAtIndexPaths:@[previousIndexPath, indexPath]];
+            return;
+        }
+    }
+    [self removeLineAtIndexPath:indexPath];
+}
+
 -(void)removeLinesAtIndexPaths:(NSArray <NSIndexPath *>*)indexPaths {
     
     NSMutableArray <QSRichTextModel *>* models = [NSMutableArray array];
@@ -70,6 +86,10 @@
         _models = [NSMutableArray array];
     }
     return _models;
+}
+
+-(UITableView *)tableView {
+    return self.viewController.tableView;;
 }
 
 @end

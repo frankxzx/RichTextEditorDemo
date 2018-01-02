@@ -49,6 +49,7 @@
 }
 
 -(void)setThumbnailImage:(UIImage *)thumbnailImage {
+    _thumbnailImage = thumbnailImage;
     self.videoView.thumbnailImage = thumbnailImage;
 }
 

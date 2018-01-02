@@ -26,19 +26,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    UIBarButtonItem *addImage = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(addTextCell)];
-    UIBarButtonItem *addText = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addImagCell)];
-    self.navigationItem.rightBarButtonItems = @[addImage, addText];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    
-}
-
--(void)addTextCell {
+    [self.viewModel addNewLine:QSRichTextCellTypeCover];
+    [self.viewModel addNewLine:QSRichTextCellTypeTitle];
     [self.viewModel addNewLine:QSRichTextCellTypeText];
-}
-
--(void)addImagCell {
-    [self.viewModel addNewLine:QSRichTextCellTypeImage];
 }
 
 -(void)addCell:(QSRichTextCellType)cellType {
@@ -67,6 +58,7 @@
     switch (model.cellType) {
         case QSRichTextCellTypeText:
             [(QSRichTextWordCell *)cell renderRichText:model.attributedString];
+            [((QSRichTextWordCell *)cell) setBodyTextStyle];
             ((QSRichTextWordCell *)cell).qs_delegate = self;
             break;
         
@@ -80,7 +72,17 @@
             ((QSRichTextVideoCell *)cell).videoView.actionDelegate = self;
             break;
             
-        default:
+        case QSRichTextCellTypeImageCaption:
+            ((QSRichTextWordCell *)cell).qs_delegate = self;
+            [((QSRichTextWordCell *)cell) setImageCaptionStyle];
+            break;
+            
+        case QSRichTextCellTypeTitle:
+            ((QSRichTextWordCell *)cell).qs_delegate = self;
+            [((QSRichTextWordCell *)cell) setArticleStyle];
+            
+        case QSRichTextCellTypeCover:
+        case QSRichTextCellTypeSeparator:
             break;
     }
     
@@ -94,7 +96,9 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     QSRichTextModel *model = self.models[indexPath.row];
     switch (model.cellType) {
+        case QSRichTextCellTypeTitle:
         case QSRichTextCellTypeText:
+        case QSRichTextCellTypeImageCaption:
             return [self.tableView qmui_heightForCellWithIdentifier:model.reuseID cacheByIndexPath:indexPath configuration:^(id cell) {
                 [cell renderRichText:model.attributedString];
             }];
@@ -104,8 +108,16 @@
                 ((QSRichTextImageCell *)cell).attchmentImage = [UIImage qmui_imageWithColor:[UIColor qmui_randomColor] size:CGSizeMake(SCREEN_WIDTH, SCREEN_HEIGHT / 4) cornerRadius:0];
             }];
             
-        default:
-            return 0;
+        case QSRichTextCellTypeVideo:
+            return [self.tableView qmui_heightForCellWithIdentifier:model.reuseID cacheByIndexPath:indexPath configuration:^(id cell) {
+                ((QSRichTextVideoCell *)cell).thumbnailImage = [UIImage qmui_imageWithColor:[UIColor qmui_randomColor] size:CGSizeMake(SCREEN_WIDTH, SCREEN_HEIGHT / 4) cornerRadius:0];
+            }];
+            
+        case QSRichTextCellTypeSeparator:
+            return 1;
+            
+        case QSRichTextCellTypeCover:
+            return 120;
     }
 }
 
@@ -151,7 +163,8 @@
 #pragma mark QSRichTextImageViewDelegate
 -(void)editorViewDeleteImage:(QSRichTextImageView *)imageView {
     NSIndexPath *indexPath = [self.tableView qmui_indexPathForRowAtView:imageView];
-    [self.viewModel removeLineAtIndexPath:indexPath];
+    QSRichTextModel *model = self.viewModel.models[indexPath.row];
+    [self.viewModel removeLineWithModel:model];
 }
 
 -(void)editorViewEditImage:(QSRichTextImageView *)imageView {
@@ -159,7 +172,16 @@
 }
 
 -(void)editorViewCaptionImage:(QSRichTextImageView *)imageView {
-    
+    NSIndexPath *indexPath = [self.tableView qmui_indexPathForRowAtView:imageView];
+     QSRichTextModel *model = self.viewModel.models[indexPath.row];
+    if (model.captionModel) {
+        //TODO: 响应已插入的图片注释
+        return;
+    } else {
+        //关联一下
+        [self.viewModel addNewLine:QSRichTextCellTypeImageCaption];
+        model.captionModel = self.viewModel.models[indexPath.row+1];
+    }
 }
 
 -(void)editorViewReplaceImage:(QSRichTextImageView *)imageView {
@@ -175,6 +197,20 @@
 -(void)editorViewDeleteVideo:(QSRichTextVideoView *)sender {
     NSIndexPath *indexPath = [self.tableView qmui_indexPathForRowAtView:sender];
     [self.viewModel removeLineAtIndexPath:indexPath];
+}
+
+#pragma mark -
+#pragma mark QSRichTextEditorFormat
+-(void)insertSeperator {
+    [self.viewModel addNewLine:QSRichTextCellTypeSeparator];
+}
+
+-(void)insertVideo {
+    [self.viewModel addNewLine:QSRichTextCellTypeVideo];
+}
+
+-(void)insertPhoto {
+    [self.viewModel addNewLine:QSRichTextCellTypeImage];
 }
 
 @end

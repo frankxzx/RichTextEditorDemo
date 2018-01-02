@@ -23,5 +23,8 @@
 @property (nonatomic,weak) id <QSRichTextWordCellDelegate> qs_delegate;
 
 - (void)renderRichText:(NSAttributedString *)text;
+- (void)setArticleStyle;
+- (void)setBodyTextStyle;
+- (void)setImageCaptionStyle;
 
 @end
