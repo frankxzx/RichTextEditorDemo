@@ -8,8 +8,12 @@
 
 #import "QSRichTextCell.h"
 #import "QSRichTextView.h"
+#import <YYText/YYText.h>
+#import "QSRichTextBar.h"
 
-@protocol QSRichTextWordCellDelegate <QSRichTextViewDelegate>
+@protocol QSRichTextWordCellDelegate <QSRichTextViewDelegate, QSRichTextEditorFormat>
+
+-(void)qsTextViewDidChange:(YYTextView *)textView;
 
 @end
 

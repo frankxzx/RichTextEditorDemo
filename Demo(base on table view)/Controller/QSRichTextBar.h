@@ -7,11 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "QSRichTextEditorAction.h"
+#import "QSRichEditorFontStyle.h"
 
+typedef NS_ENUM(NSUInteger, QSRichTextListStyleType) {
+    QSRichTextListTypeNone,
+    QSRichTextListTypeCircle,
+    QSRichTextListTypeDecimal
+};
+
+@protocol QSRichTextEditorFormat;
 @interface QSRichTextBar : UIToolbar
 
-@property (weak, nonatomic) id<QSRichTextEditorAction> formatDelegate;
+@property (weak, nonatomic) id<QSRichTextEditorFormat> formatDelegate;
 
 // font
 @property(nonatomic, strong) UIBarButtonItem *beginTextEditorButton;
@@ -47,5 +54,26 @@
 -(void)updateStateWithTypingAttributes:(NSDictionary *)attributes;
 
 -(void)initEditorBarItems;
+
+@end
+
+@protocol QSRichTextEditorFormat <NSObject>
+
+- (void)formatDidSelectTextStyle:(QSRichEditorTextStyle)style;
+- (void)formatDidToggleBold;
+- (void)formatDidToggleItalic;
+- (void)formatDidToggleStrikethrough;
+- (void)formatDidChangeTextAlignment:(CTTextAlignment)alignment;
+- (void)toggleListType:(QSRichTextListStyleType)listType;
+- (void)formatDidToggleBlockquote;
+
+-(void)insertPhoto;
+-(void)insertVideo;
+-(void)insertAudio;
+-(void)insertSeperator;
+-(void)insertHyperlink;
+
+-(void)richTextEditorOpenMoreView;
+-(void)richTextEditorCloseMoreView;
 
 @end

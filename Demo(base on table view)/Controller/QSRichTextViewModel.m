@@ -29,8 +29,12 @@
 }
 
 -(void)updateLayoutAtIndexPath:(NSIndexPath *)indexPath {
+    if (!indexPath) { return; }
     UITableView *tableView = self.viewController.tableView;
-    [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    [tableView.qmui_indexPathHeightCache invalidateHeightAtIndexPath:indexPath];
+    [UIView setAnimationsEnabled:NO];
+    [tableView beginUpdates];
+    [tableView endUpdates];
 }
 
 -(void)addEmptyTextViewLine {

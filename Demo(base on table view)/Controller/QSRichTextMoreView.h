@@ -8,10 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import <QMUIKit/QMUIKit.h>
-#import "QSRichTextEditorAction.h"
 
+@protocol QSRichTextEditorFormat;
 @interface QSRichTextMoreView : UIView
 
-@property (weak, nonatomic) id<QSRichTextEditorAction> actionDelegate;
+@property (weak, nonatomic) id<QSRichTextEditorFormat> actionDelegate;
 
 @end

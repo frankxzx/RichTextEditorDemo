@@ -8,6 +8,7 @@
 
 #import "QSRichTextMoreView.h"
 #import "QSTextFieldsViewController.h"
+#import "QSRichTextWordCell.h"
 
 @interface QSRichTextMoreView() <QMUITextFieldDelegate>
 
@@ -123,12 +124,12 @@
         }
         
         [aDialogViewController hide];
-        if ([self.actionDelegate respondsToSelector:@selector(insertHyperlink:)]) {
-            HyperlinkModel *link = [[HyperlinkModel alloc]init];
-            link.title = weakDialog.textField1.text;
-            link.link = weakDialog.textField2.text;
-            [self.actionDelegate insertHyperlink:link];
-        }
+//        if ([self.actionDelegate respondsToSelector:@selector(insertHyperlink:)]) {
+//            HyperlinkModel *link = [[HyperlinkModel alloc]init];
+//            link.title = weakDialog.textField1.text;
+//            link.link = weakDialog.textField2.text;
+//            [self.actionDelegate insertHyperlink:link];
+//        }
     }];
     [dialogViewController show];
 }

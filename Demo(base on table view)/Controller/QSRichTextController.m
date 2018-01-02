@@ -14,12 +14,11 @@
 #import "QSRichTextSeparatorCell.h"
 #import "QSRichTextAddCoverCell.h"
 #import "QSRichTextBar.h"
-#import "IQKeyboardManager.h"
 
-@interface QSRichTextController () <QSRichTextWordCellDelegate, QSRichTextImageViewDelegate>
+@interface QSRichTextController () <QSRichTextWordCellDelegate, QSRichTextImageViewDelegate, QSRichTextVideoViewDelegate>
 
 @property(nonatomic, strong) QSRichTextViewModel *viewModel;
-@property(nonatomic, strong) QSRichTextBar *toolBar;
+@property(nonatomic, strong) NSIndexPath *currentEditingIndexPath;
 
 @end
 
@@ -30,7 +29,8 @@
     UIBarButtonItem *addImage = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(addTextCell)];
     UIBarButtonItem *addText = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addImagCell)];
     self.navigationItem.rightBarButtonItems = @[addImage, addText];
-    [IQKeyboardManager sharedManager].enable = YES;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    
 }
 
 -(void)addTextCell {
@@ -75,9 +75,10 @@
             ((QSRichTextImageCell *)cell).attchmentImageView.actionDelegate = self;
             break;
         
-//        case QSRichTextCellTypeVideo:
-//            <#statements#>
-//            break;
+        case QSRichTextCellTypeVideo:
+            ((QSRichTextVideoCell *)cell).thumbnailImage = [UIImage qmui_imageWithColor:[UIColor qmui_randomColor] size:CGSizeMake(SCREEN_WIDTH, SCREEN_HEIGHT / 4) cornerRadius:0];
+            ((QSRichTextVideoCell *)cell).videoView.actionDelegate = self;
+            break;
             
         default:
             break;
@@ -122,6 +123,14 @@
 
 #pragma mark -
 #pragma mark QSRichTextWordCellDelegate
+
+-(void)qsTextViewDidChange:(YYTextView *)textView {
+    NSIndexPath *indexPath = [self.tableView qmui_indexPathForRowAtView:textView];
+    QSRichTextModel *model = self.viewModel.models[indexPath.row];
+    model.attributedString = [[NSMutableAttributedString alloc]initWithAttributedString:textView.attributedText];
+    self.currentEditingIndexPath = indexPath;
+}
+
 - (void)qsTextFieldDeleteBackward:(QSRichTextView *)textView {
     
     NSIndexPath *indexPath = [self.tableView qmui_indexPathForRowAtView:textView];
@@ -135,18 +144,37 @@
 }
 
 -(void)qsTextView:(QSRichTextView *)textView newHeightAfterTextChanged:(CGFloat)newHeight {
-    
-    NSIndexPath *indexPath = [self.tableView qmui_indexPathForRowAtView:textView];
-    [self.viewModel updateLayoutAtIndexPath:indexPath];
+    [self.viewModel updateLayoutAtIndexPath:self.currentEditingIndexPath];
 }
 
 #pragma mark -
 #pragma mark QSRichTextImageViewDelegate
 -(void)editorViewDeleteImage:(QSRichTextImageView *)imageView {
-    
     NSIndexPath *indexPath = [self.tableView qmui_indexPathForRowAtView:imageView];
     [self.viewModel removeLineAtIndexPath:indexPath];
 }
 
-@end
+-(void)editorViewEditImage:(QSRichTextImageView *)imageView {
+    
+}
 
+-(void)editorViewCaptionImage:(QSRichTextImageView *)imageView {
+    
+}
+
+-(void)editorViewReplaceImage:(QSRichTextImageView *)imageView {
+    
+}
+
+#pragma mark -
+#pragma mark QSRichTextVideoViewDelegate
+-(void)editorViewPlayVideo:(QSRichTextVideoView *)sender {
+    
+}
+
+-(void)editorViewDeleteVideo:(QSRichTextVideoView *)sender {
+    NSIndexPath *indexPath = [self.tableView qmui_indexPathForRowAtView:sender];
+    [self.viewModel removeLineAtIndexPath:indexPath];
+}
+
+@end

@@ -8,6 +8,8 @@
 
 #import "AppDelegate.h"
 #import "QSRichTextController.h"
+#import "IQKeyboardManager.h"
+#import <YYText/YYText.h>
 
 @interface AppDelegate ()
 
@@ -17,6 +19,9 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    [IQKeyboardManager sharedManager].enable = YES;
+    [[IQKeyboardManager sharedManager] registerTextFieldViewClass:[YYTextView class] didBeginEditingNotificationName:YYTextViewTextDidBeginEditingNotification didEndEditingNotificationName:YYTextViewTextDidEndEditingNotification];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor blackColor];
