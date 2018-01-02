@@ -30,6 +30,8 @@
     [self.viewModel addNewLine:QSRichTextCellTypeCover];
     [self.viewModel addNewLine:QSRichTextCellTypeTitle];
     [self.viewModel addNewLine:QSRichTextCellTypeText];
+    QSRichTextWordCell *titleTextCell = (QSRichTextWordCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
+    [titleTextCell becomeFirstResponder];
 }
 
 -(void)addCell:(QSRichTextCellType)cellType {
@@ -58,8 +60,8 @@
     switch (model.cellType) {
         case QSRichTextCellTypeText:
             [(QSRichTextWordCell *)cell renderRichText:model.attributedString];
-            [((QSRichTextWordCell *)cell) setBodyTextStyle];
             ((QSRichTextWordCell *)cell).qs_delegate = self;
+            [((QSRichTextWordCell *)cell) setBodyTextStyleWithPlaceholder:self.viewModel.isBodyEmpty];
             break;
         
         case QSRichTextCellTypeImage:
@@ -98,11 +100,13 @@
     switch (model.cellType) {
         case QSRichTextCellTypeTitle:
         case QSRichTextCellTypeText:
-        case QSRichTextCellTypeImageCaption:
-            return [self.tableView qmui_heightForCellWithIdentifier:model.reuseID cacheByIndexPath:indexPath configuration:^(id cell) {
+        case QSRichTextCellTypeImageCaption: {
+            CGFloat textCellHeight = [self.tableView qmui_heightForCellWithIdentifier:model.reuseID cacheByIndexPath:indexPath configuration:^(id cell) {
                 [cell renderRichText:model.attributedString];
             }];
-            
+            textCellHeight = MAX(30, textCellHeight);
+            return textCellHeight;
+        }
         case QSRichTextCellTypeImage:
             return [self.tableView qmui_heightForCellWithIdentifier:model.reuseID cacheByIndexPath:indexPath configuration:^(id cell) {
                 ((QSRichTextImageCell *)cell).attchmentImage = [UIImage qmui_imageWithColor:[UIColor qmui_randomColor] size:CGSizeMake(SCREEN_WIDTH, SCREEN_HEIGHT / 4) cornerRadius:0];

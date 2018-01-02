@@ -206,10 +206,15 @@ CGFloat const editorMoreViewHeight = 200;
     [self.textView reloadInputViews];
 }
 
--(void)setBodyTextStyle {
+- (void)setBodyTextStyleWithPlaceholder:(BOOL)isFirstLine {
     self.textView.font = UIFontMake(16);
     self.textView.textColor = [UIColor darkTextColor];
     self.textView.textAlignment = NSTextAlignmentLeft;
+    if (isFirstLine) {
+        self.textView.placeholderTextColor = UIColorGrayLighten;
+        self.textView.placeholderFont = UIFontMake(16);
+        self.textView.placeholderText = @"请输入正文";
+    }
 }
 
 -(void)setArticleStyle {
@@ -218,13 +223,18 @@ CGFloat const editorMoreViewHeight = 200;
     self.textView.font = UIFontMake(20);
     self.textView.placeholderText = @"请输入标题";
     self.textView.textColor = UIColorBlack;
-    self.textView.textAlignment = NSTextAlignmentCenter;
+    self.textView.textAlignment = NSTextAlignmentLeft;
 }
 
 -(void)setImageCaptionStyle {
     self.textView.font = UIFontMake(15);
     self.textView.textAlignment = NSTextAlignmentCenter;
     self.textView.textColor = UIColorGrayLighten;
+}
+
+-(BOOL)becomeFirstResponder {
+    [self.textView becomeFirstResponder];
+    return [super becomeFirstResponder];
 }
 
 @end

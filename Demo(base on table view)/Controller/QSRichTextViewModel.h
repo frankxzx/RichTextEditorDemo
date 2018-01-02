@@ -26,4 +26,6 @@
 
 -(void)removeLineWithModel:(QSRichTextModel *)model;
 
+-(BOOL)isBodyEmpty;
+
 @end

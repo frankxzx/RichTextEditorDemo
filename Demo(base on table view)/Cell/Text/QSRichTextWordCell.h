@@ -24,7 +24,7 @@
 
 - (void)renderRichText:(NSAttributedString *)text;
 - (void)setArticleStyle;
-- (void)setBodyTextStyle;
+- (void)setBodyTextStyleWithPlaceholder:(BOOL)isFirstLine;
 - (void)setImageCaptionStyle;
 
 @end

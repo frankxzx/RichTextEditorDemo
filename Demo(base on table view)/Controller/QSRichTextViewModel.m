@@ -20,7 +20,6 @@
 -(void)addNewLine:(QSRichTextCellType)cellType {
     QSRichTextModel *model = [[QSRichTextModel alloc]init];
     model.cellType = cellType;
-    model.attributedString = [[NSMutableAttributedString alloc]initWithString:@"大爷就是大爷， 大爷就是大爷 大爷就是大爷很好 🧟‍♂️  🧟‍♂️ 🧟‍♂️ 🧟‍♂️ 🧟‍♂️ 🧟‍♂️ 🧟‍♂️ 🧟‍♂️ 🧟‍♂️ 🧟‍♂️ hhh  franknknknkn"];
     [self.models addObject:model];
     UITableView *tableView = self.viewController.tableView;
     [tableView beginUpdates];
@@ -34,16 +33,6 @@
     [tableView.qmui_indexPathHeightCache invalidateHeightAtIndexPath:indexPath];
     [UIView setAnimationsEnabled:NO];
     [tableView beginUpdates];
-    [tableView endUpdates];
-}
-
--(void)addEmptyTextViewLine {
-    QSRichTextModel *model = [[QSRichTextModel alloc]init];
-    model.cellType = QSRichTextCellTypeText;
-    [self.models addObject:model];
-    UITableView *tableView = self.viewController.tableView;
-    [tableView beginUpdates];
-    [tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.models.count-1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
     [tableView endUpdates];
 }
 
@@ -90,6 +79,19 @@
 
 -(UITableView *)tableView {
     return self.viewController.tableView;;
+}
+
+-(BOOL)isBodyEmpty {
+    int i = 0;
+    for (QSRichTextModel *model in self.models) {
+        if (model.cellType == QSRichTextCellTypeText) {
+            i++;
+            if (i >= 2) {
+                return NO;
+            }
+        }
+    }
+    return YES;
 }
 
 @end
