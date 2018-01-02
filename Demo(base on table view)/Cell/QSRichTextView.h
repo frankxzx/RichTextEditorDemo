@@ -12,6 +12,7 @@
 @protocol QSRichTextViewDelegate <NSObject>
 
 - (void)qsTextFieldDeleteBackward:(QSRichTextView *)textView;
+- (void)qsTextView:(QSRichTextView *)textView newHeightAfterTextChanged:(CGFloat)newHeight;
 
 @end
 

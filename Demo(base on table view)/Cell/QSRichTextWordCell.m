@@ -8,7 +8,7 @@
 
 #import "QSRichTextWordCell.h"
 
-@interface QSRichTextWordCell ()
+@interface QSRichTextWordCell () <YYTextViewDelegate>
 
 @property(nonatomic, strong, readwrite) QSRichTextView * textView;
 
@@ -63,8 +63,51 @@
     if (!_textView) {
         _textView = [QSRichTextView new];
         _textView.scrollEnabled = NO;
+        _textView.delegate = self;
     }
     return _textView;
+}
+
+-(void)setQs_delegate:(id<QSRichTextWordCellDelegate>)qs_delegate {
+    self.textView.qs_delegate = qs_delegate;
+    _qs_delegate = qs_delegate;
+}
+
+#pragma mark -
+#pragma mark YYTextViewDelegate
+-(void)textViewDidChange:(YYTextView *)textView {
+    [self handleTextChanged:self.textView];
+}
+
+- (void)handleTextChanged:(id)sender {
+    
+    QSRichTextView *textView = nil;
+    
+    if ([sender isKindOfClass:[NSNotification class]]) {
+        id object = ((NSNotification *)sender).object;
+        if (object == self) {
+            textView = (QSRichTextView *)object;
+        }
+    } else if ([sender isKindOfClass:[QSRichTextView class]]) {
+        textView = (QSRichTextView *)sender;
+    }
+    
+    if (textView) {
+        
+        CGFloat resultHeight = [textView sizeThatFits:CGSizeMake(CGRectGetWidth(self.bounds), CGFLOAT_MAX)].height;
+        
+        NSLog(@"handleTextDidChange, text = %@, resultHeight = %f", textView.text, resultHeight);
+        
+        // 通知delegate去更新textView的高度
+        if ([textView.qs_delegate respondsToSelector:@selector(qsTextView:newHeightAfterTextChanged:)] && resultHeight != CGRectGetHeight(self.bounds)) {
+            [textView.qs_delegate qsTextView:self.textView newHeightAfterTextChanged:resultHeight];
+        }
+        
+        // textView 尚未被展示到界面上时，此时过早进行光标调整会计算错误
+        if (!textView.window) {
+            return;
+        }
+    }
 }
 
 @end

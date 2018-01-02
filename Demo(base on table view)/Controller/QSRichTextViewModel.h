@@ -18,6 +18,8 @@
 
 -(void)addNewLine:(QSRichTextCellType)cellType;
 
+-(void)updateLayoutAtIndexPath:(NSIndexPath *)indexPath;
+
 -(void)removeLineAtIndexPath:(NSIndexPath *)indexPath;
 
 -(void)removeLinesAtIndexPaths:(NSArray <NSIndexPath *>*)indexPaths;

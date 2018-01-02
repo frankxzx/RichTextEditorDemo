@@ -16,7 +16,7 @@
 #import "QSRichTextBar.h"
 #import "IQKeyboardManager.h"
 
-@interface QSRichTextController () <QSRichTextViewDelegate, QSRichTextImageViewDelegate>
+@interface QSRichTextController () <QSRichTextWordCellDelegate, QSRichTextImageViewDelegate>
 
 @property(nonatomic, strong) QSRichTextViewModel *viewModel;
 @property(nonatomic, strong) QSRichTextBar *toolBar;
@@ -67,7 +67,7 @@
     switch (model.cellType) {
         case QSRichTextCellTypeText:
             [(QSRichTextWordCell *)cell renderRichText:model.attributedString];
-            ((QSRichTextWordCell *)cell).textView.qs_delegate = self;
+            ((QSRichTextWordCell *)cell).qs_delegate = self;
             break;
         
         case QSRichTextCellTypeImage:
@@ -121,7 +121,7 @@
 }
 
 #pragma mark -
-#pragma mark QSRichTextViewDelegate
+#pragma mark QSRichTextWordCellDelegate
 - (void)qsTextFieldDeleteBackward:(QSRichTextView *)textView {
     
     NSIndexPath *indexPath = [self.tableView qmui_indexPathForRowAtView:textView];
@@ -132,6 +132,12 @@
     } else {
         [self.viewModel removeLineAtIndexPath:indexPath];
     }
+}
+
+-(void)qsTextView:(QSRichTextView *)textView newHeightAfterTextChanged:(CGFloat)newHeight {
+    
+    NSIndexPath *indexPath = [self.tableView qmui_indexPathForRowAtView:textView];
+    [self.viewModel updateLayoutAtIndexPath:indexPath];
 }
 
 #pragma mark -

@@ -28,6 +28,11 @@
     [tableView endUpdates];
 }
 
+-(void)updateLayoutAtIndexPath:(NSIndexPath *)indexPath {
+    UITableView *tableView = self.viewController.tableView;
+    [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+}
+
 -(void)addEmptyTextViewLine {
     QSRichTextModel *model = [[QSRichTextModel alloc]init];
     model.cellType = QSRichTextCellTypeText;

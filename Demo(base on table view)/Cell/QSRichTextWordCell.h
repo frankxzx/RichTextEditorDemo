@@ -9,9 +9,14 @@
 #import "QSRichTextCell.h"
 #import "QSRichTextView.h"
 
+@protocol QSRichTextWordCellDelegate <QSRichTextViewDelegate>
+
+@end
+
 @interface QSRichTextWordCell : QSRichTextCell
 
 @property(nonatomic, strong, readonly) QSRichTextView * textView;
+@property (nonatomic,weak) id <QSRichTextWordCellDelegate> qs_delegate;
 
 - (void)renderRichText:(NSAttributedString *)text;
 

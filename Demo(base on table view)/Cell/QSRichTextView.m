@@ -7,8 +7,20 @@
 //
 
 #import "QSRichTextView.h"
+#import <QMUIKit/QMUIKit.h>
+
+@interface QSRichTextView ()
+
+@end
 
 @implementation QSRichTextView
+
+-(instancetype)initWithFrame:(CGRect)frame {
+    if (self = [super initWithFrame:frame]) {
+        
+    }
+    return self;
+}
 
 - (void)deleteBackward {
     if (self.text.length == 0 && [self.qs_delegate respondsToSelector:@selector(qsTextFieldDeleteBackward:)]) {

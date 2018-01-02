@@ -4,22 +4,6 @@
    version = "2.0">
    <Breakpoints>
       <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "RichTextEditorDemo/AppDelegate.m"
-            timestampString = "534329905.278316"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "39"
-            endingLineNumber = "39"
-            landmarkName = "-injected"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.ExceptionBreakpoint">
          <BreakpointContent
             shouldBeEnabled = "Yes"
@@ -27,13 +11,6 @@
             continueAfterRunningActions = "No"
             scope = "0"
             stopOnStyle = "0">
-            <Actions>
-               <BreakpointActionProxy
-                  ActionExtensionID = "Xcode.BreakpointAction.DebuggerCommand">
-                  <ActionContent>
-                  </ActionContent>
-               </BreakpointActionProxy>
-            </Actions>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -42,13 +19,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Pods/DTRichTextEditor/Core/Source/DTRichTextEditorView.m"
-            timestampString = "535906213.03598"
+            filePath = "RichTextEditorDemo/demo/Attachment/DTImageCaptionAttachment.m"
+            timestampString = "536059496.212021"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2152"
-            endingLineNumber = "2152"
-            landmarkName = "-insertText:"
+            startingLineNumber = "36"
+            endingLineNumber = "36"
+            landmarkName = "-stringByEncodingAsHTML"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -58,13 +35,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Pods/DTRichTextEditor/Core/Source/DTRichTextEditorView.m"
-            timestampString = "535906245.306501"
+            filePath = "RichTextEditorDemo/demo/Attachment/DTImageCaptionAttachment.m"
+            timestampString = "536059501.387068"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2157"
-            endingLineNumber = "2157"
-            landmarkName = "-insertText:"
+            startingLineNumber = "19"
+            endingLineNumber = "19"
+            landmarkName = "-initWithElement:options:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -74,13 +51,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Pods/DTCoreText/Core/Source/DTCoreTextLayoutFrame.m"
-            timestampString = "535907409.055889"
+            filePath = "RichTextEditorDemo/demo/Helper/DTRichTextEditorView+qs.m"
+            timestampString = "536148610.501412"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1768"
-            endingLineNumber = "1768"
-            landmarkName = "-linesInParagraphAtIndex:"
+            startingLineNumber = "96"
+            endingLineNumber = "96"
+            landmarkName = "-removeAttachment:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -90,13 +67,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Pods/DTCoreText/Core/Source/DTCoreTextLayoutFrame.m"
-            timestampString = "535907499.287011"
+            filePath = "Pods/YYText/YYText/YYTextView.m"
+            timestampString = "536554913.60092"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1773"
-            endingLineNumber = "1773"
-            landmarkName = "-linesInParagraphAtIndex:"
+            startingLineNumber = "1424"
+            endingLineNumber = "1424"
+            landmarkName = "-_replaceRange:withText:notifyToDelegate:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -106,13 +83,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Pods/DTCoreText/Core/Source/DTCoreTextLayoutFrame.m"
-            timestampString = "535907503.415322"
+            filePath = "Pods/YYText/YYText/YYTextView.m"
+            timestampString = "536554919.093225"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1789"
-            endingLineNumber = "1789"
-            landmarkName = "-linesInParagraphAtIndex:"
+            startingLineNumber = "3396"
+            endingLineNumber = "3396"
+            landmarkName = "-replaceRange:withText:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -122,29 +99,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Pods/DTCoreText/Core/Source/DTCoreTextLayoutFrame.m"
-            timestampString = "535907504.393166"
+            filePath = "Pods/YYText/YYText/YYTextView.m"
+            timestampString = "536554940.442591"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1793"
-            endingLineNumber = "1793"
-            landmarkName = "-linesInParagraphAtIndex:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Pods/DTCoreText/Core/Source/NSMutableAttributedString+HTML.m"
-            timestampString = "535907856.639475"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "119"
-            endingLineNumber = "119"
-            landmarkName = "-appendEndOfParagraph"
+            startingLineNumber = "2914"
+            endingLineNumber = "2914"
+            landmarkName = "-paste:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
