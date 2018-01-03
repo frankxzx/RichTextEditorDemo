@@ -27,19 +27,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    [self.viewModel addNewLine:QSRichTextCellTypeCover];
-    [self.viewModel addNewLine:QSRichTextCellTypeTitle];
-    [self.viewModel addNewLine:QSRichTextCellTypeText];
+    
+    QSRichTextModel *titleModel = [[QSRichTextModel alloc]initWithCellType:QSRichTextCellTypeTitle];
+    QSRichTextModel *coverModel = [[QSRichTextModel alloc]initWithCellType:QSRichTextCellTypeCover];
+    QSRichTextModel *bodyModel = [[QSRichTextModel alloc]initWithCellType:QSRichTextCellTypeText];
+    
+    [self.viewModel addNewLinesWithModels:@[coverModel, titleModel, bodyModel]];
+    
     QSRichTextWordCell *titleTextCell = (QSRichTextWordCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
     [titleTextCell becomeFirstResponder];
-}
-
--(void)addCell:(QSRichTextCellType)cellType {
-    
-}
-
--(void)removeCell:(QSRichTextCellType)cellType {
-    
 }
 
 -(UITableViewCell *)qmui_tableView:(UITableView *)tableView cellWithIdentifier:(NSString *)identifier {
@@ -101,10 +97,8 @@
         case QSRichTextCellTypeTitle:
         case QSRichTextCellTypeText:
         case QSRichTextCellTypeImageCaption: {
-            CGFloat textCellHeight = [self.tableView qmui_heightForCellWithIdentifier:model.reuseID cacheByIndexPath:indexPath configuration:^(id cell) {
-                [cell renderRichText:model.attributedString];
-            }];
-            textCellHeight = MAX(30, textCellHeight);
+            CGFloat textCellHeight = model.cellHeight;
+            textCellHeight = MAX(50, textCellHeight);
             return textCellHeight;
         }
         case QSRichTextCellTypeImage:
@@ -160,7 +154,7 @@
 }
 
 -(void)qsTextView:(QSRichTextView *)textView newHeightAfterTextChanged:(CGFloat)newHeight {
-    [self.viewModel updateLayoutAtIndexPath:self.currentEditingIndexPath];
+    [self.viewModel updateLayoutAtIndexPath:self.currentEditingIndexPath withCellheight: newHeight];
 }
 
 #pragma mark -

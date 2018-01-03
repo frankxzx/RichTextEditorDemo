@@ -27,8 +27,23 @@
     [tableView endUpdates];
 }
 
--(void)updateLayoutAtIndexPath:(NSIndexPath *)indexPath {
+-(void)addNewLinesWithModels:(NSArray <QSRichTextModel *>*) models {
+    NSInteger count = self.models.count;
+    [self.models addObjectsFromArray:models];
+    UITableView *tableView = self.viewController.tableView;
+    [tableView beginUpdates];
+    [tableView insertRowsAtIndexPaths:[self insertIndexPathsAtIndexPath:[NSIndexPath indexPathForRow:count - 1 inSection:0] count:models.count] withRowAnimation:UITableViewRowAnimationNone];
+    [tableView endUpdates];
+}
+
+-(void)addNewLinesWithModel:(QSRichTextModel *) model {
+    [self addNewLinesWithModels:@[model]];
+}
+
+-(void)updateLayoutAtIndexPath:(NSIndexPath *)indexPath withCellheight:(CGFloat)newHeight {
     if (!indexPath) { return; }
+    QSRichTextModel *model = self.models[indexPath.row];
+    model.cellHeight = newHeight;
     UITableView *tableView = self.viewController.tableView;
     [tableView.qmui_indexPathHeightCache invalidateHeightAtIndexPath:indexPath];
     [UIView setAnimationsEnabled:NO];
@@ -92,6 +107,16 @@
         }
     }
     return YES;
+}
+
+-(NSArray <NSIndexPath *>*)insertIndexPathsAtIndexPath:(NSIndexPath *)indexPath
+                                                 count:(NSInteger)count {
+    NSMutableArray <NSIndexPath *>*indexPaths = [NSMutableArray array];
+    for (int i = 1; i <= count; i++) {
+        NSIndexPath *newVal = [NSIndexPath indexPathForRow:indexPath.row+i inSection:indexPath.section];
+        [indexPaths addObject:newVal];
+    }
+    return indexPaths;
 }
 
 @end

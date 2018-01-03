@@ -16,16 +16,24 @@
 @property(nonatomic, strong, readonly) NSMutableArray <QSRichTextModel *>* models;
 @property(nonatomic, weak) QSRichTextController *viewController;
 
+//插入新的行
 -(void)addNewLine:(QSRichTextCellType)cellType;
 
--(void)updateLayoutAtIndexPath:(NSIndexPath *)indexPath;
+-(void)addNewLinesWithModels:(NSArray <QSRichTextModel *>*) models;
 
+-(void)addNewLinesWithModel:(QSRichTextModel *) model;
+
+//刷新某一行的高度
+-(void)updateLayoutAtIndexPath:(NSIndexPath *)indexPath withCellheight:(CGFloat)newHeight;
+
+//删除行
 -(void)removeLineAtIndexPath:(NSIndexPath *)indexPath;
 
 -(void)removeLinesAtIndexPaths:(NSArray <NSIndexPath *>*)indexPaths;
 
 -(void)removeLineWithModel:(QSRichTextModel *)model;
 
+//当前正文是否有输入
 -(BOOL)isBodyEmpty;
 
 @end

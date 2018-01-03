@@ -10,6 +10,13 @@
 
 @implementation QSRichTextModel
 
+-(instancetype)initWithCellType:(QSRichTextCellType)cellType {
+    if (self = [super init]) {
+        self.cellType = cellType;
+    }
+    return self;
+}
+
 -(NSString *)reuseID {
     switch (self.cellType) {
         case QSRichTextCellTypeText:
