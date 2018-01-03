@@ -16,6 +16,9 @@
 @property(nonatomic, strong, readonly) NSMutableArray <QSRichTextModel *>* models;
 @property(nonatomic, weak) QSRichTextController *viewController;
 
+//插入图片注释
+-(void)addImageCaptionWithImageModel:(QSRichTextModel *)model;
+
 //插入新的行
 -(void)addNewLine:(QSRichTextCellType)cellType;
 

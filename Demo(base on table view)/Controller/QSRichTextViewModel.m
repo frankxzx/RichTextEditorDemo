@@ -18,11 +18,25 @@
 
 @implementation QSRichTextViewModel
 
+-(void)addImageCaptionWithImageModel:(QSRichTextModel *)model {
+//    NSInteger index = [self.models indexOfObject:model];
+//    QSRichTextModel *captionModel = [[QSRichTextModel alloc]initWithCellType:QSRichTextCellTypeImageCaption];
+//    [self.models insertObject:captionModel atIndex:index];
+}
+
 -(void)addNewLine:(QSRichTextCellType)cellType {
 
     QSRichTextModel *model = [[QSRichTextModel alloc]init];
     model.cellType = cellType;
-    [self addNewLinesWithModel:model];
+    
+    if ([model shouldAddNewLine]) {
+        QSRichTextModel *emptyLine = [[QSRichTextModel alloc]init];
+        emptyLine.cellType = QSRichTextCellTypeText;
+        [self addNewLinesWithModels:@[model, emptyLine]];
+        [self becomeActiveWithModel:emptyLine];
+    } else {
+        [self addNewLinesWithModel:model];
+    }
 }
 
 -(void)addNewLinesWithModel:(QSRichTextModel *) model {

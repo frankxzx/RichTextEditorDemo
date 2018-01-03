@@ -182,16 +182,16 @@
 
 -(void)editorViewCaptionImage:(QSRichTextImageView *)imageView {
     NSIndexPath *indexPath = [self.tableView qmui_indexPathForRowAtView:imageView];
-     QSRichTextModel *model = self.viewModel.models[indexPath.row];
+    QSRichTextModel *model = self.viewModel.models[indexPath.row];
     if (model.captionModel) {
         //TODO: 响应已插入的图片注释
         return;
     } else {
         //关联一下
-        [self.viewModel addNewLine:QSRichTextCellTypeImageCaption];
+        [self.viewModel addImageCaptionWithImageModel:model];
         model.captionModel = self.viewModel.models[indexPath.row+1];
     }
-    [self.viewModel becomeActiveWithModel:model];
+    [self.viewModel becomeActiveWithModel:model.captionModel];
 }
 
 -(void)editorViewReplaceImage:(QSRichTextImageView *)imageView {
