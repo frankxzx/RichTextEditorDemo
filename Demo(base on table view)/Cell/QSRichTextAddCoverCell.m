@@ -9,8 +9,6 @@
 #import "QSRichTextAddCoverCell.h"
 #import <QMUIKit/QMUIKit.h>
 
-#define LightenPlaceholderColor [UIColor colorWithRed:0.96 green:0.96 blue:0.97 alpha:1.00]
-
 @interface QSRichTextAddCoverCell ()
 
 @property(nonatomic, strong) QMUIButton *coverButton;

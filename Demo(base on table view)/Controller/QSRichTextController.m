@@ -81,6 +81,7 @@
             
         case QSRichTextCellTypeCover:
         case QSRichTextCellTypeSeparator:
+        case QSRichTextCellTypeTextBlock:
             break;
     }
     
@@ -96,7 +97,8 @@
     switch (model.cellType) {
         case QSRichTextCellTypeTitle:
         case QSRichTextCellTypeText:
-        case QSRichTextCellTypeImageCaption: {
+        case QSRichTextCellTypeImageCaption:
+        case QSRichTextCellTypeTextBlock: {
             CGFloat textCellHeight = model.cellHeight;
             textCellHeight = MAX(50, textCellHeight);
             return textCellHeight;
@@ -145,6 +147,10 @@
     
     NSIndexPath *indexPath = [self.tableView qmui_indexPathForRowAtView:textView];
     NSInteger index = indexPath.row;
+    //第一行不清空
+    if (self.models[index].cellType == QSRichTextCellTypeTitle) {
+        return;
+    }
     if (index > 0 && self.models[index-1].cellType == QSRichTextCellTypeImage) {
         NSIndexPath *previousIndexPath = [NSIndexPath indexPathForRow:index - 1 inSection:0];
         [self.viewModel removeLinesAtIndexPaths:@[previousIndexPath, indexPath]];
@@ -209,6 +215,10 @@
 
 -(void)insertPhoto {
     [self.viewModel addNewLine:QSRichTextCellTypeImage];
+}
+
+-(void)formatDidToggleBlockquote {
+    [self.viewModel addNewLine:QSRichTextCellTypeTextBlock];
 }
 
 @end

@@ -123,7 +123,7 @@ CGFloat const editorMoreViewHeight = 200;
     
     if (textView) {
         
-        [textView qmui_scrollToTopAnimated:NO];
+        //[textView qmui_scrollToTopAnimated:NO];
         
         CGFloat resultHeight = [textView sizeThatFits:CGSizeMake(CGRectGetWidth(self.textView.bounds), CGFLOAT_MAX)].height;
         CGFloat oldValue = CGRectGetHeight(self.contentView.bounds);

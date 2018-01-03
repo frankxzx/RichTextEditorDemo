@@ -26,5 +26,6 @@
 - (void)setArticleStyle;
 - (void)setBodyTextStyleWithPlaceholder:(BOOL)isFirstLine;
 - (void)setImageCaptionStyle;
+- (void)makeUI;
 
 @end

@@ -11,6 +11,8 @@
 #import <YYText/YYText.h>
 #import "QSRichTextHtmlWriter.h"
 
+#define LightenPlaceholderColor [UIColor colorWithRed:0.96 green:0.96 blue:0.97 alpha:1.00]
+
 @interface QSRichTextCell : QMUITableViewCell
 
 @end

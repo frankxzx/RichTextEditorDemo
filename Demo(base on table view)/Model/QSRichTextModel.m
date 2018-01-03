@@ -39,7 +39,18 @@
             
         case QSRichTextCellTypeTitle:
             return @"QSRichTextWordCell";
+            
+        case QSRichTextCellTypeTextBlock:
+            return @"QSRichTextBlockCell";
     }
+}
+
+-(BOOL)shouldAddNewLine {
+    QSRichTextCellType cellType = self.cellType;
+    if (cellType == QSRichTextCellTypeImage || cellType == QSRichTextCellTypeVideo || cellType == QSRichTextCellTypeImageCaption || cellType == QSRichTextCellTypeTextBlock) {
+        return YES;
+    }
+    return NO;
 }
 
 @end

@@ -18,13 +18,14 @@
 @implementation QSRichTextViewModel
 
 -(void)addNewLine:(QSRichTextCellType)cellType {
+
     QSRichTextModel *model = [[QSRichTextModel alloc]init];
     model.cellType = cellType;
-    [self.models addObject:model];
-    UITableView *tableView = self.viewController.tableView;
-    [tableView beginUpdates];
-    [tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.models.count-1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-    [tableView endUpdates];
+    [self addNewLinesWithModel:model];
+}
+
+-(void)addNewLinesWithModel:(QSRichTextModel *) model {
+    [self addNewLinesWithModels:@[model]];
 }
 
 -(void)addNewLinesWithModels:(NSArray <QSRichTextModel *>*) models {
@@ -34,10 +35,6 @@
     [tableView beginUpdates];
     [tableView insertRowsAtIndexPaths:[self insertIndexPathsAtIndexPath:[NSIndexPath indexPathForRow:count - 1 inSection:0] count:models.count] withRowAnimation:UITableViewRowAnimationNone];
     [tableView endUpdates];
-}
-
--(void)addNewLinesWithModel:(QSRichTextModel *) model {
-    [self addNewLinesWithModels:@[model]];
 }
 
 -(void)updateLayoutAtIndexPath:(NSIndexPath *)indexPath withCellheight:(CGFloat)newHeight {
