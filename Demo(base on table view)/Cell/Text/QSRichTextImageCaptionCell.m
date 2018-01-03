@@ -15,6 +15,9 @@
     self.textView.font = UIFontMake(15);
     self.textView.textAlignment = NSTextAlignmentCenter;
     self.textView.textColor = UIColorGrayLighten;
+    self.textView.placeholderFont = UIFontMake(15);
+    self.textView.placeholderTextColor = UIColorGrayLighten;
+    self.textView.placeholderText = @"请输入图片标注";
 }
 
 @end

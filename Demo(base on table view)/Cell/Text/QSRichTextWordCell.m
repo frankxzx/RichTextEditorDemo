@@ -135,18 +135,6 @@ CGFloat const editorMoreViewHeight = 200;
         if ([textView.qs_delegate respondsToSelector:@selector(qsTextView:newHeightAfterTextChanged:)] && resultHeight != oldValue) {
             [textView.qs_delegate qsTextView:self.textView newHeightAfterTextChanged:resultHeight];
         }
-        
-        // textView 尚未被展示到界面上时，此时过早进行光标调整会计算错误
-        if (!textView.window) {
-            return;
-        }
-        
-        textView.shouldRejectSystemScroll = YES;
-        // 用 dispatch 延迟一下，因为在文字发生换行时，系统自己会做一些滚动，我们要延迟一点才能避免被系统的滚动覆盖
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            textView.shouldRejectSystemScroll = NO;
-            [textView qmui_scrollCaretVisibleAnimated:NO];
-        });
     }
 }
 
@@ -221,6 +209,7 @@ CGFloat const editorMoreViewHeight = 200;
     self.textView.font = UIFontMake(16);
     self.textView.textColor = [UIColor darkTextColor];
     self.textView.textAlignment = NSTextAlignmentLeft;
+    [self setDefaultTextStyle];
     if (isFirstLine) {
         self.textView.placeholderTextColor = UIColorGrayLighten;
         self.textView.placeholderFont = UIFontMake(16);
@@ -228,9 +217,25 @@ CGFloat const editorMoreViewHeight = 200;
     }
 }
 
+//默认样式
+-(void)setDefaultTextStyle {
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.lineSpacing = 6;
+    NSDictionary *attributes = @{
+                                 NSFontAttributeName:[UIFont systemFontOfSize:16],
+                                 NSParagraphStyleAttributeName:paragraphStyle,
+                                 NSKernAttributeName:@(2)
+                                 };
+    
+    self.textView.typingAttributes = attributes;
+}
+
 -(BOOL)becomeFirstResponder {
-    [self.textView becomeFirstResponder];
-    return [super becomeFirstResponder];
+    if (self.textView) {
+        [self.textView becomeFirstResponder];
+        return YES;
+    }
+    return NO;
 }
 
 @end

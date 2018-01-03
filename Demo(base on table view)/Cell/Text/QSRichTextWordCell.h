@@ -19,8 +19,8 @@
 
 @interface QSRichTextWordCell : QSRichTextCell
 
-@property(nonatomic, strong, readonly) QSRichTextView * textView;
-@property (nonatomic,weak) id <QSRichTextWordCellDelegate> qs_delegate;
+@property (nonatomic, strong, readonly) QSRichTextView * textView;
+@property (nonatomic, weak) id <QSRichTextWordCellDelegate> qs_delegate;
 
 - (void)renderRichText:(NSAttributedString *)text;
 - (void)setArticleStyle;

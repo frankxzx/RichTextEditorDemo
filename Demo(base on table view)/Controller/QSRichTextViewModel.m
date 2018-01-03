@@ -66,6 +66,10 @@
             return;
         }
     }
+    
+    if (model.cellType == QSRichTextCellTypeImage ) {
+        model.captionModel = nil;
+    }
     [self removeLineAtIndexPath:indexPath];
 }
 

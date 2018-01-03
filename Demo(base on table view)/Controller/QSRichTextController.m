@@ -209,6 +209,38 @@
 
 #pragma mark -
 #pragma mark QSRichTextEditorFormat
+
+-(void)formatDidToggleBold {
+    QSRichTextView *textView = [UIResponder currentFirstResponder];
+    NSMutableAttributedString *text = textView.attributedText.mutableCopy;
+    YYTextRange *yyRange = (YYTextRange *)textView.selectedTextRange;
+    NSRange selectRange = [yyRange asRange];
+    
+    //长按切换字体属性
+    if (selectRange.length) {
+        if (selectRange.location + selectRange.length <= textView.attributedText.length) {
+            [text yy_setFont:UIFontBoldMake(16) range:selectRange];
+        }
+
+//            if (self.selectRange.location + self.selectRange.length <= self.yyTextView.attributedText.length) {
+//                [text setAttributes:@{NSFontAttributeName:YYTextViewFont} range:self.selectRange];
+//            }
+//        }
+        //记录光标位置
+        __block NSInteger lastCurPosition = textView.selectedRange.location;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            lastCurPosition += selectRange.length;
+            textView.attributedText = text;
+            textView.selectedRange = NSMakeRange(lastCurPosition, 0);
+            [textView scrollRangeToVisible:selectRange];
+        });
+    }
+}
+
+-(void)formatDidToggleBlockquote {
+    [self.viewModel addNewLine:QSRichTextCellTypeTextBlock];
+}
+
 -(void)insertSeperator {
     [self.viewModel addNewLine:QSRichTextCellTypeSeparator];
 }
@@ -219,10 +251,6 @@
 
 -(void)insertPhoto {
     [self.viewModel addNewLine:QSRichTextCellTypeImage];
-}
-
--(void)formatDidToggleBlockquote {
-    [self.viewModel addNewLine:QSRichTextCellTypeTextBlock];
 }
 
 @end

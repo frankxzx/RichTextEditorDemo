@@ -72,22 +72,4 @@
     [self setContentOffset:CGPointMake(self.contentOffset.x, contentOffsetY) animated:animated];
 }
 
-- (void)setContentOffset:(CGPoint)contentOffset animated:(BOOL)animated {
-    if (!self.shouldRejectSystemScroll) {
-        [super setContentOffset:contentOffset animated:animated];
-        NSLog(@"%@, contentOffset.y = %.2f", NSStringFromSelector(_cmd), contentOffset.y);
-    } else {
-        NSLog(@"被屏蔽的 %@, contentOffset.y = %.2f", NSStringFromSelector(_cmd), contentOffset.y);
-    }
-}
-
-- (void)setContentOffset:(CGPoint)contentOffset {
-    if (!self.shouldRejectSystemScroll) {
-        [super setContentOffset:contentOffset];
-        NSLog(@"%@, contentOffset.y = %.2f", NSStringFromSelector(_cmd), contentOffset.y);
-    } else {
-        NSLog(@"被屏蔽的 %@, contentOffset.y = %.2f", NSStringFromSelector(_cmd), contentOffset.y);
-    }
-}
-
 @end
