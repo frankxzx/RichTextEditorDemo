@@ -41,14 +41,15 @@ CGFloat const editorMoreViewHeight = 200;
     
     CGFloat contentLabelWidth = self.contentView.qmui_width;
     CGSize textViewSize = [self.textView sizeThatFits:CGSizeMake(contentLabelWidth, CGFLOAT_MAX)];
-    self.textView.frame = CGRectFlatMake(0, 0, contentLabelWidth, textViewSize.height);
+    CGFloat textCellHeight = textViewSize.height;
+    textCellHeight = MAX(50, textCellHeight);
+    self.textView.frame = CGRectFlatMake(0, 0, contentLabelWidth, textCellHeight);
 }
 
 -(CGSize)sizeThatFits:(CGSize)size {
     
     CGSize resultSize = CGSizeMake(size.width, 0);
     CGFloat resultHeight = 0;
-    CGFloat contentLabelWidth = size.width;
     CGSize contentSize = [self.textView sizeThatFits:CGSizeMake(CGRectGetWidth(self.textView.bounds), CGFLOAT_MAX)];
     resultHeight += contentSize.height;
     resultSize.height = resultHeight;
@@ -225,21 +226,6 @@ CGFloat const editorMoreViewHeight = 200;
         self.textView.placeholderFont = UIFontMake(16);
         self.textView.placeholderText = @"请输入正文";
     }
-}
-
--(void)setArticleStyle {
-    self.textView.placeholderTextColor = UIColorGrayLighten;
-    self.textView.placeholderFont = UIFontBoldMake(20);
-    self.textView.font = UIFontMake(20);
-    self.textView.placeholderText = @"请输入标题";
-    self.textView.textColor = UIColorBlack;
-    self.textView.textAlignment = NSTextAlignmentLeft;
-}
-
--(void)setImageCaptionStyle {
-    self.textView.font = UIFontMake(15);
-    self.textView.textAlignment = NSTextAlignmentCenter;
-    self.textView.textColor = UIColorGrayLighten;
 }
 
 -(BOOL)becomeFirstResponder {

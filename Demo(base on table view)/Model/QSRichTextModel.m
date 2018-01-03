@@ -32,13 +32,13 @@
             return @"QSRichTextVideoCell";
             
         case QSRichTextCellTypeImageCaption:
-            return @"QSRichTextWordCell";
+            return @"QSRichTextImageCaptionCell";
             
         case QSRichTextCellTypeCover:
             return @"QSRichTextAddCoverCell";
             
         case QSRichTextCellTypeTitle:
-            return @"QSRichTextWordCell";
+            return @"QSRichTextTitleCell";
             
         case QSRichTextCellTypeTextBlock:
             return @"QSRichTextBlockCell";

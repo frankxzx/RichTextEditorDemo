@@ -14,6 +14,8 @@
 #import "QSRichTextSeparatorCell.h"
 #import "QSRichTextAddCoverCell.h"
 #import "QSRichTextBar.h"
+#import "QSRichTextTitleCell.h"
+#import "QSRichTextImageCaptionCell.h"
 
 @interface QSRichTextController () <QSRichTextWordCellDelegate, QSRichTextImageViewDelegate, QSRichTextVideoViewDelegate>
 
@@ -55,7 +57,6 @@
     
     switch (model.cellType) {
         case QSRichTextCellTypeText:
-            [(QSRichTextWordCell *)cell renderRichText:model.attributedString];
             ((QSRichTextWordCell *)cell).qs_delegate = self;
             [((QSRichTextWordCell *)cell) setBodyTextStyleWithPlaceholder:self.viewModel.isBodyEmpty];
             break;
@@ -71,17 +72,19 @@
             break;
             
         case QSRichTextCellTypeImageCaption:
-            ((QSRichTextWordCell *)cell).qs_delegate = self;
-            [((QSRichTextWordCell *)cell) setImageCaptionStyle];
+            ((QSRichTextImageCaptionCell *)cell).qs_delegate = self;
             break;
             
         case QSRichTextCellTypeTitle:
-            ((QSRichTextWordCell *)cell).qs_delegate = self;
-            [((QSRichTextWordCell *)cell) setArticleStyle];
+            ((QSRichTextTitleCell *)cell).qs_delegate = self;
+            break;
+            
+        case QSRichTextCellTypeTextBlock:
+            ((QSRichTextTitleCell *)cell).qs_delegate = self;
+            break;
             
         case QSRichTextCellTypeCover:
         case QSRichTextCellTypeSeparator:
-        case QSRichTextCellTypeTextBlock:
             break;
     }
     
@@ -186,6 +189,7 @@
         [self.viewModel addNewLine:QSRichTextCellTypeImageCaption];
         model.captionModel = self.viewModel.models[indexPath.row+1];
     }
+    [self.viewModel becomeActiveWithModel:model];
 }
 
 -(void)editorViewReplaceImage:(QSRichTextImageView *)imageView {

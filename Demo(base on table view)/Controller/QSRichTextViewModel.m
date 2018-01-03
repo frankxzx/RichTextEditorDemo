@@ -8,6 +8,7 @@
 
 #import "QSRichTextViewModel.h"
 #import "QSRichTextController.h"
+#import "QSRichTextWordCell.h"
 
 @interface QSRichTextViewModel()
 
@@ -80,6 +81,12 @@
     [tableView beginUpdates];
     [tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
     [tableView endUpdates];
+}
+
+-(void)becomeActiveWithModel:(QSRichTextModel *)model {
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[self.models indexOfObject:model] inSection:0];
+    QSRichTextWordCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    [cell becomeFirstResponder];
 }
 
 -(NSArray<QSRichTextModel *> *)models {
