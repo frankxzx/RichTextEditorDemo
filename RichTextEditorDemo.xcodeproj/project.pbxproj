@@ -174,7 +174,6 @@
 		01DC21F41FF5E6F200A7E5F3 /* QSRichTextLayout.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSRichTextLayout.m; sourceTree = "<group>"; };
 		01DC21F61FF5EDA700A7E5F3 /* QSRichTextBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSRichTextBar.h; sourceTree = "<group>"; };
 		01DC21F71FF5EDA700A7E5F3 /* QSRichTextBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSRichTextBar.m; sourceTree = "<group>"; };
-		01DC21F91FF5EE0600A7E5F3 /* QSRichTextEditorAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSRichTextEditorAction.h; sourceTree = "<group>"; };
 		01DC21FB1FF604E900A7E5F3 /* HyperlinkModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HyperlinkModel.h; sourceTree = "<group>"; };
 		01DC21FC1FF604E900A7E5F3 /* HyperlinkModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HyperlinkModel.m; sourceTree = "<group>"; };
 		01DC22001FF6061700A7E5F3 /* QSRichTextMoreView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSRichTextMoreView.h; sourceTree = "<group>"; };
@@ -443,7 +442,6 @@
 				01DC220A1FF60AC300A7E5F3 /* QSRichTextViewModel.m */,
 				01DC21F61FF5EDA700A7E5F3 /* QSRichTextBar.h */,
 				01DC21F71FF5EDA700A7E5F3 /* QSRichTextBar.m */,
-				01DC21F91FF5EE0600A7E5F3 /* QSRichTextEditorAction.h */,
 				01DC22001FF6061700A7E5F3 /* QSRichTextMoreView.h */,
 				01DC22011FF6061700A7E5F3 /* QSRichTextMoreView.m */,
 			);

@@ -51,7 +51,7 @@
         self.moreViewCloseButton = [UIBarButtonItem qs_setBarButtonItemWithImage:UIImageMake(@"icon_close") target:self action:@selector(closeMoreView)];
         
         self.fontStyleButton.tag = QSRichEditorTextStyleNormal;
-        self.alignButton.tag = kCTTextAlignmentLeft;
+        self.alignButton.tag = NSTextAlignmentLeft;
         self.orderedListButton.tag = QSRichTextListTypeNone;
         
         [self setupTextCountItemWithCount:0];
@@ -137,15 +137,15 @@
 //对齐方式
 - (void)align:(UIBarButtonItem *)sender {
     
-    if (sender.tag == kCTTextAlignmentLeft) {
+    if (sender.tag == NSTextAlignmentLeft) {
         sender.image = UIImageMake(@"toolbar_align_center").originalImage;
-        sender.tag = kCTTextAlignmentCenter;
-    } else if (sender.tag == kCTTextAlignmentCenter) {
+        sender.tag = NSTextAlignmentCenter;
+    } else if (sender.tag == NSTextAlignmentCenter) {
         sender.image = UIImageMake(@"toolbar_align_right").originalImage;
-        sender.tag = kCTTextAlignmentRight;
-    } else if (sender.tag == kCTTextAlignmentRight) {
+        sender.tag = NSTextAlignmentRight;
+    } else if (sender.tag == NSTextAlignmentRight) {
         sender.image = UIImageMake(@"toolbar_align_left").originalImage;
-        sender.tag = kCTTextAlignmentLeft;
+        sender.tag = NSTextAlignmentLeft;
     }
     
     if ([self.formatDelegate respondsToSelector:@selector(formatDidChangeTextAlignment:)]) {

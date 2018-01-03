@@ -20,6 +20,7 @@
 @interface QSRichTextController () <QSRichTextWordCellDelegate, QSRichTextImageViewDelegate, QSRichTextVideoViewDelegate>
 
 @property(nonatomic, strong) QSRichTextViewModel *viewModel;
+@property(nonatomic, weak) QSRichTextView *currentTextView;
 @property(nonatomic, strong) NSIndexPath *currentEditingIndexPath;
 
 @end
@@ -144,6 +145,7 @@
     QSRichTextModel *model = self.viewModel.models[indexPath.row];
     model.attributedString = [[NSMutableAttributedString alloc]initWithAttributedString:textView.attributedText];
     self.currentEditingIndexPath = indexPath;
+    self.currentTextView = textView;
 }
 
 - (void)qsTextFieldDeleteBackward:(QSRichTextView *)textView {
@@ -210,22 +212,17 @@
 #pragma mark -
 #pragma mark QSRichTextEditorFormat
 
--(void)formatDidToggleBold {
-    QSRichTextView *textView = [UIResponder currentFirstResponder];
+-(void)formatTextBlock:(void (^)(NSMutableAttributedString *attributedText, NSRange range))block {
+    QSRichTextView *textView = self.currentTextView;
     NSMutableAttributedString *text = textView.attributedText.mutableCopy;
     YYTextRange *yyRange = (YYTextRange *)textView.selectedTextRange;
     NSRange selectRange = [yyRange asRange];
     
-    //长按切换字体属性
     if (selectRange.length) {
         if (selectRange.location + selectRange.length <= textView.attributedText.length) {
-            [text yy_setFont:UIFontBoldMake(16) range:selectRange];
+            block(text, selectRange);
         }
-
-//            if (self.selectRange.location + self.selectRange.length <= self.yyTextView.attributedText.length) {
-//                [text setAttributes:@{NSFontAttributeName:YYTextViewFont} range:self.selectRange];
-//            }
-//        }
+        
         //记录光标位置
         __block NSInteger lastCurPosition = textView.selectedRange.location;
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -235,6 +232,37 @@
             [textView scrollRangeToVisible:selectRange];
         });
     }
+}
+
+-(void)formatDidToggleBold {
+    [self formatTextBlock:^(NSMutableAttributedString *attributedText, NSRange range) {
+        [attributedText yy_setFont:UIFontBoldMake(16) range:range];
+    }];
+}
+
+-(void)formatDidToggleItalic {
+    [self formatTextBlock:^(NSMutableAttributedString *attributedText, NSRange range) {
+        [attributedText yy_setTextGlyphTransform:YYTextCGAffineTransformMakeSkew(-0.3, 0) range:range];
+    }];
+}
+
+-(void)formatDidToggleStrikethrough {
+    [self formatTextBlock:^(NSMutableAttributedString *attributedText, NSRange range) {
+        YYTextDecoration *decoration = [YYTextDecoration decorationWithStyle:YYTextLineStyleSingle width:@1 color:UIColorBlack];
+        [attributedText yy_setTextStrikethrough:decoration range:range];
+    }];
+}
+
+-(void)formatDidSelectTextStyle:(QSRichEditorTextStyle)style {
+    
+}
+
+-(void)formatDidChangeTextAlignment:(NSTextAlignment)alignment {
+    [self formatTextBlock:^(NSMutableAttributedString *attributedText, NSRange range) {
+        NSMutableParagraphStyle *paragraphStyle =  [attributedText.yy_paragraphStyle mutableCopy];
+        paragraphStyle.alignment = alignment;
+        [attributedText yy_setParagraphStyle:paragraphStyle range:range];
+    }];
 }
 
 -(void)formatDidToggleBlockquote {

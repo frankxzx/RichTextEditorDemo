@@ -63,7 +63,7 @@ typedef NS_ENUM(NSUInteger, QSRichTextListStyleType) {
 - (void)formatDidToggleBold;
 - (void)formatDidToggleItalic;
 - (void)formatDidToggleStrikethrough;
-- (void)formatDidChangeTextAlignment:(CTTextAlignment)alignment;
+- (void)formatDidChangeTextAlignment:(NSTextAlignment)alignment;
 - (void)toggleListType:(QSRichTextListStyleType)listType;
 - (void)formatDidToggleBlockquote;
 

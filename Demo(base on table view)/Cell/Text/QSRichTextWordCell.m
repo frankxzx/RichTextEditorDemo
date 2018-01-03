@@ -59,7 +59,7 @@ CGFloat const editorMoreViewHeight = 200;
 - (void)renderRichText:(NSAttributedString *)text {
     
     self.textView.attributedText = text;
-    self.textView.textAlignment = NSTextAlignmentJustified;
+    self.textView.textAlignment = NSTextAlignmentLeft;
     [self setNeedsLayout];
 }
 
@@ -162,7 +162,7 @@ CGFloat const editorMoreViewHeight = 200;
 }
 
 //对齐
-- (void)formatDidChangeTextAlignment:(CTTextAlignment)alignment {
+- (void)formatDidChangeTextAlignment:(NSTextAlignment)alignment {
     [self.qs_delegate formatDidChangeTextAlignment:alignment];
 }
 
@@ -220,11 +220,12 @@ CGFloat const editorMoreViewHeight = 200;
 //默认样式
 -(void)setDefaultTextStyle {
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    paragraphStyle.lineSpacing = 6;
+    paragraphStyle.lineSpacing = 4;
+    paragraphStyle.alignment = NSTextAlignmentLeft;
     NSDictionary *attributes = @{
                                  NSFontAttributeName:[UIFont systemFontOfSize:16],
                                  NSParagraphStyleAttributeName:paragraphStyle,
-                                 NSKernAttributeName:@(2)
+                                 NSKernAttributeName:@(1)
                                  };
     
     self.textView.typingAttributes = attributes;
