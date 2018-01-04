@@ -47,7 +47,7 @@
 
 -(BOOL)shouldAddNewLine {
     QSRichTextCellType cellType = self.cellType;
-    if (cellType == QSRichTextCellTypeImage || cellType == QSRichTextCellTypeVideo || cellType == QSRichTextCellTypeImageCaption || cellType == QSRichTextCellTypeTextBlock) {
+    if (cellType == QSRichTextCellTypeImage || cellType == QSRichTextCellTypeVideo || cellType == QSRichTextCellTypeImageCaption || cellType == QSRichTextCellTypeTextBlock || QSRichTextCellTypeSeparator) {
         return YES;
     }
     return NO;

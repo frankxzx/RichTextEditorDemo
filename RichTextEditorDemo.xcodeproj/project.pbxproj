@@ -18,6 +18,7 @@
 		012C960D1FFCA6460003DACA /* QSRichTextImageCaptionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 012C960C1FFCA6460003DACA /* QSRichTextImageCaptionCell.m */; };
 		012C96101FFDC04B0003DACA /* QSRichTextAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 012C960F1FFDC04B0003DACA /* QSRichTextAttributes.m */; };
 		012C96131FFDFEE10003DACA /* QSRichTextBaseWordCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 012C96121FFDFEE10003DACA /* QSRichTextBaseWordCell.m */; };
+		012C96161FFE06C30003DACA /* QSRichTextHyperlink.m in Sources */ = {isa = PBXBuildFile; fileRef = 012C96151FFE06C30003DACA /* QSRichTextHyperlink.m */; };
 		015167DD1FE76B6D00F2F1C7 /* DTImageCaptionAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 015167DC1FE76B6D00F2F1C7 /* DTImageCaptionAttachment.m */; };
 		015168121FE8DC4A00F2F1C7 /* DTTextBlockAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 015168111FE8DC4A00F2F1C7 /* DTTextBlockAttachment.m */; };
 		015168151FE8E20100F2F1C7 /* NSString+YYAdd.m in Sources */ = {isa = PBXBuildFile; fileRef = 015168141FE8E20100F2F1C7 /* NSString+YYAdd.m */; };
@@ -61,7 +62,6 @@
 		01DC21F21FF5E63300A7E5F3 /* QSRichTextModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 01DC21F11FF5E63300A7E5F3 /* QSRichTextModel.m */; };
 		01DC21F51FF5E6F200A7E5F3 /* QSRichTextLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 01DC21F41FF5E6F200A7E5F3 /* QSRichTextLayout.m */; };
 		01DC21F81FF5EDA700A7E5F3 /* QSRichTextBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 01DC21F71FF5EDA700A7E5F3 /* QSRichTextBar.m */; };
-		01DC21FD1FF604E900A7E5F3 /* HyperlinkModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 01DC21FC1FF604E900A7E5F3 /* HyperlinkModel.m */; };
 		01DC22021FF6061700A7E5F3 /* QSRichTextMoreView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01DC22011FF6061700A7E5F3 /* QSRichTextMoreView.m */; };
 		01DC22041FF606B200A7E5F3 /* NSString+YYAdd.m in Sources */ = {isa = PBXBuildFile; fileRef = 015168141FE8E20100F2F1C7 /* NSString+YYAdd.m */; };
 		01DC22051FF606B200A7E5F3 /* UIBarButtonItem+qs.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F9E4F71FEC97BC000D915F /* UIBarButtonItem+qs.m */; };
@@ -98,6 +98,8 @@
 		012C960F1FFDC04B0003DACA /* QSRichTextAttributes.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSRichTextAttributes.m; sourceTree = "<group>"; };
 		012C96111FFDFEE10003DACA /* QSRichTextBaseWordCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSRichTextBaseWordCell.h; sourceTree = "<group>"; };
 		012C96121FFDFEE10003DACA /* QSRichTextBaseWordCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSRichTextBaseWordCell.m; sourceTree = "<group>"; };
+		012C96141FFE06C30003DACA /* QSRichTextHyperlink.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSRichTextHyperlink.h; sourceTree = "<group>"; };
+		012C96151FFE06C30003DACA /* QSRichTextHyperlink.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSRichTextHyperlink.m; sourceTree = "<group>"; };
 		015167DB1FE76B6D00F2F1C7 /* DTImageCaptionAttachment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DTImageCaptionAttachment.h; sourceTree = "<group>"; };
 		015167DC1FE76B6D00F2F1C7 /* DTImageCaptionAttachment.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DTImageCaptionAttachment.m; sourceTree = "<group>"; };
 		015168101FE8DC4A00F2F1C7 /* DTTextBlockAttachment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DTTextBlockAttachment.h; sourceTree = "<group>"; };
@@ -180,8 +182,6 @@
 		01DC21F41FF5E6F200A7E5F3 /* QSRichTextLayout.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSRichTextLayout.m; sourceTree = "<group>"; };
 		01DC21F61FF5EDA700A7E5F3 /* QSRichTextBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSRichTextBar.h; sourceTree = "<group>"; };
 		01DC21F71FF5EDA700A7E5F3 /* QSRichTextBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSRichTextBar.m; sourceTree = "<group>"; };
-		01DC21FB1FF604E900A7E5F3 /* HyperlinkModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HyperlinkModel.h; sourceTree = "<group>"; };
-		01DC21FC1FF604E900A7E5F3 /* HyperlinkModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HyperlinkModel.m; sourceTree = "<group>"; };
 		01DC22001FF6061700A7E5F3 /* QSRichTextMoreView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSRichTextMoreView.h; sourceTree = "<group>"; };
 		01DC22011FF6061700A7E5F3 /* QSRichTextMoreView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSRichTextMoreView.m; sourceTree = "<group>"; };
 		01DC22091FF60AC300A7E5F3 /* QSRichTextViewModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSRichTextViewModel.h; sourceTree = "<group>"; };
@@ -424,8 +424,8 @@
 				01DC21F11FF5E63300A7E5F3 /* QSRichTextModel.m */,
 				01DC21F31FF5E6F200A7E5F3 /* QSRichTextLayout.h */,
 				01DC21F41FF5E6F200A7E5F3 /* QSRichTextLayout.m */,
-				01DC21FB1FF604E900A7E5F3 /* HyperlinkModel.h */,
-				01DC21FC1FF604E900A7E5F3 /* HyperlinkModel.m */,
+				012C96141FFE06C30003DACA /* QSRichTextHyperlink.h */,
+				012C96151FFE06C30003DACA /* QSRichTextHyperlink.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -756,8 +756,8 @@
 				01DC22071FF606B200A7E5F3 /* UIResponder+qs.m in Sources */,
 				012C95FF1FFB4D510003DACA /* QSRichTextVideoView.m in Sources */,
 				01DC21F81FF5EDA700A7E5F3 /* QSRichTextBar.m in Sources */,
-				01DC21FD1FF604E900A7E5F3 /* HyperlinkModel.m in Sources */,
 				01DC220B1FF60AC300A7E5F3 /* QSRichTextViewModel.m in Sources */,
+				012C96161FFE06C30003DACA /* QSRichTextHyperlink.m in Sources */,
 				01DC21F21FF5E63300A7E5F3 /* QSRichTextModel.m in Sources */,
 				01DC21DC1FF5D7C800A7E5F3 /* QSRichTextImageCell.m in Sources */,
 				01DC21DF1FF5D7D700A7E5F3 /* QSRichTextVideoCell.m in Sources */,

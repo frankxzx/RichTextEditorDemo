@@ -44,6 +44,7 @@
         } else {
             [self addNewLinesWithModels:@[model, emptyLine]];
         }
+        //新生成的 textView 响应, 光标位置移动
         [self becomeActiveWithModel:emptyLine];
     } else {
         [self addNewLinesWithModel:model];

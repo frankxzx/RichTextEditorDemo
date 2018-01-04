@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "QSRichEditorFontStyle.h"
+#import "QSRichTextHyperlink.h"
 
 typedef NS_ENUM(NSUInteger, QSRichTextListStyleType) {
     QSRichTextListTypeNone,
@@ -71,7 +72,7 @@ typedef NS_ENUM(NSUInteger, QSRichTextListStyleType) {
 -(void)insertVideo;
 -(void)insertAudio;
 -(void)insertSeperator;
--(void)insertHyperlink;
+-(void)insertHyperlink:(QSRichTextHyperlink *)hyperlink;
 
 -(void)richTextEditorOpenMoreView;
 -(void)richTextEditorCloseMoreView;

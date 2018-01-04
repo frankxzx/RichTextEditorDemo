@@ -15,6 +15,7 @@
 #import "QSRichTextAddCoverCell.h"
 #import "QSRichTextBar.h"
 #import "QSRichTextTitleCell.h"
+#import "QSRichTextBlockCell.h"
 #import "QSRichTextImageCaptionCell.h"
 #import "QSRichTextAttributes.h"
 
@@ -61,6 +62,7 @@
         case QSRichTextCellTypeText:
             ((QSRichTextWordCell *)cell).qs_delegate = self;
             [((QSRichTextWordCell *)cell) setBodyTextStyleWithPlaceholder:indexPath.row == 2];
+            ((QSRichTextWordCell *)cell).textView.attributedText = model.attributedString;
             break;
         
         case QSRichTextCellTypeImage:
@@ -79,10 +81,12 @@
             
         case QSRichTextCellTypeTitle:
             ((QSRichTextTitleCell *)cell).qs_delegate = self;
+            ((QSRichTextTitleCell *)cell).textView.attributedText = model.attributedString;
             break;
             
         case QSRichTextCellTypeTextBlock:
-            ((QSRichTextTitleCell *)cell).qs_delegate = self;
+            ((QSRichTextBlockCell *)cell).qs_delegate = self;
+            ((QSRichTextBlockCell *)cell).textView.attributedText = model.attributedString;
             break;
             
         case QSRichTextCellTypeCover:
@@ -304,6 +308,26 @@
 
 -(void)insertPhoto {
     [self.viewModel addNewLine:QSRichTextCellTypeImage];
+}
+
+- (void)insertHyperlink:(QSRichTextHyperlink *)hyperlink {
+    NSString *linkString = hyperlink.title;
+    [self.currentTextView insertText:linkString];
+    QSRichTextView *textView = self.currentTextView;
+    NSMutableAttributedString *attributeText = textView.attributedText.mutableCopy;
+    NSRange selectRange = NSMakeRange(self.currentTextView.attributedText.length - linkString.length, linkString.length);
+    [attributeText yy_setTextHighlightRange:selectRange color:UIColorBlue backgroundColor:nil tapAction:^(UIView * _Nonnull containerView, NSAttributedString * _Nonnull text, NSRange range, CGRect rect) {
+        
+    }];
+    
+    //记录光标位置
+    __block NSInteger lastCurPosition = textView.selectedRange.location;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        lastCurPosition += selectRange.length;
+        textView.attributedText = attributeText;
+        textView.selectedRange = NSMakeRange(lastCurPosition, 0);
+        [textView scrollRangeToVisible:selectRange];
+    });
 }
 
 @end
