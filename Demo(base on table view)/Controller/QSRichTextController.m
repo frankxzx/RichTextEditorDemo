@@ -60,7 +60,7 @@
     switch (model.cellType) {
         case QSRichTextCellTypeText:
             ((QSRichTextWordCell *)cell).qs_delegate = self;
-            [((QSRichTextWordCell *)cell) setBodyTextStyleWithPlaceholder:self.viewModel.isBodyEmpty];
+            [((QSRichTextWordCell *)cell) setBodyTextStyleWithPlaceholder:indexPath.row == 2];
             break;
         
         case QSRichTextCellTypeImage:
@@ -261,11 +261,33 @@
 }
 
 -(void)formatDidChangeTextAlignment:(NSTextAlignment)alignment {
-    [self formatTextBlock:^(NSMutableAttributedString *attributedText, NSRange range) {
-        NSMutableParagraphStyle *paragraphStyle = [attributedText.yy_paragraphStyle mutableCopy];
-        paragraphStyle.alignment = alignment;
-        [attributedText yy_setParagraphStyle:paragraphStyle range:range];
-    }];
+    
+    QSRichTextView *textView = self.currentTextView;
+    NSMutableAttributedString *attributedText = textView.attributedText.mutableCopy;
+    YYTextRange *yyRange = (YYTextRange *)textView.selectedTextRange;
+    NSRange selectRange = [yyRange asRange];
+    
+    NSArray *subStrings = [attributedText.string componentsSeparatedByString:@"\n"];
+    NSRange lineRange = NSMakeRange(0, 0);
+    for (NSString *subString in subStrings) {
+        lineRange = [attributedText.string rangeOfString:subString];
+        if (NSLocationInRange(selectRange.location, lineRange)) {
+            break;
+        }
+    }
+    
+    NSMutableParagraphStyle *paragraphStyle = [attributedText.yy_paragraphStyle mutableCopy];
+    paragraphStyle.alignment = alignment;
+    [attributedText yy_setParagraphStyle:paragraphStyle range:lineRange];
+        
+    //记录光标位置
+    __block NSInteger lastCurPosition = textView.selectedRange.location;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        lastCurPosition += selectRange.length;
+        textView.attributedText = attributedText;
+        textView.selectedRange = NSMakeRange(lastCurPosition, 0);
+        [textView scrollRangeToVisible:selectRange];
+    });
 }
 
 -(void)formatDidToggleBlockquote {

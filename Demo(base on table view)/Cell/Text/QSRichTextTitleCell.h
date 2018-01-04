@@ -6,8 +6,8 @@
 //  Copyright © 2018年 frankxzx. All rights reserved.
 //
 
-#import "QSRichTextWordCell.h"
+#import "QSRichTextBaseWordCell.h"
 
-@interface QSRichTextTitleCell : QSRichTextWordCell
+@interface QSRichTextTitleCell : QSRichTextBaseWordCell
 
 @end

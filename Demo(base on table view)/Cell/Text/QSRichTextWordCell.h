@@ -6,26 +6,10 @@
 //  Copyright © 2017年 frankxzx. All rights reserved.
 //
 
-#import "QSRichTextCell.h"
-#import "QSRichTextView.h"
-#import <YYText/YYText.h>
-#import "QSRichTextBar.h"
+#import "QSRichTextBaseWordCell.h"
 
-@protocol QSRichTextWordCellDelegate <QSRichTextViewDelegate, QSRichTextEditorFormat>
+@interface QSRichTextWordCell : QSRichTextBaseWordCell
 
--(void)qsTextViewDidChange:(QSRichTextView *)textView;
-
-@end
-
-@interface QSRichTextWordCell : QSRichTextCell
-
-@property (nonatomic, strong, readonly) QSRichTextView * textView;
-@property (nonatomic, weak) id <QSRichTextWordCellDelegate> qs_delegate;
-
-- (void)renderRichText:(NSAttributedString *)text;
-- (void)setArticleStyle;
 - (void)setBodyTextStyleWithPlaceholder:(BOOL)isFirstLine;
-- (void)setImageCaptionStyle;
-- (void)makeUI;
 
 @end

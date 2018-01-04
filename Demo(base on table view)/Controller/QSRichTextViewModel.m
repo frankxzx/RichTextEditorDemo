@@ -29,14 +29,21 @@
 }
 
 -(void)addNewLine:(QSRichTextCellType)cellType {
-
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.models.count - 1 inSection:0];
     QSRichTextModel *model = [[QSRichTextModel alloc]init];
     model.cellType = cellType;
     
+    //当插入图片，图片注释，视频，分隔符，代码块时默认添加空的一行
     if ([model shouldAddNewLine]) {
         QSRichTextModel *emptyLine = [[QSRichTextModel alloc]init];
         emptyLine.cellType = QSRichTextCellTypeText;
-        [self addNewLinesWithModels:@[model, emptyLine]];
+        //当上一行还没来得及输入内容时，直接将其替换
+        if ([self isLastLineEmpty]) {
+            [self replaceLinesWithModel:model atIndexPath:indexPath];
+            [self addNewLinesWithModels:@[emptyLine]];
+        } else {
+            [self addNewLinesWithModels:@[model, emptyLine]];
+        }
         [self becomeActiveWithModel:emptyLine];
     } else {
         [self addNewLinesWithModel:model];
@@ -47,15 +54,25 @@
     [self addNewLinesWithModels:@[model]];
 }
 
+//在最后插入新的行
 -(void)addNewLinesWithModels:(NSArray <QSRichTextModel *>*) models {
+    //最后一行索引
     NSInteger count = self.models.count;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:count - 1 inSection:0];
+    [self addNewLinesWithModels:models atBeginIndexPath:indexPath];
+}
+
+//在指定的索引插入新的行
+-(void)addNewLinesWithModels:(NSArray <QSRichTextModel *>*) models atBeginIndexPath:(NSIndexPath *)indexPath {
+    NSArray <NSIndexPath *>*indexPaths = [self insertIndexPathsAtIndexPath:indexPath count:models.count];
     [self.models addObjectsFromArray:models];
     UITableView *tableView = self.viewController.tableView;
     [tableView beginUpdates];
-    [tableView insertRowsAtIndexPaths:[self insertIndexPathsAtIndexPath:[NSIndexPath indexPathForRow:count - 1 inSection:0] count:models.count] withRowAnimation:UITableViewRowAnimationNone];
+    [tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
     [tableView endUpdates];
 }
 
+//更新 cell 高度
 -(void)updateLayoutAtIndexPath:(NSIndexPath *)indexPath withCellheight:(CGFloat)newHeight {
     if (!indexPath) { return; }
     QSRichTextModel *model = self.models[indexPath.row];
@@ -67,11 +84,19 @@
     [tableView endUpdates];
 }
 
+-(void)replaceLinesWithModel:(QSRichTextModel *)model atIndexPath:(NSIndexPath *)indexPath {
+    [self.models replaceObjectAtIndex:indexPath.row withObject:model];
+    UITableView *tableView = self.viewController.tableView;
+    [tableView beginUpdates];
+    [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    [tableView endUpdates];
+}
+
+//删除图片时 连带删除注释
 -(void)removeLineAtIndexPath:(NSIndexPath *)indexPath {
     [self removeLinesAtIndexPaths:@[indexPath]];
 }
 
-//删除图片时 连带删除注释
 -(void)removeLineWithModel:(QSRichTextModel *)model {
     
     NSInteger index = [self.models indexOfObject:model];
@@ -122,17 +147,16 @@
     return self.viewController.tableView;;
 }
 
--(BOOL)isBodyEmpty {
-    int i = 0;
-    for (QSRichTextModel *model in self.models) {
-        if (model.cellType == QSRichTextCellTypeText) {
-            i++;
-            if (i >= 2) {
-                return NO;
-            }
-        }
+-(BOOL)isLastLineEmpty {
+    NSInteger lastLineIndex = self.models.count - 1;
+    if (lastLineIndex < 2) {
+        return NO;
     }
-    return YES;
+    QSRichTextModel *model = self.models[lastLineIndex];
+    if (model.cellType != QSRichTextCellTypeText) {
+        return NO;
+    }
+    return model.attributedString.length == 0;
 }
 
 -(NSArray <NSIndexPath *>*)insertIndexPathsAtIndexPath:(NSIndexPath *)indexPath

@@ -36,9 +36,6 @@
 
 -(void)removeLineWithModel:(QSRichTextModel *)model;
 
-//当前正文是否有输入
--(BOOL)isBodyEmpty;
-
 -(void)becomeActiveWithModel:(QSRichTextModel *)model;
 
 @end
