@@ -18,6 +18,7 @@
 #import "QSRichTextBlockCell.h"
 #import "QSRichTextImageCaptionCell.h"
 #import "QSRichTextAttributes.h"
+#import "QSTextFieldsViewController.h"
 
 @interface QSRichTextController () <QSRichTextWordCellDelegate, QSRichTextImageViewDelegate, QSRichTextVideoViewDelegate>
 
@@ -310,24 +311,87 @@
     [self.viewModel addNewLine:QSRichTextCellTypeImage];
 }
 
-- (void)insertHyperlink:(QSRichTextHyperlink *)hyperlink {
+- (void)insertHyperlink {
+    [self didInsertHyperlink:nil];
+}
+
+-(void)didInsertHyperlink:(QSRichTextHyperlink *)link {
+    QSTextFieldsViewController *dialogViewController = [[QSTextFieldsViewController alloc] init];
+    dialogViewController.headerViewHeight = 70;
+    dialogViewController.headerViewBackgroundColor = UIColorWhite;
+    dialogViewController.title = @"超链接";
+    dialogViewController.titleView.horizontalTitleFont = UIFontBoldMake(20);
+    dialogViewController.titleLabelFont = UIFontBoldMake(20);
+    if (link) {
+        dialogViewController.textField1.text = link.title;
+        dialogViewController.textField2.text = link.link;
+    } else {
+        dialogViewController.textField1.placeholder = @"请输入标题（非必需）";
+        dialogViewController.textField2.placeholder = @"输入网址";
+    }
+
+    [dialogViewController addCancelButtonWithText:@"取消" block:^(QMUIDialogViewController *aDialogViewController) {
+        [aDialogViewController hide];
+        [self richTextEditorCloseMoreView];
+    }];
+    
+    __weak __typeof(QSTextFieldsViewController *)weakDialog = dialogViewController;
+    [dialogViewController addSubmitButtonWithText:@"确定" block:^(QMUIDialogViewController *aDialogViewController) {
+        [self richTextEditorCloseMoreView];
+        
+        NSString *urlRegEx = @"([\\w-]+\\.)+[\\w-]+(/[\\w- ./?%&amp;=]*)?";
+        //NSString *urlRegEx = @"http(s)?://([\\w-]+\\.)+[\\w-]+(/[\\w- ./?%&amp;=]*)?";
+        NSPredicate *checkURL = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", urlRegEx];
+        BOOL isVaild = [checkURL evaluateWithObject:weakDialog.textField2.text];
+        
+        if (!isVaild) {
+            return;
+        }
+        
+        [aDialogViewController hide];
+        
+        QSRichTextHyperlink *link = [[QSRichTextHyperlink alloc]init];
+        link.title = weakDialog.textField1.text;
+        link.link = weakDialog.textField2.text;
+        [self insertHyperlink:link];
+    }];
+    [dialogViewController show];
+}
+
+-(void)insertHyperlink:(QSRichTextHyperlink *)hyperlink {
     NSString *linkString = hyperlink.title;
     [self.currentTextView insertText:linkString];
     QSRichTextView *textView = self.currentTextView;
     NSMutableAttributedString *attributeText = textView.attributedText.mutableCopy;
-    NSRange selectRange = NSMakeRange(self.currentTextView.attributedText.length - linkString.length, linkString.length);
-    [attributeText yy_setTextHighlightRange:selectRange color:UIColorBlue backgroundColor:nil tapAction:^(UIView * _Nonnull containerView, NSAttributedString * _Nonnull text, NSRange range, CGRect rect) {
-        
+    NSRange range = NSMakeRange(self.currentTextView.attributedText.length - linkString.length, linkString.length);
+    YYTextDecoration *decoration = [YYTextDecoration decorationWithStyle:YYTextLineStyleSingle width:@1 color:UIColorBlue];
+    [attributeText yy_setTextUnderline:decoration range:range];
+    [attributeText yy_setTextHighlightRange:range color:UIColorBlue backgroundColor:nil tapAction:^(UIView * _Nonnull containerView, NSAttributedString * _Nonnull text, NSRange range, CGRect rect) {
+        NSAttributedString *linkAttributeString = [text attributedSubstringFromRange:range];
+        QSRichTextHyperlink *link = linkAttributeString.yy_attributes[@"QSHyperLink"];
+        if (link) {
+            [self didInsertHyperlink:link];
+        }
     }];
+    [attributeText yy_setAttribute:@"QSHyperLink" value:hyperlink range:range];
     
     //记录光标位置
     __block NSInteger lastCurPosition = textView.selectedRange.location;
     dispatch_async(dispatch_get_main_queue(), ^{
-        lastCurPosition += selectRange.length;
+        lastCurPosition += range.length;
         textView.attributedText = attributeText;
         textView.selectedRange = NSMakeRange(lastCurPosition, 0);
-        [textView scrollRangeToVisible:selectRange];
+        [textView scrollRangeToVisible:range];
     });
+    
+    //重置一下富文本样式
+    [self.currentTextView updateTextStyle];
+}
+
+-(void)richTextEditorCloseMoreView {
+    [self.currentTextView.inputAccessoryView initEditorBarItems];
+    self.currentTextView.inputView = nil;
+    [self.currentTextView reloadInputViews];
 }
 
 @end

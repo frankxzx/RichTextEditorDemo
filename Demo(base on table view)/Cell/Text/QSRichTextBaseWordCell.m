@@ -153,8 +153,8 @@
 }
 
 //设置超链接
-- (void)insertHyperlink:(QSRichTextHyperlink *)hyperlink {
-    [self.qs_delegate insertHyperlink:hyperlink];
+- (void)insertHyperlink {
+    [self.qs_delegate insertHyperlink];
 }
 
 -(void)insertVideo {

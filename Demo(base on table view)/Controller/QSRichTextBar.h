@@ -72,7 +72,7 @@ typedef NS_ENUM(NSUInteger, QSRichTextListStyleType) {
 -(void)insertVideo;
 -(void)insertAudio;
 -(void)insertSeperator;
--(void)insertHyperlink:(QSRichTextHyperlink *)hyperlink;
+-(void)insertHyperlink;
 
 -(void)richTextEditorOpenMoreView;
 -(void)richTextEditorCloseMoreView;
