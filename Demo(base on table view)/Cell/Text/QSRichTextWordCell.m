@@ -32,6 +32,7 @@ CGFloat const editorMoreViewHeight = 200;
 -(void)makeUI {
     [super makeUI];
     [self.textView setInputAccessoryView:self.toolBar];
+    self.textView.typingAttributes = [QSRichTextAttributes defaultAttributes];
 }
 
 -(QSRichTextBar *)toolBar {

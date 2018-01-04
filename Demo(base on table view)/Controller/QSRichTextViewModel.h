@@ -24,8 +24,6 @@
 
 -(void)addNewLinesWithModels:(NSArray <QSRichTextModel *>*) models;
 
--(void)addNewLinesWithModel:(QSRichTextModel *) model;
-
 //刷新某一行的高度
 -(void)updateLayoutAtIndexPath:(NSIndexPath *)indexPath withCellheight:(CGFloat)newHeight;
 

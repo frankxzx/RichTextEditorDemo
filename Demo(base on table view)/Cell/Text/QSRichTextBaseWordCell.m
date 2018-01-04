@@ -27,9 +27,8 @@
 
 -(void)makeUI {
     [self.contentView addSubview:self.textView];
-    self.textView.textContainerInset = UIEdgeInsetsMake(0, 20, 0, 20);
+    self.textView.textContainerInset = UIEdgeInsetsMake(10, 20, 10, 20);
     self.textView.scrollEnabled = NO;
-    self.textView.typingAttributes = [QSRichTextAttributes defaultAttributes];
 }
 
 -(void)layoutSubviews {

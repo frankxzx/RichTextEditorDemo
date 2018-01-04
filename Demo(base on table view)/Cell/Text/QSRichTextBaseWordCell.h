@@ -24,7 +24,6 @@
 @property (nonatomic, weak) id <QSRichTextWordCellDelegate> qs_delegate;
 
 - (void)renderRichText:(NSAttributedString *)text;
-- (void)setBodyTextStyleWithPlaceholder:(BOOL)isFirstLine;
 - (void)makeUI;
 
 @end

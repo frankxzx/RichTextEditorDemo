@@ -78,6 +78,7 @@
             
         case QSRichTextCellTypeImageCaption:
             ((QSRichTextImageCaptionCell *)cell).qs_delegate = self;
+            ((QSRichTextBlockCell *)cell).textView.attributedText = model.attributedString;
             break;
             
         case QSRichTextCellTypeTitle:
@@ -172,6 +173,8 @@
 
 -(void)qsTextView:(QSRichTextView *)textView newHeightAfterTextChanged:(CGFloat)newHeight {
     [self.viewModel updateLayoutAtIndexPath:self.currentEditingIndexPath withCellheight: newHeight];
+    NSIndexPath *indexPath = [self.tableView qmui_indexPathForRowAtView:textView];
+    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
 }
 
 #pragma mark -
@@ -261,12 +264,21 @@
 
 -(void)formatDidSelectTextStyle:(QSRichEditorTextStyle)style {
     QSRichEditorFontStyle *fontStyle = [[QSRichEditorFontStyle alloc]initWithStyle:style];
-    [QSRichTextAttributes setQSRichTextStyle:fontStyle];
-    [self.currentTextView updateTextStyle];
+    //如果没有选中的 range 全局修改输入的样式
+    if (self.currentTextView.selectedRange.length < 1) {
+        [QSRichTextAttributes setQSRichTextStyle:fontStyle];
+        [self.currentTextView updateTextStyle];
+    } else {
+        [self formatTextBlock:^(NSMutableAttributedString *attributedText, NSRange range) {
+            [attributedText yy_setFont:fontStyle.font range:range];
+            [attributedText yy_setColor:fontStyle.textColor range:range];
+        }];
+    }
 }
 
 -(void)formatDidChangeTextAlignment:(NSTextAlignment)alignment {
     
+    //当前整个一行 对齐方式 修改
     QSRichTextView *textView = self.currentTextView;
     NSMutableAttributedString *attributedText = textView.attributedText.mutableCopy;
     YYTextRange *yyRange = (YYTextRange *)textView.selectedTextRange;

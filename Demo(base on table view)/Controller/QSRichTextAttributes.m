@@ -21,6 +21,9 @@
     static QSRichTextAttributes *instance = nil;
     dispatch_once(&onceToken,^{
         instance = [[super allocWithZone:NULL] init];
+        instance.aligment = NSTextAlignmentLeft;
+        instance.font = [UIFont systemFontOfSize:16];
+        instance.textColor = [UIColor darkTextColor];
     });
     return instance;
 }
@@ -38,9 +41,9 @@
     paragraphStyle.lineSpacing = 4;
     paragraphStyle.alignment = self.aligment;
     return @{
-           NSFontAttributeName:self.font ?: [UIFont systemFontOfSize:16],
+           NSFontAttributeName:self.font,
            NSParagraphStyleAttributeName:paragraphStyle,
-           NSForegroundColorAttributeName: self.textColor ?: [UIColor darkTextColor],
+           NSForegroundColorAttributeName:self.textColor,
            NSKernAttributeName:@(1)
            };
 }

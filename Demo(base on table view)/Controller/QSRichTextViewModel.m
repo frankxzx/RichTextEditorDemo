@@ -21,7 +21,7 @@
 -(void)addImageCaptionWithImageModel:(QSRichTextModel *)model {
     NSInteger index = [self.models indexOfObject:model];
     QSRichTextModel *captionModel = [[QSRichTextModel alloc]initWithCellType:QSRichTextCellTypeImageCaption];
-    [self.models insertObject:captionModel atIndex:index];
+    [self.models insertObject:captionModel atIndex:index+1];
     UITableView *tableView = self.viewController.tableView;
     [tableView beginUpdates];
     [tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index + 1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
@@ -39,6 +39,10 @@
         emptyLine.cellType = QSRichTextCellTypeText;
         //当上一行还没来得及输入内容时，直接将其替换
         if ([self isLastLineEmpty]) {
+            //当插入分割线 如果上一行是空的 直接返回
+            if (cellType == QSRichTextCellTypeSeparator) {
+                return;
+            }
             [self replaceLinesWithModel:model atIndexPath:indexPath];
             [self addNewLinesWithModels:@[emptyLine]];
         } else {
@@ -47,12 +51,8 @@
         //新生成的 textView 响应, 光标位置移动
         [self becomeActiveWithModel:emptyLine];
     } else {
-        [self addNewLinesWithModel:model];
+        [self addNewLinesWithModels:@[model]];
     }
-}
-
--(void)addNewLinesWithModel:(QSRichTextModel *) model {
-    [self addNewLinesWithModels:@[model]];
 }
 
 //在最后插入新的行
