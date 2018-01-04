@@ -13,7 +13,7 @@
 
 @protocol QSRichTextWordCellDelegate <QSRichTextViewDelegate, QSRichTextEditorFormat>
 
--(void)qsTextViewDidChange:(YYTextView *)textView;
+-(void)qsTextViewDidChange:(QSRichTextView *)textView;
 
 @end
 

@@ -7,6 +7,7 @@
 //
 
 #import <YYText/YYText.h>
+#import "QSRichTextAttributes.h"
 
 @class QSRichTextView;
 @protocol QSRichTextViewDelegate <NSObject>
@@ -22,5 +23,7 @@
 @property(nonatomic, assign) BOOL shouldRejectSystemScroll;// 如果在 handleTextChanged: 里主动调整 contentOffset，则为了避免被系统的自动调整覆盖，会利用这个标记去屏蔽系统对 setContentOffset: 的调用
 
 - (void)qmui_scrollCaretVisibleAnimated:(BOOL)animated;
+- (void)updateTextStyle;
 
 @end
+

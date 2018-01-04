@@ -8,6 +8,7 @@
 
 #import "QSRichTextWordCell.h"
 #import "QSRichTextMoreView.h"
+#import "QSRichTextAttributes.h"
 
 CGFloat const toolBarHeight = 44;
 CGFloat const editorMoreViewHeight = 200;
@@ -34,6 +35,7 @@ CGFloat const editorMoreViewHeight = 200;
     [self.textView setInputAccessoryView:self.toolBar];
     self.textView.textContainerInset = UIEdgeInsetsMake(0, 20, 0, 20);
     self.textView.scrollEnabled = NO;
+    self.textView.typingAttributes = [QSRichTextAttributes defaultAttributes];
 }
 
 -(void)layoutSubviews {
@@ -104,7 +106,7 @@ CGFloat const editorMoreViewHeight = 200;
 #pragma mark YYTextViewDelegate
 -(void)textViewDidChange:(YYTextView *)textView {
     if (self.qs_delegate && [self.qs_delegate respondsToSelector:@selector(qsTextViewDidChange:)]) {
-        [self.qs_delegate qsTextViewDidChange:textView];
+        [self.qs_delegate qsTextViewDidChange:(QSRichTextView *)textView];
     }
     [self handleTextChanged:self.textView];
 }
@@ -206,29 +208,11 @@ CGFloat const editorMoreViewHeight = 200;
 }
 
 - (void)setBodyTextStyleWithPlaceholder:(BOOL)isFirstLine {
-    self.textView.font = UIFontMake(16);
-    self.textView.textColor = [UIColor darkTextColor];
-    self.textView.textAlignment = NSTextAlignmentLeft;
-    [self setDefaultTextStyle];
     if (isFirstLine) {
         self.textView.placeholderTextColor = UIColorGrayLighten;
         self.textView.placeholderFont = UIFontMake(16);
         self.textView.placeholderText = @"请输入正文";
     }
-}
-
-//默认样式
--(void)setDefaultTextStyle {
-    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    paragraphStyle.lineSpacing = 4;
-    paragraphStyle.alignment = NSTextAlignmentLeft;
-    NSDictionary *attributes = @{
-                                 NSFontAttributeName:[UIFont systemFontOfSize:16],
-                                 NSParagraphStyleAttributeName:paragraphStyle,
-                                 NSKernAttributeName:@(1)
-                                 };
-    
-    self.textView.typingAttributes = attributes;
 }
 
 -(BOOL)becomeFirstResponder {

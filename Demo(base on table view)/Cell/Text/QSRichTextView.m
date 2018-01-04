@@ -22,6 +22,10 @@
     return self;
 }
 
+-(void)updateTextStyle {
+    self.typingAttributes = [QSRichTextAttributes defaultAttributes];
+}
+
 - (void)deleteBackward {
     if (self.text.length == 0 && [self.qs_delegate respondsToSelector:@selector(qsTextFieldDeleteBackward:)]) {
         [self.qs_delegate qsTextFieldDeleteBackward:self];

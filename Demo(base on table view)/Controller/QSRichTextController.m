@@ -16,6 +16,7 @@
 #import "QSRichTextBar.h"
 #import "QSRichTextTitleCell.h"
 #import "QSRichTextImageCaptionCell.h"
+#import "QSRichTextAttributes.h"
 
 @interface QSRichTextController () <QSRichTextWordCellDelegate, QSRichTextImageViewDelegate, QSRichTextVideoViewDelegate>
 
@@ -140,7 +141,7 @@
 #pragma mark -
 #pragma mark QSRichTextWordCellDelegate
 
--(void)qsTextViewDidChange:(YYTextView *)textView {
+-(void)qsTextViewDidChange:(QSRichTextView *)textView {
     NSIndexPath *indexPath = [self.tableView qmui_indexPathForRowAtView:textView];
     QSRichTextModel *model = self.viewModel.models[indexPath.row];
     model.attributedString = [[NSMutableAttributedString alloc]initWithAttributedString:textView.attributedText];
@@ -254,12 +255,14 @@
 }
 
 -(void)formatDidSelectTextStyle:(QSRichEditorTextStyle)style {
-    
+    QSRichEditorFontStyle *fontStyle = [[QSRichEditorFontStyle alloc]initWithStyle:style];
+    [QSRichTextAttributes setQSRichTextStyle:fontStyle];
+    [self.currentTextView updateTextStyle];
 }
 
 -(void)formatDidChangeTextAlignment:(NSTextAlignment)alignment {
     [self formatTextBlock:^(NSMutableAttributedString *attributedText, NSRange range) {
-        NSMutableParagraphStyle *paragraphStyle =  [attributedText.yy_paragraphStyle mutableCopy];
+        NSMutableParagraphStyle *paragraphStyle = [attributedText.yy_paragraphStyle mutableCopy];
         paragraphStyle.alignment = alignment;
         [attributedText yy_setParagraphStyle:paragraphStyle range:range];
     }];

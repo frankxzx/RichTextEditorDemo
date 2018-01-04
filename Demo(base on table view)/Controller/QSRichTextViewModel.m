@@ -19,9 +19,13 @@
 @implementation QSRichTextViewModel
 
 -(void)addImageCaptionWithImageModel:(QSRichTextModel *)model {
-//    NSInteger index = [self.models indexOfObject:model];
-//    QSRichTextModel *captionModel = [[QSRichTextModel alloc]initWithCellType:QSRichTextCellTypeImageCaption];
-//    [self.models insertObject:captionModel atIndex:index];
+    NSInteger index = [self.models indexOfObject:model];
+    QSRichTextModel *captionModel = [[QSRichTextModel alloc]initWithCellType:QSRichTextCellTypeImageCaption];
+    [self.models insertObject:captionModel atIndex:index];
+    UITableView *tableView = self.viewController.tableView;
+    [tableView beginUpdates];
+    [tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index + 1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+    [tableView endUpdates];
 }
 
 -(void)addNewLine:(QSRichTextCellType)cellType {
