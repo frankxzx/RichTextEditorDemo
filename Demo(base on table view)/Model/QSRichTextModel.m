@@ -47,10 +47,17 @@
 
 -(BOOL)shouldAddNewLine {
     QSRichTextCellType cellType = self.cellType;
-    if (cellType == QSRichTextCellTypeImage || cellType == QSRichTextCellTypeVideo || cellType == QSRichTextCellTypeImageCaption || cellType == QSRichTextCellTypeTextBlock || QSRichTextCellTypeSeparator) {
+    switch (cellType) {
+        case QSRichTextCellTypeImage:
+        case QSRichTextCellTypeVideo:
+        case QSRichTextCellTypeImageCaption:
+        case QSRichTextCellTypeTextBlock:
+        case QSRichTextCellTypeSeparator:
         return YES;
+            
+        default:
+            return NO;
     }
-    return NO;
 }
 
 @end

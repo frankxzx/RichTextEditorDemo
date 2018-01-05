@@ -76,4 +76,9 @@ CGFloat const editorMoreViewHeight = 200;
     self.textView.placeholderText = nil;
 }
 
+-(BOOL)becomeFirstResponder {
+    [self.toolBar initEditorBarItems];
+    return [super becomeFirstResponder];
+}
+
 @end

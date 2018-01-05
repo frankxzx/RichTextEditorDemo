@@ -23,7 +23,6 @@
 @interface QSRichTextController () <QSRichTextWordCellDelegate, QSRichTextImageViewDelegate, QSRichTextVideoViewDelegate>
 
 @property(nonatomic, strong) QSRichTextViewModel *viewModel;
-@property(nonatomic, weak) QSRichTextView *currentTextView;
 @property(nonatomic, strong) NSIndexPath *currentEditingIndexPath;
 
 @end
@@ -385,6 +384,7 @@
             [self didInsertHyperlink:link];
         }
     }];
+    //将 hyperlink 对象存入 attributedString
     [attributeText yy_setAttribute:@"QSHyperLink" value:hyperlink range:range];
     
     //记录光标位置

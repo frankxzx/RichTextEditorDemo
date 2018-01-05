@@ -12,10 +12,8 @@
 
 -(void)makeUI {
     [super makeUI];
+    self.textView.textContainerInset = UIEdgeInsetsMake(10, 35, 10, 35);
     self.textView.backgroundColor = LightenPlaceholderColor;
-    self.textView.qmui_borderPosition = QMUIButtonImagePositionTop | QMUIButtonImagePositionLeft | QMUIButtonImagePositionRight | QMUIButtonImagePositionBottom;
-    self.textView.qmui_borderWidth = PixelOne;
-    self.textView.qmui_borderColor = UIColorGray;
 }
 
 @end

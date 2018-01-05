@@ -28,30 +28,81 @@
     [tableView endUpdates];
 }
 
+//当插入图片，图片注释，视频，分隔符，代码块时默认添加空的一行
 -(void)addNewLine:(QSRichTextCellType)cellType {
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.models.count - 1 inSection:0];
-    QSRichTextModel *model = [[QSRichTextModel alloc]init];
-    model.cellType = cellType;
+    QSRichTextModel *model = [[QSRichTextModel alloc]initWithCellType:cellType];
+    QSRichTextModel *emptyLine = [[QSRichTextModel alloc]initWithCellType:QSRichTextCellTypeText];
     
-    //当插入图片，图片注释，视频，分隔符，代码块时默认添加空的一行
-    if ([model shouldAddNewLine]) {
-        QSRichTextModel *emptyLine = [[QSRichTextModel alloc]init];
-        emptyLine.cellType = QSRichTextCellTypeText;
-        //当上一行还没来得及输入内容时，直接将其替换
-        if ([self isLastLineEmpty]) {
-            //当插入分割线 如果上一行是空的 直接返回
-            if (cellType == QSRichTextCellTypeSeparator) {
-                return;
+    //正常插两行
+    void (^addNewLineWithEmptyTextLine)(void) = ^{
+         [self addNewLinesWithModels:@[model, emptyLine]];
+    };
+    
+    //当上一行文本行 还没来得及输入内容时，直接将其替换
+    void (^replaceLastLineWithEmptyTextLine)(void) = ^{
+        [self replaceLinesWithModel:model atIndexPath:indexPath];
+        [self addNewLinesWithModels:@[emptyLine]];
+    };
+    
+    switch (cellType) {
+        case QSRichTextCellTypeImage:
+        case QSRichTextCellTypeVideo:
+        case QSRichTextCellTypeImageCaption:
+        {
+            if ([self isLastLineEmpty]) {
+                replaceLastLineWithEmptyTextLine();
+            } else {
+                addNewLineWithEmptyTextLine();
             }
-            [self replaceLinesWithModel:model atIndexPath:indexPath];
-            [self addNewLinesWithModels:@[emptyLine]];
-        } else {
-            [self addNewLinesWithModels:@[model, emptyLine]];
+            //新生成的 textView 响应, 光标位置移动
+            [self becomeActiveWithModel:emptyLine];
+            break;
         }
-        //新生成的 textView 响应, 光标位置移动
-        [self becomeActiveWithModel:emptyLine];
-    } else {
-        [self addNewLinesWithModels:@[model]];
+            
+        case QSRichTextCellTypeSeparator:
+        {
+            //上方已经有分割线，则不进行响应
+            if ([self isLastLineEmpty]) { return; }
+            addNewLineWithEmptyTextLine();
+            [self becomeActiveWithModel:emptyLine];
+            break;
+        }
+            
+        case QSRichTextCellTypeTextBlock:
+        {
+            QSRichTextView *textView = self.viewController.currentTextView;
+            if (textView) {
+              NSIndexPath *indexPath = [self.tableView qmui_indexPathForRowAtView:textView];
+              QSRichTextModel *currentModel = self.models[indexPath.row];
+              NSMutableAttributedString *attributedString = currentModel.attributedString;
+                model.attributedString = attributedString;
+                if (currentModel.cellType == QSRichTextCellTypeText) {
+                    replaceLastLineWithEmptyTextLine();
+                } else if (currentModel.cellType == QSRichTextCellTypeTextBlock){
+                    //还原 text block 之前的样式
+                    QSRichTextModel *model = [[QSRichTextModel alloc]initWithCellType:QSRichTextCellTypeText];
+                    model.attributedString = attributedString;
+                    [self replaceLinesWithModel:model atIndexPath:indexPath];
+                    [self addNewLinesWithModels:@[emptyLine]];
+                } else {
+                    addNewLineWithEmptyTextLine();
+                }
+                //text block 那一行去响应
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    CGFloat lastCurPosition = model.attributedString.length-1;
+                    textView.selectedRange = NSMakeRange(lastCurPosition, 0);
+                });
+                [self becomeActiveWithModel:model];
+            }
+            break;
+        }
+                
+        case QSRichTextCellTypeText:
+        case QSRichTextCellTypeTitle:
+        case QSRichTextCellTypeCover:
+            [self addNewLinesWithModels:@[model]];
+        break;
     }
 }
 

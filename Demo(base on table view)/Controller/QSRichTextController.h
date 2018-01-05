@@ -8,7 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import <QMUIKit/QMUIKit.h>
+#import "QSRichTextView.h"
 
 @interface QSRichTextController :QMUICommonTableViewController
+
+@property(nonatomic, weak) QSRichTextView *currentTextView;
 
 @end
