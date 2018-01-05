@@ -81,10 +81,23 @@
 #pragma mark -
 #pragma mark YYTextViewDelegate
 -(void)textViewDidChange:(YYTextView *)textView {
-    if (self.qs_delegate && [self.qs_delegate respondsToSelector:@selector(qsTextViewDidChange:)]) {
-        [self.qs_delegate qsTextViewDidChange:(QSRichTextView *)textView];
+    if (self.qs_delegate && [self.qs_delegate respondsToSelector:@selector(qsTextViewDidChangeText:)]) {
+        [self.qs_delegate qsTextViewDidChangeText:(QSRichTextView *)textView];
     }
     [self handleTextChanged:self.textView];
+}
+
+-(void)textViewDidChangeSelection:(YYTextView *)textView {
+    if (self.qs_delegate && [self.qs_delegate respondsToSelector:@selector(qsTextViewDidChanege:selectedRange:)]) {
+        [self.qs_delegate qsTextViewDidChanege:(QSRichTextView *)textView selectedRange:textView.selectedRange];
+    }
+}
+
+-(BOOL)textView:(YYTextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+    if (self.qs_delegate && [self.qs_delegate respondsToSelector:@selector(qsTextView:shouldChangeTextInRange:replacementText:)]) {
+      return [self.qs_delegate qsTextView:(QSRichTextView *)textView shouldChangeTextInRange:range replacementText:text];
+    }
+    return NO;
 }
 
 - (void)handleTextChanged:(id)sender {

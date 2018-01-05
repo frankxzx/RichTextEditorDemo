@@ -40,9 +40,13 @@
     };
     
     //当上一行文本行 还没来得及输入内容时，直接将其替换
-    void (^replaceLastLineWithEmptyTextLine)(void) = ^{
+    void (^replaceLastLineWithEmptyTextLineAtIndexPath)(NSIndexPath *) = ^(NSIndexPath *indexPath) {
         [self replaceLinesWithModel:model atIndexPath:indexPath];
-        [self addNewLinesWithModels:@[emptyLine]];
+        [self addNewLinesWithModels:@[emptyLine] atBeginIndexPath:indexPath];
+    };
+    
+    void (^replaceLastLineWithEmptyTextLine)(void) = ^{
+        replaceLastLineWithEmptyTextLineAtIndexPath(indexPath);
     };
     
     switch (cellType) {
@@ -75,25 +79,25 @@
             if (textView) {
               NSIndexPath *indexPath = [self.tableView qmui_indexPathForRowAtView:textView];
               QSRichTextModel *currentModel = self.models[indexPath.row];
-              NSMutableAttributedString *attributedString = currentModel.attributedString;
-                model.attributedString = attributedString;
-                if (currentModel.cellType == QSRichTextCellTypeText) {
-                    replaceLastLineWithEmptyTextLine();
-                } else if (currentModel.cellType == QSRichTextCellTypeTextBlock){
-                    //还原 text block 之前的样式
-                    QSRichTextModel *model = [[QSRichTextModel alloc]initWithCellType:QSRichTextCellTypeText];
-                    model.attributedString = attributedString;
-                    [self replaceLinesWithModel:model atIndexPath:indexPath];
-                    [self addNewLinesWithModels:@[emptyLine]];
-                } else {
-                    addNewLineWithEmptyTextLine();
+                switch (currentModel.cellType) {
+                    case QSRichTextCellTypeText:
+                        currentModel.cellType = QSRichTextCellTypeTextBlock;
+                        break;
+                    case QSRichTextCellTypeTextBlock:
+                        currentModel.cellType = QSRichTextCellTypeText;
+                        break;
+                    default:
+                        break;
                 }
+                
+                [self updateCellAtIndexPath:indexPath];
+                [self becomeActiveWithModel:currentModel];
                 //text block 那一行去响应
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    CGFloat lastCurPosition = model.attributedString.length-1;
-                    textView.selectedRange = NSMakeRange(lastCurPosition, 0);
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    CGFloat lastCurPosition = currentModel.attributedString.length;
+                    textView.selectedRange = NSMakeRange(1, 0);
+                    //[textView scrollRangeToVisible:NSMakeRange(lastCurPosition, 0)];
                 });
-                [self becomeActiveWithModel:model];
             }
             break;
         }
@@ -138,6 +142,10 @@
 
 -(void)replaceLinesWithModel:(QSRichTextModel *)model atIndexPath:(NSIndexPath *)indexPath {
     [self.models replaceObjectAtIndex:indexPath.row withObject:model];
+    [self updateCellAtIndexPath:indexPath];
+}
+
+-(void)updateCellAtIndexPath:(NSIndexPath *)indexPath {
     UITableView *tableView = self.viewController.tableView;
     [tableView beginUpdates];
     [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];

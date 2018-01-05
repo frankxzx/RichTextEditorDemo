@@ -10,6 +10,7 @@
 
 @interface QSRichTextWordCell : QSRichTextBaseWordCell
 
+@property(nonatomic, strong, readonly) QSRichTextBar *toolBar;
 - (void)setBodyTextStyleWithPlaceholder:(BOOL)isFirstLine;
 
 @end

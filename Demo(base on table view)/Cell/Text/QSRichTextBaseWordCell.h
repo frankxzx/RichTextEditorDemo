@@ -14,7 +14,11 @@
 
 @protocol QSRichTextWordCellDelegate <QSRichTextViewDelegate, QSRichTextEditorFormat>
 
--(void)qsTextViewDidChange:(QSRichTextView *)textView;
+-(void)qsTextViewDidChangeText:(QSRichTextView *)textView;
+
+-(void)qsTextViewDidChanege:(QSRichTextView *)textView selectedRange:(NSRange)selectedRange;
+
+-(BOOL)qsTextView:(YYTextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text;
 
 @end
 

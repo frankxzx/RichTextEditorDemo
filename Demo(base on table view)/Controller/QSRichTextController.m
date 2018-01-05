@@ -23,7 +23,6 @@
 @interface QSRichTextController () <QSRichTextWordCellDelegate, QSRichTextImageViewDelegate, QSRichTextVideoViewDelegate>
 
 @property(nonatomic, strong) QSRichTextViewModel *viewModel;
-@property(nonatomic, strong) NSIndexPath *currentEditingIndexPath;
 
 @end
 
@@ -131,6 +130,22 @@
     }
 }
 
+//-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+//    NSIndexPath *currentTextViewIndexPath = [self.tableView qmui_indexPathForRowAtView:self.currentTextView];
+//    if ([currentTextViewIndexPath isEqual:indexPath]) {
+//        self.currentTextView.inputAccessoryView = ((QSRichTextWordCell *)[self.tableView cellForRowAtIndexPath:indexPath]).toolBar;
+//        [self.currentTextView reloadInputViews];
+//    }
+//}
+//
+//- (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+//    NSIndexPath *currentTextViewIndexPath = [self.tableView qmui_indexPathForRowAtView:self.currentTextView];
+//    if ([currentTextViewIndexPath isEqual:indexPath]) {
+//        self.currentTextView.inputAccessoryView = nil;
+//        [self.currentTextView reloadInputViews];
+//    }
+//}
+
 -(QSRichTextViewModel *)viewModel {
     if (!_viewModel) {
         _viewModel = [[QSRichTextViewModel alloc]init];
@@ -146,20 +161,42 @@
 #pragma mark -
 #pragma mark QSRichTextWordCellDelegate
 
--(void)qsTextViewDidChange:(QSRichTextView *)textView {
+-(void)qsTextViewDidChangeText:(QSRichTextView *)textView {
     NSIndexPath *indexPath = [self.tableView qmui_indexPathForRowAtView:textView];
     QSRichTextModel *model = self.viewModel.models[indexPath.row];
     model.attributedString = [[NSMutableAttributedString alloc]initWithAttributedString:textView.attributedText];
-    self.currentEditingIndexPath = indexPath;
     self.currentTextView = textView;
+}
+
+-(void)qsTextViewDidChanege:(QSRichTextView *)textView selectedRange:(NSRange)selectedRange {
+    self.currentTextView = textView;
+}
+
+-(BOOL)qsTextView:(YYTextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+    NSIndexPath *indexPath = [self.tableView qmui_indexPathForRowAtView:textView];
+    QSRichTextModel *model = self.models[indexPath.row];
+    if (model.cellType == QSRichTextCellTypeText) {
+        return YES;
+    }
+    if ([text isEqualToString:@"\n"]) {
+        NSString *string = [textView.text substringFromIndex:textView.text.length-1];
+        if ([string isEqualToString:@"\n"]) {
+            textView.text = [textView.text qmui_trimLineBreakCharacter];
+            QSRichTextModel *emptyLine = [[QSRichTextModel alloc]initWithCellType:QSRichTextCellTypeText];
+            [self.viewModel addNewLinesWithModels:@[emptyLine]];
+            [self.viewModel becomeActiveWithModel:emptyLine];
+            return NO;
+        }
+    }
+    return YES;
 }
 
 - (void)qsTextFieldDeleteBackward:(QSRichTextView *)textView {
     
     NSIndexPath *indexPath = [self.tableView qmui_indexPathForRowAtView:textView];
     NSInteger index = indexPath.row;
-    //第一行不清空
-    if (self.models[index].cellType == QSRichTextCellTypeTitle) {
+    //前三行不清空
+    if (index < 3) {
         return;
     }
     if (index > 0 && self.models[index-1].cellType == QSRichTextCellTypeImage) {
@@ -171,8 +208,8 @@
 }
 
 -(void)qsTextView:(QSRichTextView *)textView newHeightAfterTextChanged:(CGFloat)newHeight {
-    [self.viewModel updateLayoutAtIndexPath:self.currentEditingIndexPath withCellheight: newHeight];
     NSIndexPath *indexPath = [self.tableView qmui_indexPathForRowAtView:textView];
+    [self.viewModel updateLayoutAtIndexPath:indexPath withCellheight: newHeight];
     [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
 }
 
