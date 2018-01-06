@@ -14,8 +14,12 @@ typedef NS_ENUM(NSInteger, QSRichTextCellType)
 {
     QSRichTextCellTypeText = 0,
     QSRichTextCellTypeImage,
+    QSRichTextCellTypeImageCaption,
     QSRichTextCellTypeVideo,
-    QSRichTextCellTypeSeparator
+    QSRichTextCellTypeSeparator,
+    QSRichTextCellTypeTitle,
+    QSRichTextCellTypeCover,
+    QSRichTextCellTypeTextBlock
 };
 
 @interface QSRichTextModel : NSObject <QSRichTextHtmlWriter>
@@ -25,5 +29,10 @@ typedef NS_ENUM(NSInteger, QSRichTextCellType)
 @property(nonatomic, strong) QSRichTextLayout *layout;
 @property(nonatomic, copy) NSString *reuseID;
 @property(nonatomic, assign) QSRichTextCellType cellType;
+@property(nonatomic, assign) CGFloat cellHeight;
+@property(nonatomic, weak) QSRichTextModel *captionModel;
+
+-(instancetype)initWithCellType:(QSRichTextCellType)cellType;
+-(BOOL)shouldAddNewLine;
 
 @end

@@ -8,6 +8,7 @@
 
 #import "QSRichEditorFontStyle.h"
 #import <QMUIKit/QMUIKit.h>
+#import "QSRichTextAttributes.h"
 
 #define QSRichEditorPlaceholderColor UIColorGray
 #define QSRichEditorLargerColor UIColorBlack
@@ -56,6 +57,13 @@ NSString * const QSRichEditorTextStyleKey = @"QSRichEditorTextStyle";
     }
     
     return self;
+}
+
+-(NSDictionary *)attributes {
+    NSMutableDictionary *attributes = [[NSMutableDictionary alloc]initWithDictionary:[QSRichTextAttributes defaultAttributes]];
+    attributes[NSForegroundColorAttributeName] = self.textColor;
+    attributes[NSFontAttributeName] = self.font;
+    return attributes;
 }
 
 @end

@@ -21,6 +21,7 @@ extern NSString * const QSRichEditorTextStyleKey;
 @property(nonatomic, assign) QSRichEditorTextStyle style;
 @property(nonatomic, strong) UIFont *font;
 @property(nonatomic, strong) UIColor *textColor;
+@property(nonatomic, copy) NSDictionary *attributes;
 
 - (id)initWithStyle:(QSRichEditorTextStyle)style;
 

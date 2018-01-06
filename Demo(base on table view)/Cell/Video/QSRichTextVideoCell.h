@@ -7,7 +7,11 @@
 //
 
 #import "QSRichTextCell.h"
+#import "QSRichTextVideoView.h"
 
 @interface QSRichTextVideoCell : QSRichTextCell
+
+@property(nonatomic, strong) UIImage *thumbnailImage;
+@property(nonatomic, strong, readonly) QSRichTextVideoView *videoView;
 
 @end

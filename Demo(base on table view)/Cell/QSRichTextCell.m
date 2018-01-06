@@ -16,13 +16,9 @@
 
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-        [self makeUI];
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     return self;
-}
-
--(void)makeUI {
-    self.selectionStyle = UITableViewCellSelectionStyleNone;
 }
 
 @end

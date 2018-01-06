@@ -9,6 +9,14 @@
 #import <UIKit/UIKit.h>
 #import "QSRichTextCell.h"
 
+@protocol QSRichTextAddCoverCellDelegate <NSObject>
+
+-(void)didInsertArticleCover:(UIButton *)sender;
+
+@end
+
 @interface QSRichTextAddCoverCell : QSRichTextCell
+
+@property(nonatomic, weak) id <QSRichTextAddCoverCellDelegate> actionDelegate;
 
 @end

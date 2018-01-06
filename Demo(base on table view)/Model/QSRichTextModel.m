@@ -10,6 +10,13 @@
 
 @implementation QSRichTextModel
 
+-(instancetype)initWithCellType:(QSRichTextCellType)cellType {
+    if (self = [super init]) {
+        self.cellType = cellType;
+    }
+    return self;
+}
+
 -(NSString *)reuseID {
     switch (self.cellType) {
         case QSRichTextCellTypeText:
@@ -23,6 +30,33 @@
             
         case QSRichTextCellTypeVideo:
             return @"QSRichTextVideoCell";
+            
+        case QSRichTextCellTypeImageCaption:
+            return @"QSRichTextImageCaptionCell";
+            
+        case QSRichTextCellTypeCover:
+            return @"QSRichTextAddCoverCell";
+            
+        case QSRichTextCellTypeTitle:
+            return @"QSRichTextTitleCell";
+            
+        case QSRichTextCellTypeTextBlock:
+            return @"QSRichTextBlockCell";
+    }
+}
+
+-(BOOL)shouldAddNewLine {
+    QSRichTextCellType cellType = self.cellType;
+    switch (cellType) {
+        case QSRichTextCellTypeImage:
+        case QSRichTextCellTypeVideo:
+        case QSRichTextCellTypeImageCaption:
+        case QSRichTextCellTypeTextBlock:
+        case QSRichTextCellTypeSeparator:
+        return YES;
+            
+        default:
+            return NO;
     }
 }
 
