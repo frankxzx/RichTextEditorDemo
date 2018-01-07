@@ -9,8 +9,10 @@
 #import "QSRichTextBaseWordCell.h"
 #import "QSRichTextMoreView.h"
 #import "QSRichTextAttributes.h"
+#import "QSTextFieldsViewController.h"
+#import "NSString+YYAdd.h"
 
-@interface QSRichTextBaseWordCell () <YYTextViewDelegate, QSRichTextEditorFormat>
+@interface QSRichTextBaseWordCell ()
 
 @property(nonatomic, strong, readwrite) QSRichTextView * textView;
 
@@ -100,6 +102,11 @@
     return NO;
 }
 
+-(void)textViewDidBeginEditing:(YYTextView *)textView {
+    NSRange selectedRange = NSMakeRange(textView.text.length, 0);
+    textView.selectedTextRange = [YYTextRange rangeWithRange:selectedRange];
+}
+
 - (void)handleTextChanged:(id)sender {
     
     QSRichTextView *textView = nil;
@@ -156,8 +163,8 @@
 }
 
 //设置序列样式
-- (void)toggleListType:(QSRichTextListStyleType)listType {
-    [self.qs_delegate toggleListType:listType];
+- (void)formatDidToggleListStyle:(QSRichTextListStyleType)listType {
+    [self.qs_delegate formatDidToggleListStyle:listType];
 }
 
 -(void)formatDidToggleBlockquote {
@@ -166,7 +173,85 @@
 
 //设置超链接
 - (void)insertHyperlink {
-    [self.qs_delegate insertHyperlink];
+    [self didInsertHyperlink:nil];
+}
+
+
+-(void)didInsertHyperlink:(QSRichTextHyperlink *)link {
+    QSTextFieldsViewController *dialogViewController = [[QSTextFieldsViewController alloc] init];
+    dialogViewController.headerViewHeight = 70;
+    dialogViewController.headerViewBackgroundColor = UIColorWhite;
+    dialogViewController.title = @"超链接";
+    dialogViewController.titleView.horizontalTitleFont = UIFontBoldMake(20);
+    dialogViewController.titleLabelFont = UIFontBoldMake(20);
+    if (link) {
+        dialogViewController.textField1.text = link.title;
+        dialogViewController.textField2.text = link.link;
+    } else {
+        dialogViewController.textField1.placeholder = @"请输入标题（非必需）";
+        dialogViewController.textField2.placeholder = @"输入网址";
+    }
+    
+    [dialogViewController addCancelButtonWithText:@"取消" block:^(QMUIDialogViewController *aDialogViewController) {
+        [aDialogViewController hide];
+        [self richTextEditorCloseMoreView];
+    }];
+    
+    __weak __typeof(QSTextFieldsViewController *)weakDialog = dialogViewController;
+    [dialogViewController addSubmitButtonWithText:@"确定" block:^(QMUIDialogViewController *aDialogViewController) {
+        [self richTextEditorCloseMoreView];
+        
+        NSString *urlRegEx = @"([\\w-]+\\.)+[\\w-]+(/[\\w- ./?%&amp;=]*)?";
+        //NSString *urlRegEx = @"http(s)?://([\\w-]+\\.)+[\\w-]+(/[\\w- ./?%&amp;=]*)?";
+        NSPredicate *checkURL = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", urlRegEx];
+        BOOL isVaild = [checkURL evaluateWithObject:weakDialog.textField2.text];
+        
+        if (!isVaild) {
+            return;
+        }
+        
+        [aDialogViewController hide];
+        
+        QSRichTextHyperlink *link = [[QSRichTextHyperlink alloc]init];
+        link.title = weakDialog.textField1.text;
+        link.link = weakDialog.textField2.text;
+        [self insertHyperlink:link];
+    }];
+    [dialogViewController show];
+}
+
+-(void)insertHyperlink:(id)sender {
+    
+    QSRichTextHyperlink *hyperlink;
+    if ([sender isKindOfClass:[QSRichTextHyperlink class]]) {
+        hyperlink = sender;
+    } else if([hyperlink isKindOfClass:[QSRichTextLinkButton class]]){
+        hyperlink = ((QSRichTextLinkButton *)sender).link;
+    }
+    
+    UIFont *buttonTextFont = [UIFont systemFontOfSize:15];
+    CGSize maxSize = CGSizeMake(SCREEN_WIDTH - 40, HUGE);
+    CGSize textSize = [hyperlink.title sizeForFont:buttonTextFont size:maxSize mode:NSLineBreakByWordWrapping];
+    
+    QSRichTextLinkButton *linkButon = [[QSRichTextLinkButton alloc]initWithFrame:CGRectMakeWithSize(textSize)];
+    [linkButon setLink:hyperlink];
+    [linkButon setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [linkButon setTitle:hyperlink.title forState:UIControlStateNormal];
+    [linkButon.titleLabel setFont:buttonTextFont];
+    [linkButon addTarget:self action:@selector(insertHyperlink:) forControlEvents:UIControlEventTouchUpInside];
+    
+    NSMutableAttributedString *linkString = [NSMutableAttributedString yy_attachmentStringWithContent:linkButon contentMode:UIViewContentModeScaleAspectFit attachmentSize:textSize alignToFont:buttonTextFont alignment:YYTextVerticalAlignmentCenter];
+    
+    NSMutableAttributedString *pading = [[NSMutableAttributedString alloc]initWithString:@" " attributes:[QSRichTextAttributes defaultAttributes]];
+    
+    NSMutableAttributedString *linkStringWithPadding = [[NSMutableAttributedString alloc]init];
+    [linkStringWithPadding appendAttributedString:pading];
+    [linkStringWithPadding appendAttributedString:linkString];
+    [linkStringWithPadding appendAttributedString:pading];
+    
+    NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc]initWithAttributedString:self.textView.attributedText];
+    [attributedText replaceCharactersInRange:self.textView.selectedRange withAttributedString:linkStringWithPadding];
+    self.textView.attributedText = attributedText;
 }
 
 -(void)insertVideo {
@@ -188,5 +273,9 @@
     }
     return NO;
 }
+
+@end
+
+@implementation QSRichTextLinkButton
 
 @end

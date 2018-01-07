@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "QSRichTextLayout.h"
 #import "QSRichTextHtmlWriter.h"
+#import <YYText/YYText.h>
 
 typedef NS_ENUM(NSInteger, QSRichTextCellType)
 {
@@ -19,7 +20,10 @@ typedef NS_ENUM(NSInteger, QSRichTextCellType)
     QSRichTextCellTypeSeparator,
     QSRichTextCellTypeTitle,
     QSRichTextCellTypeCover,
-    QSRichTextCellTypeTextBlock
+    QSRichTextCellTypeTextBlock,
+    QSRichTextCellTypeListCellCircle,
+    QSRichTextCellTypeListCellNumber,
+    QSRichTextCellTypeListCellNone,
 };
 
 @interface QSRichTextModel : NSObject <QSRichTextHtmlWriter>
@@ -27,6 +31,7 @@ typedef NS_ENUM(NSInteger, QSRichTextCellType)
 @property(nonatomic, strong) NSMutableAttributedString *attributedString;
 @property(nonatomic, strong) UIImage *image;
 @property(nonatomic, strong) QSRichTextLayout *layout;
+@property(nonatomic, strong) NSMutableArray <YYTextRange *>*prefixRanges;
 @property(nonatomic, copy) NSString *reuseID;
 @property(nonatomic, assign) QSRichTextCellType cellType;
 @property(nonatomic, assign) CGFloat cellHeight;

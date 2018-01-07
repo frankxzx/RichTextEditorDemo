@@ -92,12 +92,38 @@
                 
                 [self updateCellAtIndexPath:indexPath];
                 [self becomeActiveWithModel:currentModel];
-                //text block 那一行去响应
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    CGFloat lastCurPosition = currentModel.attributedString.length;
-                    textView.selectedRange = NSMakeRange(1, 0);
-                    //[textView scrollRangeToVisible:NSMakeRange(lastCurPosition, 0)];
-                });
+            }
+            break;
+        }
+            
+        case QSRichTextCellTypeListCellNone:
+        case QSRichTextCellTypeListCellNumber:
+        case QSRichTextCellTypeListCellCircle:
+        {
+            QSRichTextView *textView = self.viewController.currentTextView;
+            if (textView) {
+                NSIndexPath *indexPath = [self.tableView qmui_indexPathForRowAtView:textView];
+                QSRichTextModel *currentModel = self.models[indexPath.row];
+                
+                switch (cellType) {
+                    case QSRichTextCellTypeListCellNumber: {
+//                        NSString *prefix = [NSString stringWithFormat:@"%@.",@(1)];
+//                        [textView replaceRange:[YYTextRange rangeWithRange:NSMakeRange(0, 0)] withText:prefix];
+                        break;
+                    }
+                        
+                    case QSRichTextCellTypeListCellCircle: {
+//                        NSString *prefix =@"\u2022";
+//                        [textView replaceRange:[YYTextRange rangeWithRange:NSMakeRange(0, 0)] withText:prefix];
+                        break;
+                    }
+                    default:
+                        break;
+                }
+                
+                currentModel.cellType = cellType;
+                [self updateCellAtIndexPath:indexPath];
+                [self becomeActiveWithModel:currentModel];
             }
             break;
         }
@@ -193,6 +219,7 @@
 -(void)becomeActiveWithModel:(QSRichTextModel *)model {
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[self.models indexOfObject:model] inSection:0];
     QSRichTextWordCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    cell.textView.inputAccessoryView = self.viewController.toolBar;
     [cell becomeFirstResponder];
 }
 

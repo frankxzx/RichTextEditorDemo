@@ -9,9 +9,11 @@
 #import <UIKit/UIKit.h>
 #import <QMUIKit/QMUIKit.h>
 #import "QSRichTextView.h"
+#import "QSRichTextBar.h"
 
 @interface QSRichTextController :QMUICommonTableViewController
 
 @property(nonatomic, weak) QSRichTextView *currentTextView;
+@property(nonatomic, strong) QSRichTextBar *toolBar;
 
 @end

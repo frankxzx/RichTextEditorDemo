@@ -22,7 +22,13 @@
 
 @end
 
-@interface QSRichTextBaseWordCell : QSRichTextCell
+@interface QSRichTextLinkButton: QMUILinkButton
+
+@property(nonatomic, strong) QSRichTextHyperlink *link;
+
+@end
+
+@interface QSRichTextBaseWordCell : QSRichTextCell <YYTextViewDelegate, QSRichTextEditorFormat>
 
 @property (nonatomic, strong, readonly) QSRichTextView * textView;
 @property (nonatomic, weak) id <QSRichTextWordCellDelegate> qs_delegate;

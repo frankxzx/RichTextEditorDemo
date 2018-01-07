@@ -15,7 +15,6 @@ CGFloat const editorMoreViewHeight = 200;
 
 @interface QSRichTextWordCell () <YYTextViewDelegate, QSRichTextEditorFormat>
 
-@property(nonatomic, strong) QSRichTextBar *toolBar;
 @property(nonatomic, strong) QSRichTextMoreView *editorMoreView;
 
 @end
@@ -31,16 +30,7 @@ CGFloat const editorMoreViewHeight = 200;
 
 -(void)makeUI {
     [super makeUI];
-    [self.textView setInputAccessoryView:self.toolBar];
     self.textView.typingAttributes = [QSRichTextAttributes defaultAttributes];
-}
-
--(QSRichTextBar *)toolBar {
-    if (!_toolBar) {
-        _toolBar = [[QSRichTextBar alloc]initWithFrame:CGRectMake(0, 0, self.bounds.size.width, toolBarHeight)];
-        _toolBar.formatDelegate = self;
-    }
-    return _toolBar;
 }
 
 -(QSRichTextMoreView *)editorMoreView {
@@ -79,6 +69,10 @@ CGFloat const editorMoreViewHeight = 200;
 -(BOOL)becomeFirstResponder {
     [self.toolBar initEditorBarItems];
     return [super becomeFirstResponder];
+}
+
+-(QSRichTextBar *)toolBar {
+    return (QSRichTextBar *)self.textView.inputAccessoryView;
 }
 
 @end

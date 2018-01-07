@@ -19,6 +19,7 @@
 #import "QSRichTextImageCaptionCell.h"
 #import "QSRichTextAttributes.h"
 #import "QSTextFieldsViewController.h"
+#import "QSRichTextListCell.h"
 
 @interface QSRichTextController () <QSRichTextWordCellDelegate, QSRichTextImageViewDelegate, QSRichTextVideoViewDelegate>
 
@@ -37,9 +38,7 @@
     QSRichTextModel *bodyModel = [[QSRichTextModel alloc]initWithCellType:QSRichTextCellTypeText];
     
     [self.viewModel addNewLinesWithModels:@[coverModel, titleModel, bodyModel]];
-    
-    QSRichTextWordCell *titleTextCell = (QSRichTextWordCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
-    [titleTextCell becomeFirstResponder];
+    [self.viewModel becomeActiveWithModel:bodyModel];
 }
 
 -(UITableViewCell *)qmui_tableView:(UITableView *)tableView cellWithIdentifier:(NSString *)identifier {
@@ -89,6 +88,17 @@
             ((QSRichTextBlockCell *)cell).textView.attributedText = model.attributedString;
             break;
             
+        case QSRichTextCellTypeListCellCircle:
+        case QSRichTextCellTypeListCellNumber:
+        case QSRichTextCellTypeListCellNone:
+            ((QSRichTextListCell *)cell).qs_delegate = self;
+            ((QSRichTextListCell *)cell).textView.attributedText = model.attributedString;
+            if (model.prefixRanges) {
+                ((QSRichTextListCell *)cell).prefixRanges = model.prefixRanges.mutableCopy;
+            }
+            [((QSRichTextListCell *)cell) updateListTypeStyle];
+            break;
+            
         case QSRichTextCellTypeCover:
         case QSRichTextCellTypeSeparator:
             break;
@@ -107,7 +117,10 @@
         case QSRichTextCellTypeTitle:
         case QSRichTextCellTypeText:
         case QSRichTextCellTypeImageCaption:
-        case QSRichTextCellTypeTextBlock: {
+        case QSRichTextCellTypeTextBlock:
+        case QSRichTextCellTypeListCellNone:
+        case QSRichTextCellTypeListCellNumber:
+        case QSRichTextCellTypeListCellCircle: {
             CGFloat textCellHeight = model.cellHeight;
             textCellHeight = MAX(50, textCellHeight);
             return textCellHeight;
@@ -146,6 +159,14 @@
 //    }
 //}
 
+-(QSRichTextBar *)toolBar {
+    if (!_toolBar) {
+        _toolBar = [[QSRichTextBar alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 44)];
+        _toolBar.formatDelegate = self;
+    }
+    return _toolBar;
+}
+
 -(QSRichTextViewModel *)viewModel {
     if (!_viewModel) {
         _viewModel = [[QSRichTextViewModel alloc]init];
@@ -166,6 +187,13 @@
     QSRichTextModel *model = self.viewModel.models[indexPath.row];
     model.attributedString = [[NSMutableAttributedString alloc]initWithAttributedString:textView.attributedText];
     self.currentTextView = textView;
+    
+    if (model.cellType == QSRichTextCellTypeListCellNone||
+        model.cellType == QSRichTextCellTypeListCellCircle ||
+        model.cellType == QSRichTextCellTypeListCellNumber) {
+        QSRichTextListCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+        model.prefixRanges = cell.prefixRanges.mutableCopy;
+    }
 }
 
 -(void)qsTextViewDidChanege:(QSRichTextView *)textView selectedRange:(NSRange)selectedRange {
@@ -273,7 +301,7 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             lastCurPosition += selectRange.length;
             textView.attributedText = text;
-            textView.selectedRange = NSMakeRange(lastCurPosition, 0);
+            textView.selectedTextRange = [YYTextRange rangeWithRange:NSMakeRange(lastCurPosition, 0)];
             [textView scrollRangeToVisible:selectRange];
         });
     }
@@ -347,6 +375,23 @@
     [self.viewModel addNewLine:QSRichTextCellTypeTextBlock];
 }
 
+-(void)formatDidToggleListStyle:(QSRichTextListStyleType)listType {
+    
+    QSRichTextCellType cellType;
+    switch (listType) {
+        case QSRichTextListTypeNone:
+            cellType = QSRichTextCellTypeListCellNone;
+            break;
+        case QSRichTextListTypeDecimal:
+            cellType = QSRichTextCellTypeListCellNumber;
+            break;
+        case QSRichTextListTypeCircle:
+            cellType = QSRichTextCellTypeListCellCircle;
+            break;
+    }
+    [self.viewModel addNewLine:cellType];
+}
+
 -(void)insertSeperator {
     [self.viewModel addNewLine:QSRichTextCellTypeSeparator];
 }
@@ -357,84 +402,6 @@
 
 -(void)insertPhoto {
     [self.viewModel addNewLine:QSRichTextCellTypeImage];
-}
-
-- (void)insertHyperlink {
-    [self didInsertHyperlink:nil];
-}
-
--(void)didInsertHyperlink:(QSRichTextHyperlink *)link {
-    QSTextFieldsViewController *dialogViewController = [[QSTextFieldsViewController alloc] init];
-    dialogViewController.headerViewHeight = 70;
-    dialogViewController.headerViewBackgroundColor = UIColorWhite;
-    dialogViewController.title = @"超链接";
-    dialogViewController.titleView.horizontalTitleFont = UIFontBoldMake(20);
-    dialogViewController.titleLabelFont = UIFontBoldMake(20);
-    if (link) {
-        dialogViewController.textField1.text = link.title;
-        dialogViewController.textField2.text = link.link;
-    } else {
-        dialogViewController.textField1.placeholder = @"请输入标题（非必需）";
-        dialogViewController.textField2.placeholder = @"输入网址";
-    }
-
-    [dialogViewController addCancelButtonWithText:@"取消" block:^(QMUIDialogViewController *aDialogViewController) {
-        [aDialogViewController hide];
-        [self richTextEditorCloseMoreView];
-    }];
-    
-    __weak __typeof(QSTextFieldsViewController *)weakDialog = dialogViewController;
-    [dialogViewController addSubmitButtonWithText:@"确定" block:^(QMUIDialogViewController *aDialogViewController) {
-        [self richTextEditorCloseMoreView];
-        
-        NSString *urlRegEx = @"([\\w-]+\\.)+[\\w-]+(/[\\w- ./?%&amp;=]*)?";
-        //NSString *urlRegEx = @"http(s)?://([\\w-]+\\.)+[\\w-]+(/[\\w- ./?%&amp;=]*)?";
-        NSPredicate *checkURL = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", urlRegEx];
-        BOOL isVaild = [checkURL evaluateWithObject:weakDialog.textField2.text];
-        
-        if (!isVaild) {
-            return;
-        }
-        
-        [aDialogViewController hide];
-        
-        QSRichTextHyperlink *link = [[QSRichTextHyperlink alloc]init];
-        link.title = weakDialog.textField1.text;
-        link.link = weakDialog.textField2.text;
-        [self insertHyperlink:link];
-    }];
-    [dialogViewController show];
-}
-
--(void)insertHyperlink:(QSRichTextHyperlink *)hyperlink {
-    NSString *linkString = hyperlink.title;
-    [self.currentTextView insertText:linkString];
-    QSRichTextView *textView = self.currentTextView;
-    NSMutableAttributedString *attributeText = textView.attributedText.mutableCopy;
-    NSRange range = NSMakeRange(self.currentTextView.attributedText.length - linkString.length, linkString.length);
-    YYTextDecoration *decoration = [YYTextDecoration decorationWithStyle:YYTextLineStyleSingle width:@1 color:UIColorBlue];
-    [attributeText yy_setTextUnderline:decoration range:range];
-    [attributeText yy_setTextHighlightRange:range color:UIColorBlue backgroundColor:nil tapAction:^(UIView * _Nonnull containerView, NSAttributedString * _Nonnull text, NSRange range, CGRect rect) {
-        NSAttributedString *linkAttributeString = [text attributedSubstringFromRange:range];
-        QSRichTextHyperlink *link = linkAttributeString.yy_attributes[@"QSHyperLink"];
-        if (link) {
-            [self didInsertHyperlink:link];
-        }
-    }];
-    //将 hyperlink 对象存入 attributedString
-    [attributeText yy_setAttribute:@"QSHyperLink" value:hyperlink range:range];
-    
-    //记录光标位置
-    __block NSInteger lastCurPosition = textView.selectedRange.location;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        lastCurPosition += range.length;
-        textView.attributedText = attributeText;
-        textView.selectedRange = NSMakeRange(lastCurPosition, 0);
-        [textView scrollRangeToVisible:range];
-    });
-    
-    //重置一下富文本样式
-    [self.currentTextView updateTextStyle];
 }
 
 -(void)richTextEditorCloseMoreView {

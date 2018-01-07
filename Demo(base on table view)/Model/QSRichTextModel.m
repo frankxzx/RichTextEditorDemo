@@ -42,6 +42,13 @@
             
         case QSRichTextCellTypeTextBlock:
             return @"QSRichTextBlockCell";
+            
+        case QSRichTextCellTypeListCellNone:
+            return @"QSRichTextListCell";
+        case QSRichTextCellTypeListCellCircle:
+            return @"QSRichTextListCircleCell";
+        case QSRichTextCellTypeListCellNumber:
+            return @"QSRichTextListNumberCell";
     }
 }
 

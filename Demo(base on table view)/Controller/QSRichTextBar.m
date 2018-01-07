@@ -201,8 +201,8 @@
         sender.tag = (NSInteger)QSRichTextListTypeCircle;
     }
     
-    if ([self.formatDelegate respondsToSelector:@selector(toggleListType:)]) {
-        [self.formatDelegate toggleListType:sender.tag];
+    if ([self.formatDelegate respondsToSelector:@selector(formatDidToggleListStyle:)]) {
+        [self.formatDelegate formatDidToggleListStyle:sender.tag];
     }
 }
 

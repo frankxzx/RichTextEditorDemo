@@ -44,6 +44,7 @@
 		0177618B1FF4C22F00B75C67 /* DTTextAttachment+qs.m in Sources */ = {isa = PBXBuildFile; fileRef = 0177618A1FF4C22F00B75C67 /* DTTextAttachment+qs.m */; };
 		0177618E1FF4CF5900B75C67 /* UIResponder+qs.m in Sources */ = {isa = PBXBuildFile; fileRef = 0177618D1FF4CF5900B75C67 /* UIResponder+qs.m */; };
 		01957E4C1FE515F200F1281D /* DTImageTextAttachment+qs.m in Sources */ = {isa = PBXBuildFile; fileRef = 01957E4B1FE515F200F1281D /* DTImageTextAttachment+qs.m */; };
+		01AEC5362001C8B700D724D9 /* QSRichTextListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 01AEC5352001C8B700D724D9 /* QSRichTextListCell.m */; };
 		01DC21C21FF5D54200A7E5F3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 01DC21C11FF5D54200A7E5F3 /* AppDelegate.m */; };
 		01DC21C51FF5D54200A7E5F3 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01DC21C41FF5D54200A7E5F3 /* ViewController.m */; };
 		01DC21C81FF5D54200A7E5F3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 01DC21C61FF5D54200A7E5F3 /* Main.storyboard */; };
@@ -149,6 +150,8 @@
 		0177618D1FF4CF5900B75C67 /* UIResponder+qs.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIResponder+qs.m"; sourceTree = "<group>"; };
 		01957E4A1FE515F200F1281D /* DTImageTextAttachment+qs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DTImageTextAttachment+qs.h"; sourceTree = "<group>"; };
 		01957E4B1FE515F200F1281D /* DTImageTextAttachment+qs.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "DTImageTextAttachment+qs.m"; sourceTree = "<group>"; };
+		01AEC5342001C8B700D724D9 /* QSRichTextListCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSRichTextListCell.h; sourceTree = "<group>"; };
+		01AEC5352001C8B700D724D9 /* QSRichTextListCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSRichTextListCell.m; sourceTree = "<group>"; };
 		01DC21BE1FF5D54200A7E5F3 /* Demo(base on table view).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Demo(base on table view).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		01DC21C01FF5D54200A7E5F3 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		01DC21C11FF5D54200A7E5F3 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -302,6 +305,8 @@
 				01DC22111FF623B900A7E5F3 /* QSRichTextView.m */,
 				012C96111FFDFEE10003DACA /* QSRichTextBaseWordCell.h */,
 				012C96121FFDFEE10003DACA /* QSRichTextBaseWordCell.m */,
+				01AEC5342001C8B700D724D9 /* QSRichTextListCell.h */,
+				01AEC5352001C8B700D724D9 /* QSRichTextListCell.m */,
 				01DC21D71FF5D7B100A7E5F3 /* QSRichTextWordCell.h */,
 				01DC21D81FF5D7B100A7E5F3 /* QSRichTextWordCell.m */,
 				012C96051FFCA14A0003DACA /* QSRichTextBlockCell.h */,
@@ -792,6 +797,7 @@
 				01DC21C21FF5D54200A7E5F3 /* AppDelegate.m in Sources */,
 				01DC21D91FF5D7B100A7E5F3 /* QSRichTextWordCell.m in Sources */,
 				012C96101FFDC04B0003DACA /* QSRichTextAttributes.m in Sources */,
+				01AEC5362001C8B700D724D9 /* QSRichTextListCell.m in Sources */,
 				01DC22121FF623B900A7E5F3 /* QSRichTextView.m in Sources */,
 				012C96071FFCA14A0003DACA /* QSRichTextBlockCell.m in Sources */,
 				01DC21E61FF5D95300A7E5F3 /* QSRichTextAddCoverCell.m in Sources */,
