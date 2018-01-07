@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "QSRichEditorFontStyle.h"
 #import "QSRichTextHyperlink.h"
+#import "UIBarButtonItem+qs.h"
 
 typedef NS_ENUM(NSUInteger, QSRichTextListStyleType) {
     QSRichTextListTypeNone,
@@ -55,6 +56,8 @@ typedef NS_ENUM(NSUInteger, QSRichTextListStyleType) {
 -(void)updateStateWithTypingAttributes:(NSDictionary *)attributes;
 
 -(void)initEditorBarItems;
+
+-(void)setListType:(QSRichTextListStyleType)listType;
 
 @end
 

@@ -43,8 +43,9 @@
     if (_shouldInsertPrefix) {
         self.textView.delegate = nil;
         YYTextRange *range = [YYTextRange rangeWithRange:NSMakeRange(textView.text.length, 0)];
+        YYTextRange *replaceRange = [YYTextRange rangeWithRange:NSMakeRange(textView.text.length, self.prefix.length)];
+        NSLog(@"前缀的 range ：%@", replaceRange);
         [self.textView replaceRange:range withText:self.prefix];
-        YYTextRange *replaceRange = [YYTextRange rangeWithRange:NSMakeRange(textView.text.length, 1)];
         [self.prefixRanges addObject:replaceRange];
         self.textView.delegate = self;;
         _shouldInsertPrefix = NO;
@@ -53,9 +54,10 @@
 }
 
 -(NSString *)prefix {
-    return @"";
+    return @"  ";
 }
 
+//无法定位 当前删除的是第几行，从而无法接着 序列往下排
 -(void)updateListTypeStyle {
     for (YYTextRange *range in self.prefixRanges) {
         [self.textView replaceRange:range withText:self.prefix];
@@ -75,10 +77,7 @@
 @implementation QSRichTextListCircleCell
 
 -(NSString *)prefix {
-    return @"\u2022";
+    return @"\u2022 ";
 }
 
 @end
-
-
-

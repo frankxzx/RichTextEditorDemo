@@ -198,6 +198,27 @@
 
 -(void)qsTextViewDidChanege:(QSRichTextView *)textView selectedRange:(NSRange)selectedRange {
     self.currentTextView = textView;
+    NSIndexPath *indexPath = [self.tableView qmui_indexPathForRowAtView:textView];
+    QSRichTextModel *model = self.models[indexPath.row];
+    QSRichTextCellType cellType = model.cellType;
+    [self.toolBar.blockquoteButton qs_setSelected:cellType == QSRichTextCellTypeTextBlock];
+    switch (cellType) {
+        case QSRichTextCellTypeListCellNone:
+            [self.toolBar setListType:QSRichTextListTypeNone];
+            break;
+        case QSRichTextCellTypeListCellNumber:
+            [self.toolBar setListType:QSRichTextListTypeDecimal];
+            break;
+        case QSRichTextCellTypeListCellCircle:
+            [self.toolBar setListType:QSRichTextListTypeCircle];
+            break;
+        default:
+            break;
+    }
+//    //text block 里禁止插入图片
+//    [self.toolBar.photoButton qs_setEnable:cellType == QSRichTextCellTypeTextBlock];
+//    //text block 里禁止排序
+//    [self.toolBar.alignButton qs_setEnable:cellType == QSRichTextCellTypeTextBlock];
 }
 
 -(BOOL)qsTextView:(YYTextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {

@@ -9,7 +9,6 @@
 #import "QSRichTextBar.h"
 #import <QMUIKit/QMUIKit.h>
 #import <YYText/YYText.h>
-#import "UIBarButtonItem+qs.h"
 #import "QSRichEditorFontStyle.h"
 #import "UIResponder+qs.h"
 
@@ -45,7 +44,9 @@
         self.alignButton = [UIBarButtonItem qs_setBarButtonItemWithImage:UIImageMake(@"toolbar_align_left") target:self action:@selector(align:)];
         self.orderedListButton = [UIBarButtonItem qs_setBarButtonItemWithImage:UIImageMake(@"toolbar_order") target:self action:@selector(setOrderedList:)];
         self.photoButton = [UIBarButtonItem qs_setBarButtonItemWithImage:UIImageMake(@"toolbar_image") target:self action:@selector(insertImage:)];
-        self.blockquoteButton = [UIBarButtonItem qs_setBarButtonItemWithImage:UIImageMake(@"toolbar_blockquote") target:self action:@selector(setBlockquote)];
+        self.blockquoteButton = [UIBarButtonItem qs_setBarButtonItemWithImage:UIImageMake(@"toolbar_blockquote")
+                                                                       selectedImage:[UIImageMake(@"toolbar_blockquote") qmui_imageWithTintColor:UIColorBlue]
+                                                                          target:self action:@selector(setBlockquote)];
         self.moreButton = [UIBarButtonItem qs_setBarButtonItemWithImage:UIImageMake(@"toolbar_more") target:self action:@selector(openMoreView:)];
         self.textEditorCloseButton = [UIBarButtonItem qs_setBarButtonItemWithImage:UIImageMake(@"toolbar_close") target:self action:@selector(endTextEditor)];
         self.moreViewCloseButton = [UIBarButtonItem qs_setBarButtonItemWithImage:UIImageMake(@"icon_close") target:self action:@selector(closeMoreView)];
@@ -313,9 +314,23 @@
     
 }
 
+-(void)setListType:(QSRichTextListStyleType)listType {
+    self.orderedListButton.tag = listType;
+    switch (listType) {
+        case QSRichTextListTypeNone:
+            self.orderedListButton.image = UIImageMake(@"toolbar_order").originalImage;
+            break;
+        case QSRichTextListTypeDecimal:
+            self.orderedListButton.image = UIImageMake(@"toolbar_order_number").originalImage;
+            break;
+        case QSRichTextListTypeCircle:
+            self.orderedListButton.image = UIImageMake(@"toolbar_order_dot").originalImage;
+            break;
+    }
+}
+
 -(BOOL)isTextEditor {
     return  [self.items containsObject:self.textEditorCloseButton];
 }
 
 @end
-
