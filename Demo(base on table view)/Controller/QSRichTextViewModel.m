@@ -104,23 +104,6 @@
             if (textView) {
                 NSIndexPath *indexPath = [self.tableView qmui_indexPathForRowAtView:textView];
                 QSRichTextModel *currentModel = self.models[indexPath.row];
-                
-                switch (cellType) {
-                    case QSRichTextCellTypeListCellNumber: {
-//                        NSString *prefix = [NSString stringWithFormat:@"%@.",@(1)];
-//                        [textView replaceRange:[YYTextRange rangeWithRange:NSMakeRange(0, 0)] withText:prefix];
-                        break;
-                    }
-                        
-                    case QSRichTextCellTypeListCellCircle: {
-//                        NSString *prefix =@"\u2022";
-//                        [textView replaceRange:[YYTextRange rangeWithRange:NSMakeRange(0, 0)] withText:prefix];
-                        break;
-                    }
-                    default:
-                        break;
-                }
-                
                 currentModel.cellType = cellType;
                 [self updateCellAtIndexPath:indexPath];
                 [self becomeActiveWithModel:currentModel];

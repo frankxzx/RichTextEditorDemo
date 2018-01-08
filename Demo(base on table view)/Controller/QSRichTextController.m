@@ -236,6 +236,7 @@ CGFloat const editorMoreViewHeight = 200;
 //    [self.toolBar.photoButton qs_setEnable:cellType == QSRichTextCellTypeTextBlock];
 //    //text block 里禁止排序
 //    [self.toolBar.alignButton qs_setEnable:cellType == QSRichTextCellTypeTextBlock];
+    [textView setInputAccessoryView:self.toolBar];
 }
 
 -(BOOL)qsTextView:(YYTextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
@@ -443,7 +444,6 @@ CGFloat const editorMoreViewHeight = 200;
 }
 
 -(void)richTextEditorCloseMoreView {
-    [self.currentTextView.inputAccessoryView initEditorBarItems];
     self.currentTextView.inputView = nil;
     [self.currentTextView reloadInputViews];
 }

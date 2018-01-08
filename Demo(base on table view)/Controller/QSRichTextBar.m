@@ -227,6 +227,7 @@
     if ([self.formatDelegate respondsToSelector:@selector(richTextEditorCloseMoreView)]) {
         [self.formatDelegate richTextEditorCloseMoreView];
     }
+    [self initEditorBarItems];
 }
 
 //插入图片
