@@ -10,12 +10,7 @@
 #import "QSRichTextMoreView.h"
 #import "QSRichTextAttributes.h"
 
-CGFloat const toolBarHeight = 44;
-CGFloat const editorMoreViewHeight = 200;
-
 @interface QSRichTextWordCell () <YYTextViewDelegate, QSRichTextEditorFormat>
-
-@property(nonatomic, strong) QSRichTextMoreView *editorMoreView;
 
 @end
 
@@ -33,26 +28,18 @@ CGFloat const editorMoreViewHeight = 200;
     self.textView.typingAttributes = [QSRichTextAttributes defaultAttributes];
 }
 
--(QSRichTextMoreView *)editorMoreView {
-    if (!_editorMoreView) {
-        _editorMoreView = [[QSRichTextMoreView alloc]initWithFrame:CGRectMake(0, toolBarHeight, self.bounds.size.width, editorMoreViewHeight)];
-        _editorMoreView.actionDelegate = self;
-    }
-    return _editorMoreView;
-}
-
--(void)richTextEditorOpenMoreView {
-    NSInteger wordCount = [self.textView.attributedText yy_plainTextForRange:self.textView.attributedText.yy_rangeOfAll].length;
-    [self.toolBar setupTextCountItemWithCount:wordCount];
-    self.textView.inputView = self.editorMoreView;
-    [self.textView reloadInputViews];
-}
-
--(void)richTextEditorCloseMoreView {
-    [self.toolBar initEditorBarItems];
-    self.textView.inputView = nil;
-    [self.textView reloadInputViews];
-}
+//-(void)richTextEditorOpenMoreView {
+//    NSInteger wordCount = [self.textView.attributedText yy_plainTextForRange:self.textView.attributedText.yy_rangeOfAll].length;
+//    [self.toolBar setupTextCountItemWithCount:wordCount];
+//    self.textView.inputView = self.editorMoreView;
+//    [self.textView reloadInputViews];
+//}
+//
+//-(void)richTextEditorCloseMoreView {
+//    [self.toolBar initEditorBarItems];
+//    self.textView.inputView = nil;
+//    [self.textView reloadInputViews];
+//}
 
 - (void)setBodyTextStyleWithPlaceholder:(BOOL)isFirstLine {
     self.textView.placeholderTextColor = UIColorGrayLighten;

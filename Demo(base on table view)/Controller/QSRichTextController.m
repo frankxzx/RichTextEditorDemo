@@ -20,10 +20,15 @@
 #import "QSRichTextAttributes.h"
 #import "QSTextFieldsViewController.h"
 #import "QSRichTextListCell.h"
+#import "QSRichTextMoreView.h"
+
+CGFloat const toolBarHeight = 44;
+CGFloat const editorMoreViewHeight = 200;
 
 @interface QSRichTextController () <QSRichTextWordCellDelegate, QSRichTextImageViewDelegate, QSRichTextVideoViewDelegate>
 
 @property(nonatomic, strong) QSRichTextViewModel *viewModel;
+@property(nonatomic, strong) QSRichTextMoreView *editorMoreView;
 
 @end
 
@@ -169,6 +174,14 @@
         _toolBar.formatDelegate = self;
     }
     return _toolBar;
+}
+
+-(QSRichTextMoreView *)editorMoreView {
+    if (!_editorMoreView) {
+        _editorMoreView = [[QSRichTextMoreView alloc]initWithFrame:CGRectMake(0, toolBarHeight, self.view.bounds.size.width, editorMoreViewHeight)];
+        _editorMoreView.actionDelegate = self;
+    }
+    return _editorMoreView;
 }
 
 -(QSRichTextViewModel *)viewModel {
@@ -432,6 +445,13 @@
 -(void)richTextEditorCloseMoreView {
     [self.currentTextView.inputAccessoryView initEditorBarItems];
     self.currentTextView.inputView = nil;
+    [self.currentTextView reloadInputViews];
+}
+
+-(void)richTextEditorOpenMoreView {
+    NSInteger wordCount = [self.currentTextView.attributedText yy_plainTextForRange:self.currentTextView.attributedText.yy_rangeOfAll].length;
+    [self.toolBar setupTextCountItemWithCount:wordCount];
+    self.currentTextView.inputView = self.editorMoreView;
     [self.currentTextView reloadInputViews];
 }
 

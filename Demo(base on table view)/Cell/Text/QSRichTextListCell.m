@@ -75,6 +75,7 @@
 -(void)prepareForReuse {
     [super prepareForReuse];
     self.prefixRanges = [NSMutableArray array];
+    [self.prefixRanges addObject:[YYTextRange rangeWithRange:NSMakeRange(0, self.prefix.length)]];
 }
 
 @end
