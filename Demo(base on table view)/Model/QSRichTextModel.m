@@ -114,16 +114,24 @@
         return text;
     };
     
-    NSMutableAttributedString *(^applyListType)(NSMutableAttributedString *) = ^(NSMutableAttributedString *attributedText) {
-        NSMutableAttributedString *text = [[NSMutableAttributedString alloc]initWithAttributedString:attributedText];
-        [attributedText enumerateAttribute:YYTextGlyphTransformAttributeName inRange:attributedText.yy_rangeOfAll options:NSAttributedStringEnumerationReverse usingBlock:^(id  _Nullable value, NSRange range, BOOL * _Nonnull stop) {
-            NSValue *transform = value;
-            if (transform) {
-                [text replaceCharactersInRange:range withString:[NSString stringWithFormat:@"<i>%@</i>", [attributedText.string substringWithRange:range]]];
-            }
-        }];
-        return text;
-    };
+//    NSMutableAttributedString *(^applyNumberListType)(QSRichTextCellType, NSMutableAttributedString *) = ^(QSRichTextCellType cellType, NSMutableAttributedString *attributedText) {
+//        NSMutableAttributedString *text = [[NSMutableAttributedString alloc]initWithAttributedString:attributedText];
+//        if (cellType == QSRichTextCellTypeListCellNumber) {
+//            [text yy_insertString:@"<ol>" atIndex:0];
+//            [text yy_insertString:@"</ol>" atIndex:attributedText.length];
+//        } else {
+//            [text yy_insertString:@"<ul>" atIndex:0];
+//            [text yy_insertString:@"</ul>" atIndex:attributedText.length];
+//        }
+//
+//        [attributedText enumerateAttribute:YYTextGlyphTransformAttributeName inRange:attributedText.yy_rangeOfAll options:NSAttributedStringEnumerationReverse usingBlock:^(id  _Nullable value, NSRange range, BOOL * _Nonnull stop) {
+//            NSValue *transform = value;
+//            if (transform) {
+//                [text replaceCharactersInRange:range withString:[NSString stringWithFormat:@"<i>%@</i>", [attributedText.string substringWithRange:range]]];
+//            }
+//        }];
+//        return text;
+//    };
     
     NSMutableString *htmlString = [[NSMutableString alloc]init];
     switch (self.cellType) {
@@ -156,15 +164,15 @@
             [htmlString appendFormat:@"<p>%@</p>", self.attributedString.string];
             break;
         case QSRichTextCellTypeListCellNumber:
-            
-            break;
         case QSRichTextCellTypeListCellCircle:
-            
+            [htmlString appendFormat:@"<p>%@</p>", self.attributedString.string];
             break;
         default:
             [htmlString appendFormat:@"<p>%@</p>", self.attributedString.string];
             break;
     }
+    
+    [htmlString stringByReplacingOccurrencesOfString:@"\n" withString:@"<br/>"];
     
     return htmlString;
 }
@@ -187,7 +195,7 @@
         g = components[1];
         b = components[2];
         a = components[3];
-    }
+    } 
     
     return [NSString stringWithFormat:@"#%02lX%02lX%02lX%02lX",
             lroundf(r * 255),
