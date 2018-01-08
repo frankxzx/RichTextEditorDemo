@@ -15,6 +15,7 @@
 @property(nonatomic, strong) NSMutableArray <YYTextRange *>*prefixRanges;
 
 -(void)updateListTypeStyle;
+-(void)initListType;
 
 @end
 

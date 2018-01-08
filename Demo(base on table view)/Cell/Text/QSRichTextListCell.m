@@ -18,9 +18,8 @@
 
 - (void)makeUI {
     [super makeUI];
-    self.currentLine = 1;
     self.prefixRanges = [NSMutableArray array];
-    [self.prefixRanges addObject:[YYTextRange rangeWithRange:NSMakeRange(0, 0)]];
+    [self.prefixRanges addObject:[YYTextRange rangeWithRange:NSMakeRange(0, self.prefix.length)]];
 }
 
 //当输入 \n 回车时 currentLine +1
@@ -28,7 +27,6 @@
 
     if ([text isEqualToString:@"\n"]) {
         _shouldInsertPrefix = YES;
-        self.currentLine += 1;
         return YES;
     }
     
@@ -44,9 +42,8 @@
         self.textView.delegate = nil;
         YYTextRange *range = [YYTextRange rangeWithRange:NSMakeRange(textView.text.length, 0)];
         YYTextRange *replaceRange = [YYTextRange rangeWithRange:NSMakeRange(textView.text.length, self.prefix.length)];
-        NSLog(@"前缀的 range ：%@", replaceRange);
-        [self.textView replaceRange:range withText:self.prefix];
         [self.prefixRanges addObject:replaceRange];
+        [self.textView replaceRange:range withText:self.prefix];
         self.textView.delegate = self;;
         _shouldInsertPrefix = NO;
     }
@@ -59,9 +56,25 @@
 
 //无法定位 当前删除的是第几行，从而无法接着 序列往下排
 -(void)updateListTypeStyle {
+    int i = 1;
     for (YYTextRange *range in self.prefixRanges) {
-        [self.textView replaceRange:range withText:self.prefix];
+        if ([self isKindOfClass:[QSRichTextListNumberCell class]]) {
+            [self.textView replaceRange:range withText:[NSString stringWithFormat:@"%@.",@(i)]];
+        } else {
+            [self.textView replaceRange:range withText:self.prefix];
+        }
+        i++;
     }
+}
+
+-(void)initListType {
+    YYTextRange *replaceRange = [YYTextRange rangeWithRange:NSMakeRange(0, 0)];
+    [self.textView replaceRange:replaceRange withText:self.prefix];
+}
+
+-(void)prepareForReuse {
+    [super prepareForReuse];
+    self.prefixRanges = [NSMutableArray array];
 }
 
 @end
@@ -69,7 +82,7 @@
 @implementation QSRichTextListNumberCell
 
 -(NSString *)prefix {
-    return [NSString stringWithFormat:@"%@.",@(self.currentLine)];
+    return [NSString stringWithFormat:@"%@.",@(self.prefixRanges.count)];
 }
 
 @end

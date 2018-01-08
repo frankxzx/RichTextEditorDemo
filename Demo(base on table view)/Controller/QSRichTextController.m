@@ -93,10 +93,14 @@
         case QSRichTextCellTypeListCellNone:
             ((QSRichTextListCell *)cell).qs_delegate = self;
             ((QSRichTextListCell *)cell).textView.attributedText = model.attributedString;
-            if (model.prefixRanges) {
+            if (model.prefixRanges.count > 0) {
+                //更改 list type cell 样式
                 ((QSRichTextListCell *)cell).prefixRanges = model.prefixRanges.mutableCopy;
+                [((QSRichTextListCell *)cell) updateListTypeStyle];
+            } else {
+                //初始化 list type cell
+                [((QSRichTextListCell *)cell) initListType];
             }
-            [((QSRichTextListCell *)cell) updateListTypeStyle];
             break;
             
         case QSRichTextCellTypeCover:
