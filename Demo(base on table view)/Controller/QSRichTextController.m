@@ -21,6 +21,7 @@
 #import "QSTextFieldsViewController.h"
 #import "QSRichTextListCell.h"
 #import "QSRichTextMoreView.h"
+#import "QSRichTextHtmlWriterManager.h"
 
 CGFloat const toolBarHeight = 44;
 CGFloat const editorMoreViewHeight = 200;
@@ -44,6 +45,22 @@ CGFloat const editorMoreViewHeight = 200;
     
     [self.viewModel addNewLinesWithModels:@[coverModel, titleModel, bodyModel]];
     [self.viewModel becomeActiveWithModel:bodyModel];
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"预览" style:UIBarButtonItemStylePlain target:self action:@selector(preview)];
+}
+
+-(void)preview {
+    [QSRichTextHtmlWriterManager sharedInstance].htmlWriters = self.models.mutableCopy;
+    NSString *htmlString = [QSRichTextHtmlWriterManager htmlString];
+    UIView *contentView = [[UIView alloc] initWithFrame:self.view.bounds];
+    contentView.backgroundColor = UIColorWhite;
+    UIWebView *webView = [[UIWebView alloc]initWithFrame:self.view.bounds];
+    [webView loadHTMLString:htmlString baseURL:nil];
+    [contentView addSubview:webView];
+    
+    UIViewController *controller = [[UIViewController alloc]init];
+    controller.view = contentView;
+    [self.navigationController pushViewController:controller animated:true];
 }
 
 -(UITableViewCell *)qmui_tableView:(UITableView *)tableView cellWithIdentifier:(NSString *)identifier {
@@ -433,14 +450,17 @@ CGFloat const editorMoreViewHeight = 200;
 
 -(void)insertSeperator {
     [self.viewModel addNewLine:QSRichTextCellTypeSeparator];
+    [self richTextEditorCloseMoreView];
 }
 
 -(void)insertVideo {
     [self.viewModel addNewLine:QSRichTextCellTypeVideo];
+    [self richTextEditorCloseMoreView];
 }
 
 -(void)insertPhoto {
     [self.viewModel addNewLine:QSRichTextCellTypeImage];
+    [self richTextEditorCloseMoreView];
 }
 
 -(void)richTextEditorCloseMoreView {

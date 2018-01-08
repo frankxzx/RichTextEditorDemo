@@ -15,4 +15,6 @@
 
 + (instancetype)sharedInstance;
 
++ (NSString *)htmlString;
+
 @end

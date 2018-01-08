@@ -38,6 +38,5 @@ typedef NS_ENUM(NSInteger, QSRichTextCellType)
 @property(nonatomic, weak) QSRichTextModel *captionModel;
 
 -(instancetype)initWithCellType:(QSRichTextCellType)cellType;
--(BOOL)shouldAddNewLine;
 
 @end

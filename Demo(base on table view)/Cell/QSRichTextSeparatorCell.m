@@ -10,8 +10,6 @@
 
 @interface QSRichTextSeparatorCell ()
 
-@property(nonatomic, strong) CALayer *separatorLayer;
-
 @end
 
 @implementation QSRichTextSeparatorCell

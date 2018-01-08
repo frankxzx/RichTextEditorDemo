@@ -14,6 +14,7 @@
     [super makeUI];
     self.textView.textContainerInset = UIEdgeInsetsMake(10, 35, 10, 35);
     self.textView.backgroundColor = LightenPlaceholderColor;
+    self.textView.textColor = UIColorGray;
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.lineSpacing = 2;
     paragraphStyle.alignment = NSTextAlignmentLeft;
