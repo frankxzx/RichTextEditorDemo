@@ -204,12 +204,9 @@ CGFloat const editorMoreViewHeight = 200;
     QSRichTextModel *model = self.viewModel.models[indexPath.row];
     model.attributedString = [[NSMutableAttributedString alloc]initWithAttributedString:textView.attributedText];
     self.currentTextView = textView;
-    
-    if (model.cellType == QSRichTextCellTypeListCellNone||
-        model.cellType == QSRichTextCellTypeListCellCircle ||
-        model.cellType == QSRichTextCellTypeListCellNumber) {
-        QSRichTextListCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-        model.prefixRanges = cell.prefixRanges.mutableCopy;
+    QSRichTextCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    if ([cell isKindOfClass:[QSRichTextListCell class]]) {
+         model.prefixRanges = ((QSRichTextListCell *)cell).prefixRanges.mutableCopy;
     }
 }
 
@@ -266,12 +263,15 @@ CGFloat const editorMoreViewHeight = 200;
     if (index < 3) {
         return;
     }
-    if (index > 0 && self.models[index-1].cellType == QSRichTextCellTypeImage) {
+    
+    QSRichTextCellType cellType = self.models[index-1].cellType;
+    if (index > 0 && (cellType == QSRichTextCellTypeImage || cellType == QSRichTextCellTypeVideo || cellType == QSRichTextCellTypeSeparator)) {
         NSIndexPath *previousIndexPath = [NSIndexPath indexPathForRow:index - 1 inSection:0];
         [self.viewModel removeLinesAtIndexPaths:@[previousIndexPath, indexPath]];
     } else {
         [self.viewModel removeLineAtIndexPath:indexPath];
     }
+    [self.viewModel becomeActiveLastLine];
 }
 
 -(void)qsTextView:(QSRichTextView *)textView newHeightAfterTextChanged:(CGFloat)newHeight {
@@ -449,7 +449,10 @@ CGFloat const editorMoreViewHeight = 200;
 }
 
 -(void)richTextEditorOpenMoreView {
-    NSInteger wordCount = [self.currentTextView.attributedText yy_plainTextForRange:self.currentTextView.attributedText.yy_rangeOfAll].length;
+    int wordCount = 0;
+    for (QSRichTextModel *model in self.models) {
+        wordCount += model.attributedString.string.length;
+    }
     [self.toolBar setupTextCountItemWithCount:wordCount];
     self.currentTextView.inputView = self.editorMoreView;
     [self.currentTextView reloadInputViews];

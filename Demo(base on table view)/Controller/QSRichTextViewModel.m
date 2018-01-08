@@ -61,6 +61,7 @@
             }
             //新生成的 textView 响应, 光标位置移动
             [self becomeActiveWithModel:emptyLine];
+            [self.tableView qmui_scrollToBottom];
             break;
         }
             
@@ -201,6 +202,15 @@
 
 -(void)becomeActiveWithModel:(QSRichTextModel *)model {
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[self.models indexOfObject:model] inSection:0];
+    [self becomeActiveAtIndexPath:indexPath];
+}
+
+-(void)becomeActiveLastLine {
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.models.count - 1 inSection:0];
+    [self becomeActiveAtIndexPath:indexPath];
+}
+
+-(void)becomeActiveAtIndexPath:(NSIndexPath *)indexPath {
     QSRichTextWordCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
     cell.textView.inputAccessoryView = self.viewController.toolBar;
     [cell becomeFirstResponder];

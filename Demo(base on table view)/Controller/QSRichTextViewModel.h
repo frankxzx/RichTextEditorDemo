@@ -35,5 +35,6 @@
 -(void)removeLineWithModel:(QSRichTextModel *)model;
 
 -(void)becomeActiveWithModel:(QSRichTextModel *)model;
+-(void)becomeActiveLastLine;
 
 @end
