@@ -22,6 +22,7 @@
 #import "QSRichTextListCell.h"
 #import "QSRichTextMoreView.h"
 #import "QSRichTextHtmlWriterManager.h"
+#import "NSString+YYAdd.h"
 
 CGFloat const toolBarHeight = 44;
 CGFloat const editorMoreViewHeight = 200;
@@ -463,7 +464,96 @@ CGFloat const editorMoreViewHeight = 200;
     [self richTextEditorCloseMoreView];
 }
 
+//设置超链接
+- (void)insertHyperlink {
+    [self didInsertHyperlink:nil];
+}
+
+-(void)insertHyperlink:(QSRichTextHyperlink *)hyperlink {
+    
+    UIFont *buttonTextFont = [UIFont systemFontOfSize:15];
+    CGSize maxSize = CGSizeMake(SCREEN_WIDTH - 40, HUGE);
+    CGSize textSize = [hyperlink.title sizeForFont:buttonTextFont size:maxSize mode:NSLineBreakByWordWrapping];
+    textSize.width += 10;
+    QSRichTextLinkButton *linkButon = [[QSRichTextLinkButton alloc]initWithFrame:CGRectMakeWithSize(textSize)];
+    [linkButon setLink:hyperlink];
+    [linkButon setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [linkButon setTitle:hyperlink.title forState:UIControlStateNormal];
+    [linkButon.titleLabel setFont:buttonTextFont];
+    [linkButon addTarget:self action:@selector(didInsertHyperlink:) forControlEvents:UIControlEventTouchUpInside];
+    
+    NSMutableAttributedString *linkString = [NSMutableAttributedString yy_attachmentStringWithContent:linkButon contentMode:UIViewContentModeScaleAspectFit attachmentSize:textSize alignToFont:buttonTextFont alignment:YYTextVerticalAlignmentCenter];
+    
+    NSMutableAttributedString *padding = [[NSMutableAttributedString alloc]initWithString:@" " attributes:[QSRichTextAttributes defaultAttributes]];
+    
+    NSMutableAttributedString *linkStringWithPadding = [[NSMutableAttributedString alloc]init];
+    [linkStringWithPadding appendAttributedString:padding];
+    [linkStringWithPadding appendAttributedString:linkString];
+    [linkStringWithPadding appendAttributedString:padding];
+    
+    NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc]initWithAttributedString:self.currentTextView.attributedText];
+    [attributedText replaceCharactersInRange:self.currentTextView.selectedRange withAttributedString:linkStringWithPadding];
+    self.currentTextView.attributedText = attributedText;
+}
+
+-(void)didInsertHyperlink:(id)sender {
+    
+    QSRichTextHyperlink *hyperlink;
+    if ([sender isKindOfClass:[QSRichTextHyperlink class]]) {
+        hyperlink = sender;
+    } else if([sender isKindOfClass:[QSRichTextLinkButton class]]){
+        hyperlink = ((QSRichTextLinkButton *)sender).link;
+    }
+    
+    QSTextFieldsViewController *dialogViewController = [[QSTextFieldsViewController alloc] init];
+    dialogViewController.headerViewHeight = 70;
+    dialogViewController.headerViewBackgroundColor = UIColorWhite;
+    dialogViewController.title = @"超链接";
+    dialogViewController.titleView.horizontalTitleFont = UIFontBoldMake(20);
+    dialogViewController.titleLabelFont = UIFontBoldMake(20);
+    if (hyperlink) {
+        dialogViewController.textField1.text = hyperlink.title;
+        dialogViewController.textField2.text = hyperlink.link;
+    } else {
+        dialogViewController.textField1.placeholder = @"请输入标题（非必需）";
+        dialogViewController.textField2.placeholder = @"输入网址";
+    }
+    
+    [dialogViewController addCancelButtonWithText:@"取消" block:^(QMUIDialogViewController *aDialogViewController) {
+        [aDialogViewController hide];
+    }];
+    
+    __weak __typeof(QSTextFieldsViewController *)weakDialog = dialogViewController;
+    [dialogViewController addSubmitButtonWithText:@"确定" block:^(QMUIDialogViewController *aDialogViewController) {
+        
+        NSString *urlRegEx = @"([\\w-]+\\.)+[\\w-]+(/[\\w- ./?%&amp;=]*)?";
+        //NSString *urlRegEx = @"http(s)?://([\\w-]+\\.)+[\\w-]+(/[\\w- ./?%&amp;=]*)?";
+        NSPredicate *checkURL = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", urlRegEx];
+        BOOL isVaild = [checkURL evaluateWithObject:weakDialog.textField2.text];
+        
+        if (!isVaild) {
+            return;
+        }
+        
+        [aDialogViewController hide];
+        
+        if(hyperlink){
+            [sender setLink:hyperlink];
+            [sender setTitle:hyperlink.title forState:UIControlStateNormal];
+        } else {
+            QSRichTextHyperlink *link = [[QSRichTextHyperlink alloc]init];
+            link.title = weakDialog.textField1.text;
+            link.link = weakDialog.textField2.text;
+            [self insertHyperlink:link];
+        }
+    }];
+    [dialogViewController showWithAnimated:YES completion:^(BOOL finished){
+        [self richTextEditorCloseMoreView];
+    }];
+}
+
 -(void)richTextEditorCloseMoreView {
+    [self.toolBar initEditorBarItems];
     self.currentTextView.inputView = nil;
     [self.currentTextView reloadInputViews];
 }
@@ -476,6 +566,10 @@ CGFloat const editorMoreViewHeight = 200;
     [self.toolBar setupTextCountItemWithCount:wordCount];
     self.currentTextView.inputView = self.editorMoreView;
     [self.currentTextView reloadInputViews];
+}
+
+- (void)insertAudio {
+    
 }
 
 @end

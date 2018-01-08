@@ -139,10 +139,10 @@
             [htmlString appendString:@"<img src=https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1513334563991&di=7ecafd20cfd4bfd2a7516f1034241df6&imgtype=0&src=http%3A%2F%2Fe.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F29381f30e924b89905322ad164061d950b7bf6c9.jpg width=\'100%\'/>"];
             break;
         case QSRichTextCellTypeTitle:
-            [htmlString appendFormat:@"<p class='title'>%@</p>", self.attributedString.string];
+            [htmlString appendFormat:@"<div class='title'>%@</div>", self.attributedString.string];
             break;
         case QSRichTextCellTypeText: {
-           [htmlString appendFormat:@"<p>%@</p>", applyTextColor(applyBold(applyStrikeThroughText(applyFontStyle(applyItalicText(self.attributedString))))).string];
+           [htmlString appendFormat:@"<div>%@</div>", applyTextColor(applyBold(applyStrikeThroughText(applyFontStyle(applyItalicText(self.attributedString))))).string];
             break;
         }
         case QSRichTextCellTypeImage:
@@ -155,20 +155,20 @@
             [htmlString appendString:@"<hr></hr>"];
             break;
         case QSRichTextCellTypeImageCaption:
-            [htmlString appendFormat:@"<p class='imageDes'>%@</p>", self.attributedString.string];
+            [htmlString appendFormat:@"<div class='imageDes'>%@</div>", self.attributedString.string];
             break;
         case QSRichTextCellTypeTextBlock:
-            [htmlString appendFormat:@"<p class='block'>%@</p>", self.attributedString.string];
+            [htmlString appendFormat:@"<div class='block'>%@</div>", self.attributedString.string];
             break;
         case QSRichTextCellTypeListCellNone:
-            [htmlString appendFormat:@"<p>%@</p>", self.attributedString.string];
+            [htmlString appendFormat:@"<div>%@</div>", self.attributedString.string];
             break;
         case QSRichTextCellTypeListCellNumber:
         case QSRichTextCellTypeListCellCircle:
-            [htmlString appendFormat:@"<p>%@</p>", self.attributedString.string];
+            [htmlString appendFormat:@"<div>%@</div>", self.attributedString.string];
             break;
         default:
-            [htmlString appendFormat:@"<p>%@</p>", self.attributedString.string];
+            [htmlString appendFormat:@"<div>%@</div>", self.attributedString.string];
             break;
     }
     

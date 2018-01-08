@@ -3,7 +3,7 @@ body {
     color: #7E7E7E;
 }
 
-p {
+div {
     margin: 8px 25px 8px 25px;
 }
 
@@ -17,14 +17,14 @@ hr {
     padding: 0;
 }
 
-p.imageDes {
+div.imageDes {
     font-size: 12px;font-size: 12px;
     color: #e2e2e2;
     margin: 8px;
     text-align: center;
 }
 
-p.title {
+div.title {
     line-height: 36px;
     font-size: 26px;
     color: #121212;
@@ -32,7 +32,7 @@ p.title {
     text-align: center;
 }
 
-p.block {
+div.block {
     padding: 20px;
     border-radius: 3px;
     background-color: #F0F0F0;
@@ -43,7 +43,7 @@ p.block {
     color: #656565;
 }
 
-p.quote {
+div.quote {
     padding: 12px;
     border-radius: 3px;
     background-color: #F2F2F2;
@@ -54,6 +54,6 @@ p.quote {
 
 video {object-fit: inherit;}
 
-p.bottom {
+div.bottom {
     padding: 20px
 }
