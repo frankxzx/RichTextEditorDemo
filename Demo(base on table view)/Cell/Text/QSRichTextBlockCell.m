@@ -32,6 +32,9 @@
                                        }];
     [attributedText yy_setTextBlockBorder:border range:attributedText.yy_rangeOfAll];
     self.textView.attributedText = attributedText;
+    if ([attributedText.string isEqualToString:@" "]) {
+        [self.textView deleteBackward];
+    }
 }
 
 @end

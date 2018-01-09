@@ -181,9 +181,11 @@
 
 -(void)updateCellAtIndexPath:(NSIndexPath *)indexPath {
     UITableView *tableView = self.viewController.tableView;
+    [UIView setAnimationsEnabled:NO];
     [tableView beginUpdates];
     [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     [tableView endUpdates];
+    [UIView setAnimationsEnabled:YES];
 }
 
 //删除图片时 连带删除注释

@@ -17,4 +17,6 @@
                                                     alignment:(YYTextVerticalAlignment)alignment
                                                      userInfo:(NSDictionary *)userInfo;
 
+-(BOOL)isItalic;
+
 @end

@@ -39,7 +39,7 @@
     CGFloat contentLabelWidth = self.contentView.qmui_width;
     CGSize textViewSize = [self.textView sizeThatFits:CGSizeMake(contentLabelWidth, CGFLOAT_MAX)];
     CGFloat textCellHeight = textViewSize.height;
-    textCellHeight = MAX(50, textCellHeight);
+    textCellHeight = MAX(textCellHeight, 50);
     self.textView.frame = CGRectFlatMake(0, 0, contentLabelWidth, textCellHeight);
 }
 

@@ -108,18 +108,20 @@ CGFloat const editorMoreViewHeight = 200;
             ((QSRichTextTitleCell *)cell).textView.attributedText = model.attributedString;
             break;
             
-        case QSRichTextCellTypeTextBlock:
+        case QSRichTextCellTypeTextBlock: {
+            NSAttributedString *attributedText = model.attributedString ? model.attributedString : [[NSAttributedString alloc]initWithString:@" "];
             ((QSRichTextBlockCell *)cell).qs_delegate = self;
-            ((QSRichTextBlockCell *)cell).textView.attributedText = model.attributedString;
+            ((QSRichTextBlockCell *)cell).textView.attributedText = attributedText;
             [((QSRichTextBlockCell *)cell) updateCellTextStyle];
             break;
-            
-        case QSRichTextCellTypeCodeBlock:
+        }
+        case QSRichTextCellTypeCodeBlock: {
+            NSAttributedString *attributedText = model.attributedString ? model.attributedString : [[NSAttributedString alloc]initWithString:@" "];
             ((QSRichTextCodeBlockCell *)cell).qs_delegate = self;
-            ((QSRichTextCodeBlockCell *)cell).textView.attributedText = model.attributedString;
+            ((QSRichTextCodeBlockCell *)cell).textView.attributedText = attributedText;
             [((QSRichTextCodeBlockCell *)cell) updateCellTextStyle];
             break;
-            
+        }
         case QSRichTextCellTypeListCellCircle:
         case QSRichTextCellTypeListCellNumber:
         case QSRichTextCellTypeListCellNone:
@@ -259,6 +261,16 @@ CGFloat const editorMoreViewHeight = 200;
 //    [self.toolBar.photoButton qs_setEnable:cellType == QSRichTextCellTypeTextBlock];
 //    //text block 里禁止排序
 //    [self.toolBar.alignButton qs_setEnable:cellType == QSRichTextCellTypeTextBlock];
+    
+    NSAttributedString *attributedText = textView.attributedText;
+    NSDictionary *attributes = [attributedText attributesAtIndex:selectedRange.location effectiveRange:nil];
+    UIFont *font = attributes[NSFontAttributeName];
+    NSParagraphStyle *paragraph = attributes[NSParagraphStyleAttributeName];
+    
+    if (<#condition#>) {
+        <#statements#>
+    }
+    
     [textView setInputAccessoryView:self.toolBar];
 }
 
@@ -332,10 +344,7 @@ CGFloat const editorMoreViewHeight = 200;
 -(void)editorViewCaptionImage:(QSRichTextImageView *)imageView {
     NSIndexPath *indexPath = [self.tableView qmui_indexPathForRowAtView:imageView];
     QSRichTextModel *model = self.viewModel.models[indexPath.row];
-    if (model.captionModel) {
-        //TODO: 响应已插入的图片注释
-        return;
-    } else {
+    if (!model.captionModel) {
         //关联一下
         [self.viewModel addImageCaptionWithImageModel:model];
         model.captionModel = self.viewModel.models[indexPath.row+1];
