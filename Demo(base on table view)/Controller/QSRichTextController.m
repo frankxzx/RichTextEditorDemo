@@ -23,9 +23,11 @@
 #import "QSRichTextMoreView.h"
 #import "QSRichTextHtmlWriterManager.h"
 #import "NSString+YYAdd.h"
+#import "NSAttributedString+qs.h"
 
 CGFloat const toolBarHeight = 44;
 CGFloat const editorMoreViewHeight = 200;
+NSString *const QSRichTextLinkAttributedName = @"QSRichTextLinkAttributedName";
 
 @interface QSRichTextController () <QSRichTextWordCellDelegate, QSRichTextImageViewDelegate, QSRichTextVideoViewDelegate>
 
@@ -295,7 +297,7 @@ CGFloat const editorMoreViewHeight = 200;
 -(void)qsTextView:(QSRichTextView *)textView newHeightAfterTextChanged:(CGFloat)newHeight {
     NSIndexPath *indexPath = [self.tableView qmui_indexPathForRowAtView:textView];
     [self.viewModel updateLayoutAtIndexPath:indexPath withCellheight: newHeight];
-    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionNone animated:NO];
 }
 
 #pragma mark -
@@ -469,33 +471,6 @@ CGFloat const editorMoreViewHeight = 200;
     [self didInsertHyperlink:nil];
 }
 
--(void)insertHyperlink:(QSRichTextHyperlink *)hyperlink {
-    
-    UIFont *buttonTextFont = [UIFont systemFontOfSize:15];
-    CGSize maxSize = CGSizeMake(SCREEN_WIDTH - 40, HUGE);
-    CGSize textSize = [hyperlink.title sizeForFont:buttonTextFont size:maxSize mode:NSLineBreakByWordWrapping];
-    textSize.width += 10;
-    QSRichTextLinkButton *linkButon = [[QSRichTextLinkButton alloc]initWithFrame:CGRectMakeWithSize(textSize)];
-    [linkButon setLink:hyperlink];
-    [linkButon setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-    [linkButon setTitle:hyperlink.title forState:UIControlStateNormal];
-    [linkButon.titleLabel setFont:buttonTextFont];
-    [linkButon addTarget:self action:@selector(didInsertHyperlink:) forControlEvents:UIControlEventTouchUpInside];
-    
-    NSMutableAttributedString *linkString = [NSMutableAttributedString yy_attachmentStringWithContent:linkButon contentMode:UIViewContentModeScaleAspectFit attachmentSize:textSize alignToFont:buttonTextFont alignment:YYTextVerticalAlignmentCenter];
-    
-    NSMutableAttributedString *padding = [[NSMutableAttributedString alloc]initWithString:@" " attributes:[QSRichTextAttributes defaultAttributes]];
-    
-    NSMutableAttributedString *linkStringWithPadding = [[NSMutableAttributedString alloc]init];
-    [linkStringWithPadding appendAttributedString:padding];
-    [linkStringWithPadding appendAttributedString:linkString];
-    [linkStringWithPadding appendAttributedString:padding];
-    
-    NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc]initWithAttributedString:self.currentTextView.attributedText];
-    [attributedText replaceCharactersInRange:self.currentTextView.selectedRange withAttributedString:linkStringWithPadding];
-    self.currentTextView.attributedText = attributedText;
-}
-
 -(void)didInsertHyperlink:(id)sender {
     
     QSRichTextHyperlink *hyperlink;
@@ -537,19 +512,64 @@ CGFloat const editorMoreViewHeight = 200;
         
         [aDialogViewController hide];
         
+        QSRichTextHyperlink *newlink = [[QSRichTextHyperlink alloc]init];
+        newlink.title = weakDialog.textField1.text;
+        newlink.link = weakDialog.textField2.text;
+        
         if(hyperlink){
-            [sender setLink:hyperlink];
-            [sender setTitle:hyperlink.title forState:UIControlStateNormal];
+            //在对应位置 替换超链接
+            [self.currentTextView.attributedText enumerateAttribute:YYTextAttachmentAttributeName inRange:self.currentTextView.attributedText.yy_rangeOfAll options:kNilOptions usingBlock:^(id  _Nullable value, NSRange range, BOOL * _Nonnull stop) {
+                YYTextAttachment *attach = value;
+                if (attach) {
+                    QSRichTextHyperlink *link = attach.userInfo[QSRichTextLinkAttributedName];
+                    if (link == hyperlink) {
+                        [self replaceHyperlink:newlink inRange:range];
+                        *stop = YES;
+                    }
+                }
+            }];
         } else {
-            QSRichTextHyperlink *link = [[QSRichTextHyperlink alloc]init];
-            link.title = weakDialog.textField1.text;
-            link.link = weakDialog.textField2.text;
-            [self insertHyperlink:link];
+            //在尾部插入新的 超链接
+            [self replaceHyperlink:newlink inRange:self.currentTextView.selectedRange];
         }
     }];
     [dialogViewController showWithAnimated:YES completion:^(BOOL finished){
         [self richTextEditorCloseMoreView];
     }];
+}
+
+-(void)replaceHyperlink:(QSRichTextHyperlink *)hyperlink inRange:(NSRange)replaceRange {
+    
+    UIFont *buttonTextFont = [UIFont systemFontOfSize:15];
+    CGSize maxSize = CGSizeMake(SCREEN_WIDTH - 40, HUGE);
+    CGSize textSize = [hyperlink.title sizeForFont:buttonTextFont size:maxSize mode:NSLineBreakByWordWrapping];
+    textSize.width += 10;
+    QSRichTextLinkButton *linkButon = [[QSRichTextLinkButton alloc]initWithFrame:CGRectMakeWithSize(textSize)];
+    [linkButon setLink:hyperlink];
+    [linkButon setTitleColor:UIColorBlue forState:UIControlStateNormal];
+    [linkButon setTitle:hyperlink.title forState:UIControlStateNormal];
+    [linkButon.titleLabel setFont:buttonTextFont];
+    [linkButon addTarget:self action:@selector(didInsertHyperlink:) forControlEvents:UIControlEventTouchUpInside];
+    
+    NSMutableAttributedString *linkString = [NSMutableAttributedString yy_attachmentStringWithContent:linkButon
+                                                                                          contentMode:UIViewContentModeScaleAspectFit
+                                                                                       attachmentSize:textSize
+                                                                                          alignToFont:buttonTextFont
+                                                                                            alignment:YYTextVerticalAlignmentCenter
+                                                                                             userInfo:@{QSRichTextLinkAttributedName: hyperlink}];
+    
+    NSMutableAttributedString *padding = [[NSMutableAttributedString alloc]initWithString:@" " attributes:[QSRichTextAttributes defaultAttributes]];
+    
+    NSMutableAttributedString *linkStringWithPadding = [[NSMutableAttributedString alloc]init];
+    [linkStringWithPadding appendAttributedString:padding];
+    [linkStringWithPadding appendAttributedString:linkString];
+    [linkStringWithPadding appendAttributedString:padding];
+    
+    //将 hyperlink 插入到对于位置
+    NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc]initWithAttributedString:self.currentTextView.attributedText];
+    [attributedText replaceCharactersInRange:replaceRange withAttributedString:linkStringWithPadding];
+    self.currentTextView.attributedText = attributedText;
+    self.currentTextView.selectedRange = NSMakeRange(self.currentTextView.attributedText.length, 0);
 }
 
 -(void)richTextEditorCloseMoreView {
