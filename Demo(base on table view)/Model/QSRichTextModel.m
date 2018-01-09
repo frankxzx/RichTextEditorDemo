@@ -51,6 +51,8 @@ NSString *const QSRichTextLinkAttributedName = @"QSRichTextLinkAttributedName";
             return @"QSRichTextListCircleCell";
         case QSRichTextCellTypeListCellNumber:
             return @"QSRichTextListNumberCell";
+        case QSRichTextCellTypeCodeBlock:
+            return @"QSRichTextCodeBlockCell";
     }
 }
 
@@ -155,10 +157,12 @@ NSString *const QSRichTextLinkAttributedName = @"QSRichTextLinkAttributedName";
         case QSRichTextCellTypeTitle:
             [htmlString appendFormat:@"<div class='title'>%@</div>", self.attributedString.string];
             break;
-        case QSRichTextCellTypeText: {
+        case QSRichTextCellTypeText:
+        case QSRichTextCellTypeListCellNumber:
+        case QSRichTextCellTypeListCellCircle:
+        case QSRichTextCellTypeListCellNone:
            [htmlString appendFormat:@"<div>%@</div>", applyHyperlink(applyTextColor(applyBold(applyStrikeThroughText(applyFontStyle(applyItalicText(self.attributedString)))))).string];
             break;
-        }
         case QSRichTextCellTypeImage:
             [htmlString appendString:@"<img src=https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1513334563991&di=7ecafd20cfd4bfd2a7516f1034241df6&imgtype=0&src=http%3A%2F%2Fe.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F29381f30e924b89905322ad164061d950b7bf6c9.jpg width=\'100%\'/>"];
             break;
@@ -173,13 +177,6 @@ NSString *const QSRichTextLinkAttributedName = @"QSRichTextLinkAttributedName";
             break;
         case QSRichTextCellTypeTextBlock:
             [htmlString appendFormat:@"<div class='block'>%@</div>", self.attributedString.string];
-            break;
-        case QSRichTextCellTypeListCellNone:
-            [htmlString appendFormat:@"<div>%@</div>", self.attributedString.string];
-            break;
-        case QSRichTextCellTypeListCellNumber:
-        case QSRichTextCellTypeListCellCircle:
-            [htmlString appendFormat:@"<div>%@</div>", self.attributedString.string];
             break;
         default:
             [htmlString appendFormat:@"<div>%@</div>", self.attributedString.string];

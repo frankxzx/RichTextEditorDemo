@@ -73,7 +73,7 @@ typedef NS_ENUM(NSUInteger, QSRichTextListStyleType) {
 
 -(void)insertPhoto;
 -(void)insertVideo;
--(void)insertAudio;
+-(void)insertCodeBlock;
 -(void)insertSeperator;
 -(void)insertHyperlink;
 

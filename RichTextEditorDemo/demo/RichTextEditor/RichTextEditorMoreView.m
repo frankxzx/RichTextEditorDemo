@@ -25,7 +25,7 @@
 -(instancetype)initWithFrame:(CGRect)frame {
 	if (self = [super initWithFrame:frame]) {
 		self.videoButton = [[QMUIButton alloc]initWithImage:UIImageMake(@"toolbar_video") title:@"视频"];
-		self.audioButton = [[QMUIButton alloc]initWithImage:UIImageMake(@"toolbar_audio") title:@"语音"];
+		self.audioButton = [[QMUIButton alloc]initWithImage:UIImageMake(@"toolbar_audio") title:@"代码块"];
 		self.seperatorButton = [[QMUIButton alloc]initWithImage:UIImageMake(@"toolbar_seperator") title:@"分割线"];
 		self.hyperlinkButton = [[QMUIButton alloc]initWithImage:UIImageMake(@"toolbar_hyperlink") title:@"超链接"];
         self.videoButton.imagePosition = QMUIButtonImagePositionTop;

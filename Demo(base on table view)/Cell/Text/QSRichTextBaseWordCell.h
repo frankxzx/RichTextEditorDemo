@@ -20,6 +20,8 @@
 
 -(BOOL)qsTextView:(YYTextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text;
 
+-(BOOL)qsTextViewShouldBeginEditing:(YYTextView *)textView;
+
 @end
 
 //超链接按钮

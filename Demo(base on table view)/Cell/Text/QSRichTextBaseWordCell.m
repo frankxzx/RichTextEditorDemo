@@ -89,6 +89,13 @@
     [self handleTextChanged:self.textView];
 }
 
+-(BOOL)textViewShouldBeginEditing:(YYTextView *)textView {
+    if (self.qs_delegate && [self.qs_delegate respondsToSelector:@selector(qsTextViewShouldBeginEditing:)]) {
+      return [self.qs_delegate qsTextViewShouldBeginEditing:textView];
+    }
+    return NO;
+}
+
 -(void)textViewDidChangeSelection:(YYTextView *)textView {
     if (self.qs_delegate && [self.qs_delegate respondsToSelector:@selector(qsTextViewDidChanege:selectedRange:)]) {
         [self.qs_delegate qsTextViewDidChanege:(QSRichTextView *)textView selectedRange:textView.selectedRange];

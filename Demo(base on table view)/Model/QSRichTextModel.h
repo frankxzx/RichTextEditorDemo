@@ -24,6 +24,7 @@ typedef NS_ENUM(NSInteger, QSRichTextCellType)
     QSRichTextCellTypeTitle,
     QSRichTextCellTypeCover,
     QSRichTextCellTypeTextBlock,
+    QSRichTextCellTypeCodeBlock,
     QSRichTextCellTypeListCellCircle,
     QSRichTextCellTypeListCellNumber,
     QSRichTextCellTypeListCellNone,

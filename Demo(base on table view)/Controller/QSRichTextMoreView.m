@@ -24,7 +24,7 @@
 -(instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         self.videoButton = [[QMUIButton alloc]initWithImage:UIImageMake(@"toolbar_video") title:@"视频"];
-        self.audioButton = [[QMUIButton alloc]initWithImage:UIImageMake(@"toolbar_audio") title:@"语音"];
+        self.audioButton = [[QMUIButton alloc]initWithImage:UIImageMake(@"icon_code") title:@"代码块"];
         self.seperatorButton = [[QMUIButton alloc]initWithImage:UIImageMake(@"toolbar_seperator") title:@"分割线"];
         self.hyperlinkButton = [[QMUIButton alloc]initWithImage:UIImageMake(@"toolbar_hyperlink") title:@"超链接"];
         self.videoButton.imagePosition = QMUIButtonImagePositionTop;
@@ -38,7 +38,7 @@
         self.videoButton.titleLabel.font = UIFontMake(15);
         
         [self.videoButton addTarget:self action:@selector(insertVideo) forControlEvents:UIControlEventTouchUpInside];
-        [self.audioButton addTarget:self action:@selector(insertAudio) forControlEvents:UIControlEventTouchUpInside];
+        [self.audioButton addTarget:self action:@selector(insertCodeBlock) forControlEvents:UIControlEventTouchUpInside];
         [self.seperatorButton addTarget:self action:@selector(insertSeperator) forControlEvents:UIControlEventTouchUpInside];
         [self.hyperlinkButton addTarget:self action:@selector(insertHyperlink) forControlEvents:UIControlEventTouchUpInside];
         
@@ -77,9 +77,9 @@
     }
 }
 
--(void)insertAudio {
-    if ([self.actionDelegate respondsToSelector:@selector(insertAudio)]) {
-        [self.actionDelegate insertAudio];
+-(void)insertCodeBlock {
+    if ([self.actionDelegate respondsToSelector:@selector(insertCodeBlock)]) {
+        [self.actionDelegate insertCodeBlock];
     }
 }
 

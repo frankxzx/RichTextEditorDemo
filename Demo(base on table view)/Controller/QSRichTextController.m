@@ -24,6 +24,7 @@
 #import "QSRichTextHtmlWriterManager.h"
 #import "NSString+YYAdd.h"
 #import "NSAttributedString+qs.h"
+#import "QSRichTextCodeBlockCell.h"
 
 CGFloat const toolBarHeight = 44;
 CGFloat const editorMoreViewHeight = 200;
@@ -99,7 +100,7 @@ CGFloat const editorMoreViewHeight = 200;
             
         case QSRichTextCellTypeImageCaption:
             ((QSRichTextImageCaptionCell *)cell).qs_delegate = self;
-            ((QSRichTextBlockCell *)cell).textView.attributedText = model.attributedString;
+            ((QSRichTextImageCaptionCell *)cell).textView.attributedText = model.attributedString;
             break;
             
         case QSRichTextCellTypeTitle:
@@ -110,6 +111,11 @@ CGFloat const editorMoreViewHeight = 200;
         case QSRichTextCellTypeTextBlock:
             ((QSRichTextBlockCell *)cell).qs_delegate = self;
             ((QSRichTextBlockCell *)cell).textView.attributedText = model.attributedString;
+            break;
+            
+        case QSRichTextCellTypeCodeBlock:
+            ((QSRichTextCodeBlockCell *)cell).qs_delegate = self;
+            ((QSRichTextCodeBlockCell *)cell).textView.attributedText = model.attributedString;
             break;
             
         case QSRichTextCellTypeListCellCircle:
@@ -146,6 +152,7 @@ CGFloat const editorMoreViewHeight = 200;
         case QSRichTextCellTypeText:
         case QSRichTextCellTypeImageCaption:
         case QSRichTextCellTypeTextBlock:
+        case QSRichTextCellTypeCodeBlock:
         case QSRichTextCellTypeListCellNone:
         case QSRichTextCellTypeListCellNumber:
         case QSRichTextCellTypeListCellCircle: {
@@ -229,7 +236,6 @@ CGFloat const editorMoreViewHeight = 200;
 }
 
 -(void)qsTextViewDidChanege:(QSRichTextView *)textView selectedRange:(NSRange)selectedRange {
-    self.currentTextView = textView;
     NSIndexPath *indexPath = [self.tableView qmui_indexPathForRowAtView:textView];
     QSRichTextModel *model = self.models[indexPath.row];
     QSRichTextCellType cellType = model.cellType;
@@ -252,6 +258,11 @@ CGFloat const editorMoreViewHeight = 200;
 //    //text block 里禁止排序
 //    [self.toolBar.alignButton qs_setEnable:cellType == QSRichTextCellTypeTextBlock];
     [textView setInputAccessoryView:self.toolBar];
+}
+
+-(BOOL)qsTextViewShouldBeginEditing:(YYTextView *)textView {
+    self.currentTextView = (QSRichTextView *)textView;
+    return YES;
 }
 
 -(BOOL)qsTextView:(YYTextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
@@ -469,6 +480,12 @@ CGFloat const editorMoreViewHeight = 200;
     [self didInsertHyperlink:nil];
 }
 
+//插入代码块
+- (void)insertCodeBlock {
+    [self.viewModel addNewLine:QSRichTextCellTypeCodeBlock];
+    [self richTextEditorCloseMoreView];
+}
+
 -(void)didInsertHyperlink:(id)sender {
     
     QSRichTextHyperlink *hyperlink;
@@ -556,7 +573,8 @@ CGFloat const editorMoreViewHeight = 200;
                                                                                             alignment:YYTextVerticalAlignmentCenter
                                                                                              userInfo:@{QSRichTextLinkAttributedName: hyperlink}];
     
-    NSMutableAttributedString *padding = [[NSMutableAttributedString alloc]initWithString:@" "];
+    //为了使后面的 字体继承前面的样式
+    NSMutableAttributedString *padding = [[NSMutableAttributedString alloc]initWithString:@" " attributes:[QSRichTextAttributes defaultAttributes]];
     
     NSMutableAttributedString *linkStringWithPadding = [[NSMutableAttributedString alloc]init];
     [linkStringWithPadding appendAttributedString:padding];
@@ -584,10 +602,6 @@ CGFloat const editorMoreViewHeight = 200;
     [self.toolBar setupTextCountItemWithCount:wordCount];
     self.currentTextView.inputView = self.editorMoreView;
     [self.currentTextView reloadInputViews];
-}
-
-- (void)insertAudio {
-    
 }
 
 @end
