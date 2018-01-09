@@ -314,12 +314,12 @@
 				01DC21D81FF5D7B100A7E5F3 /* QSRichTextWordCell.m */,
 				012C96051FFCA14A0003DACA /* QSRichTextBlockCell.h */,
 				012C96061FFCA14A0003DACA /* QSRichTextBlockCell.m */,
+				014B87432004847B00A94E28 /* QSRichTextCodeBlockCell.h */,
+				014B87442004847B00A94E28 /* QSRichTextCodeBlockCell.m */,
 				012C96081FFCA63A0003DACA /* QSRichTextTitleCell.h */,
 				012C96091FFCA63A0003DACA /* QSRichTextTitleCell.m */,
 				012C960B1FFCA6460003DACA /* QSRichTextImageCaptionCell.h */,
 				012C960C1FFCA6460003DACA /* QSRichTextImageCaptionCell.m */,
-				014B87432004847B00A94E28 /* QSRichTextCodeBlockCell.h */,
-				014B87442004847B00A94E28 /* QSRichTextCodeBlockCell.m */,
 			);
 			path = Text;
 			sourceTree = "<group>";

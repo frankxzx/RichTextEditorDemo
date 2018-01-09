@@ -97,6 +97,29 @@
             break;
         }
             
+        case QSRichTextCellTypeCodeBlock:
+        {
+            QSRichTextView *textView = self.viewController.currentTextView;
+            if (textView) {
+                NSIndexPath *indexPath = [self.tableView qmui_indexPathForRowAtView:textView];
+                QSRichTextModel *currentModel = self.models[indexPath.row];
+                switch (currentModel.cellType) {
+                    case QSRichTextCellTypeText:
+                        currentModel.cellType = QSRichTextCellTypeCodeBlock;
+                        break;
+                    case QSRichTextCellTypeCodeBlock:
+                        currentModel.cellType = QSRichTextCellTypeText;
+                        break;
+                    default:
+                        break;
+                }
+                
+                [self updateCellAtIndexPath:indexPath];
+                [self becomeActiveWithModel:currentModel];
+            }
+            break;
+        }
+            
         case QSRichTextCellTypeListCellNone:
         case QSRichTextCellTypeListCellNumber:
         case QSRichTextCellTypeListCellCircle:
@@ -148,6 +171,7 @@
     [UIView setAnimationsEnabled:NO];
     [tableView beginUpdates];
     [tableView endUpdates];
+    [UIView setAnimationsEnabled:YES];
 }
 
 -(void)replaceLinesWithModel:(QSRichTextModel *)model atIndexPath:(NSIndexPath *)indexPath {

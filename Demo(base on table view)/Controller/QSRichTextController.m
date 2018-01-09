@@ -111,11 +111,13 @@ CGFloat const editorMoreViewHeight = 200;
         case QSRichTextCellTypeTextBlock:
             ((QSRichTextBlockCell *)cell).qs_delegate = self;
             ((QSRichTextBlockCell *)cell).textView.attributedText = model.attributedString;
+            [((QSRichTextBlockCell *)cell) updateCellTextStyle];
             break;
             
         case QSRichTextCellTypeCodeBlock:
             ((QSRichTextCodeBlockCell *)cell).qs_delegate = self;
             ((QSRichTextCodeBlockCell *)cell).textView.attributedText = model.attributedString;
+            [((QSRichTextCodeBlockCell *)cell) updateCellTextStyle];
             break;
             
         case QSRichTextCellTypeListCellCircle:
@@ -271,14 +273,18 @@ CGFloat const editorMoreViewHeight = 200;
     if (model.cellType == QSRichTextCellTypeText) {
         return YES;
     }
-    if ([text isEqualToString:@"\n"]) {
-        NSString *string = [textView.text substringFromIndex:textView.text.length-1];
-        if ([string isEqualToString:@"\n"]) {
-            textView.text = [textView.text qmui_trimLineBreakCharacter];
-            QSRichTextModel *emptyLine = [[QSRichTextModel alloc]initWithCellType:QSRichTextCellTypeText];
-            [self.viewModel addNewLinesWithModels:@[emptyLine]];
-            [self.viewModel becomeActiveWithModel:emptyLine];
-            return NO;
+    if (model.cellType == QSRichTextCellTypeCodeBlock ||
+        model.cellType == QSRichTextCellTypeTextBlock ||
+        model.cellType == QSRichTextCellTypeImageCaption) {
+        if ([text isEqualToString:@"\n"]) {
+            NSString *string = [textView.text substringFromIndex:textView.text.length-1];
+            if ([string isEqualToString:@"\n"]) {
+                [textView deleteBackward];
+                QSRichTextModel *emptyLine = [[QSRichTextModel alloc]initWithCellType:QSRichTextCellTypeText];
+                [self.viewModel addNewLinesWithModels:@[emptyLine]];
+                [self.viewModel becomeActiveWithModel:emptyLine];
+                return NO;
+            }
         }
     }
     return YES;
@@ -305,8 +311,10 @@ CGFloat const editorMoreViewHeight = 200;
 
 -(void)qsTextView:(QSRichTextView *)textView newHeightAfterTextChanged:(CGFloat)newHeight {
     NSIndexPath *indexPath = [self.tableView qmui_indexPathForRowAtView:textView];
-    [self.viewModel updateLayoutAtIndexPath:indexPath withCellheight: newHeight];
-    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionNone animated:NO];
+    if (indexPath) {
+        [self.viewModel updateLayoutAtIndexPath:indexPath withCellheight: newHeight];
+        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionNone animated:NO];
+    }
 }
 
 #pragma mark -

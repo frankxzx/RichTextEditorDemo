@@ -12,18 +12,21 @@
 
 -(void)makeUI {
     [super makeUI];
-    self.textView.textColor = UIColorGrayLighten;
-    self.textView.placeholderFont = UIFontMake(15);
-    self.textView.placeholderTextColor = UIColorGrayLighten;
-    self.textView.placeholderText = @"请输入图片标注";
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.lineSpacing = 2;
-    paragraphStyle.alignment = NSTextAlignmentLeft;
+    paragraphStyle.alignment = NSTextAlignmentCenter;
     self.textView.typingAttributes = @{
              NSFontAttributeName: UIFontMake(15),
              NSParagraphStyleAttributeName:paragraphStyle,
              NSForegroundColorAttributeName: UIColorGrayLighten,
              };
+    NSMutableAttributedString *placeholderText = [[NSMutableAttributedString alloc]initWithString:@"请输入图片标注"];
+    [placeholderText yy_setAttributes:@{
+                                        NSFontAttributeName: UIFontMake(15),
+                                        NSParagraphStyleAttributeName:paragraphStyle,
+                                        NSForegroundColorAttributeName: UIColorGrayLighten,
+                                        }];
+    self.textView.placeholderAttributedText = placeholderText;
 }
 
 @end

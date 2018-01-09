@@ -13,16 +13,25 @@
 -(void)makeUI {
     [super makeUI];
     self.textView.textContainerInset = UIEdgeInsetsMake(10, 35, 10, 35);
-    self.textView.backgroundColor = LightenPlaceholderColor;
-    self.textView.textColor = UIColorGray;
+}
+
+-(void)updateCellTextStyle {
+    NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc]initWithAttributedString:self.textView.attributedText];
+    YYTextBorder *border = [YYTextBorder new];
+    border.fillColor = LightenPlaceholderColor;
+    border.lineStyle = YYTextLineStyleNone;
+    border.insets = UIEdgeInsetsMake(-8, -15, -8, -15);
+    border.cornerRadius = 3;
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.lineSpacing = 2;
     paragraphStyle.alignment = NSTextAlignmentLeft;
-    self.textView.typingAttributes = @{
-                                       NSFontAttributeName: UIFontMake(15),
+    [attributedText yy_setAttributes:@{
+                                       NSFontAttributeName: UIFontMake(14),
                                        NSParagraphStyleAttributeName:paragraphStyle,
                                        NSForegroundColorAttributeName: UIColorGray,
-                                       };
+                                       }];
+    [attributedText yy_setTextBlockBorder:border range:attributedText.yy_rangeOfAll];
+    self.textView.attributedText = attributedText;
 }
 
 @end

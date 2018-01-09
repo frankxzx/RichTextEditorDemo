@@ -178,6 +178,9 @@ NSString *const QSRichTextLinkAttributedName = @"QSRichTextLinkAttributedName";
         case QSRichTextCellTypeTextBlock:
             [htmlString appendFormat:@"<div class='block'>%@</div>", self.attributedString.string];
             break;
+        case QSRichTextCellTypeCodeBlock:
+            [htmlString appendFormat:@"<div class='codeBlock'>%@</div>", self.attributedString.string];
+            break;
         default:
             [htmlString appendFormat:@"<div>%@</div>", self.attributedString.string];
             break;

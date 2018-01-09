@@ -128,8 +128,8 @@
     }
     
     if (textView) {
-        
-        CGFloat resultHeight = [textView sizeThatFits:CGSizeMake(CGRectGetWidth(self.textView.bounds), CGFLOAT_MAX)].height;
+        //行高不足 50 设置为 50
+        CGFloat resultHeight = MAX([textView sizeThatFits:CGSizeMake(CGRectGetWidth(self.textView.bounds), CGFLOAT_MAX)].height, 50);
         CGFloat oldValue = CGRectGetHeight(self.contentView.bounds);
         
         NSLog(@"handleTextDidChange, text = %@, resultHeight = %f old value = %f", textView.text, resultHeight, oldValue);

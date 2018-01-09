@@ -10,4 +10,6 @@
 
 @interface QSRichTextBlockCell : QSRichTextWordCell
 
+-(void)updateCellTextStyle;
+
 @end
