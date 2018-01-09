@@ -8,6 +8,8 @@
 
 #import "QSRichTextModel.h"
 
+NSString *const QSRichTextLinkAttributedName = @"QSRichTextLinkAttributedName";
+
 @implementation QSRichTextModel
 
 -(instancetype)initWithCellType:(QSRichTextCellType)cellType {
@@ -133,6 +135,18 @@
 //        return text;
 //    };
     
+    NSMutableAttributedString *(^applyHyperlink)(NSMutableAttributedString *) = ^(NSMutableAttributedString *attributedText) {
+        NSMutableAttributedString *text = [[NSMutableAttributedString alloc]initWithAttributedString:attributedText];
+        [attributedText enumerateAttribute:YYTextAttachmentAttributeName inRange:attributedText.yy_rangeOfAll options:NSAttributedStringEnumerationReverse usingBlock:^(id  _Nullable value, NSRange range, BOOL * _Nonnull stop) {
+            YYTextAttachment *attach = value;
+            QSRichTextHyperlink *link = attach.userInfo[QSRichTextLinkAttributedName];
+            if (link) {
+                [text replaceCharactersInRange:range withString:[NSString stringWithFormat:@"<a href=\"http://%@\">%@</a>", link.link, link.title]];
+            }
+        }];
+        return text;
+    };
+    
     NSMutableString *htmlString = [[NSMutableString alloc]init];
     switch (self.cellType) {
         case QSRichTextCellTypeCover:
@@ -142,7 +156,7 @@
             [htmlString appendFormat:@"<div class='title'>%@</div>", self.attributedString.string];
             break;
         case QSRichTextCellTypeText: {
-           [htmlString appendFormat:@"<div>%@</div>", applyTextColor(applyBold(applyStrikeThroughText(applyFontStyle(applyItalicText(self.attributedString))))).string];
+           [htmlString appendFormat:@"<div>%@</div>", applyHyperlink(applyTextColor(applyBold(applyStrikeThroughText(applyFontStyle(applyItalicText(self.attributedString)))))).string];
             break;
         }
         case QSRichTextCellTypeImage:
@@ -172,9 +186,7 @@
             break;
     }
     
-    [htmlString stringByReplacingOccurrencesOfString:@"\n" withString:@"<br/>"];
-    
-    return htmlString;
+    return  [htmlString stringByReplacingOccurrencesOfString:@"\n" withString:@"<br/>"];
 }
 
 + (NSString *)hexStringFromColor:(UIColor *)color

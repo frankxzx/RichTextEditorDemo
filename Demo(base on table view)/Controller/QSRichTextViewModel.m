@@ -213,6 +213,7 @@
 -(void)becomeActiveAtIndexPath:(NSIndexPath *)indexPath {
     QSRichTextWordCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
     cell.textView.inputAccessoryView = self.viewController.toolBar;
+    cell.textView.selectedRange = NSMakeRange(cell.textView.attributedText.length, 0);
     [cell becomeFirstResponder];
 }
 

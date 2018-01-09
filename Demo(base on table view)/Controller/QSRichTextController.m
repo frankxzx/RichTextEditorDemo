@@ -27,7 +27,6 @@
 
 CGFloat const toolBarHeight = 44;
 CGFloat const editorMoreViewHeight = 200;
-NSString *const QSRichTextLinkAttributedName = @"QSRichTextLinkAttributedName";
 
 @interface QSRichTextController () <QSRichTextWordCellDelegate, QSRichTextImageViewDelegate, QSRichTextVideoViewDelegate>
 
@@ -223,7 +222,6 @@ NSString *const QSRichTextLinkAttributedName = @"QSRichTextLinkAttributedName";
     NSIndexPath *indexPath = [self.tableView qmui_indexPathForRowAtView:textView];
     QSRichTextModel *model = self.viewModel.models[indexPath.row];
     model.attributedString = [[NSMutableAttributedString alloc]initWithAttributedString:textView.attributedText];
-    self.currentTextView = textView;
     QSRichTextCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
     if ([cell isKindOfClass:[QSRichTextListCell class]]) {
          model.prefixRanges = ((QSRichTextListCell *)cell).prefixRanges.mutableCopy;
@@ -558,7 +556,7 @@ NSString *const QSRichTextLinkAttributedName = @"QSRichTextLinkAttributedName";
                                                                                             alignment:YYTextVerticalAlignmentCenter
                                                                                              userInfo:@{QSRichTextLinkAttributedName: hyperlink}];
     
-    NSMutableAttributedString *padding = [[NSMutableAttributedString alloc]initWithString:@" " attributes:[QSRichTextAttributes defaultAttributes]];
+    NSMutableAttributedString *padding = [[NSMutableAttributedString alloc]initWithString:@" "];
     
     NSMutableAttributedString *linkStringWithPadding = [[NSMutableAttributedString alloc]init];
     [linkStringWithPadding appendAttributedString:padding];

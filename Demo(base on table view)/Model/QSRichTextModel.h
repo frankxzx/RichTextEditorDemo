@@ -10,6 +10,9 @@
 #import "QSRichTextLayout.h"
 #import "QSRichTextHtmlWriter.h"
 #import <YYText/YYText.h>
+#import "QSRichTextHyperlink.h"
+
+extern NSString *const QSRichTextLinkAttributedName;
 
 typedef NS_ENUM(NSInteger, QSRichTextCellType)
 {
