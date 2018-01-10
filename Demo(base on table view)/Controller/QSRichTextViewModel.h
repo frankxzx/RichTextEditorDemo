@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "QSRichTextModel.h"
 #import "UIResponder+qs.h"
+#import "QSArticleUploader.h"
+#import "UIImage+ImageCompress.h"
 
 @class QSRichTextController;
 @interface QSRichTextViewModel : NSObject

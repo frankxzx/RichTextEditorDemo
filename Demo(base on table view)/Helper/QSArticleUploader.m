@@ -11,11 +11,6 @@
 #define kQiniuUploadURL @"https://upload.qbox.me"
 #define kQiniuTaskKey @"qiniuTaskKey"
 
-typedef void (^UploadOneFileSucceededHandler)(NSString *fileIndex, NSDictionary * _Nonnull info);
-typedef void (^UploadOneFileFailedHandler)(NSString *fileIndex, NSError * _Nullable error);
-typedef void (^UploadOneFileProgressHandler)(NSString *fileIndex, int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend);
-typedef void (^UploadAllFilesCompleteHandler)(void);
-
 @interface QSArticleUploader ()
 
 @property(atomic, strong, readwrite) MutableOrderedDictionary <NSString *,QiniuFile *>* _Nonnull files;
@@ -23,16 +18,11 @@ typedef void (^UploadAllFilesCompleteHandler)(void);
 @end
 
 @implementation QSArticleUploader {
-    NSString *accessToken;
     NSMutableArray <NSString *>*fileQueue;
     MutableOrderedDictionary <NSString *, NSURLSessionTask *> *taskRefs;
     NSMutableDictionary *responsesData;
     __weak QSArticleUploader *weakSelf;
     NSURLSession *defaultSession;
-    UploadOneFileSucceededHandler oneSucceededHandler;
-    UploadOneFileFailedHandler oneFailedHandler;
-    UploadOneFileProgressHandler oneProgressHandler;
-    UploadAllFilesCompleteHandler allCompleteHandler;
 }
 
 - (id)init
@@ -58,29 +48,15 @@ typedef void (^UploadAllFilesCompleteHandler)(void);
     return self;
 }
 
-+(id)sharedUploader
++(QSArticleUploader *)sharedUploader
 {
-    static QiniuUploader *uploader;
+    static QSArticleUploader *uploader;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         if(uploader == nil)
-            uploader = [[QiniuUploader alloc] init];
+            uploader = [[QSArticleUploader alloc] init];
     });
     return uploader;
-}
-
-- (Boolean)startUpload:(NSString * _Nonnull)theAccessToken
-uploadOneFileSucceededHandler: (nullable void (^)(NSString *fileIndex, NSDictionary * _Nonnull info)) successHandler
-uploadOneFileFailedHandler: (nullable void (^)(NSString *fileIndex, NSError * _Nullable error)) failHandler
-uploadOneFileProgressHandler: (nullable void (^)(NSString *fileIndex, int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend)) progressHandler
-uploadAllFilesComplete: (nullable void (^)()) completeHandler
-{
-    accessToken = theAccessToken;
-    oneSucceededHandler = successHandler;
-    oneFailedHandler = failHandler;
-    oneProgressHandler = progressHandler;
-    allCompleteHandler = completeHandler;
-    return [self startUpload];
 }
 
 - (Boolean)startUpload
@@ -89,8 +65,12 @@ uploadAllFilesComplete: (nullable void (^)()) completeHandler
         return false;
     }
     _isRunning = YES;
-    [self createFileQueue];
-    [self uploadQueue];
+    if (fileQueue.count == 0) {
+        [self createFileQueue];
+        [self uploadQueue];
+    } else {
+        [self uploadFile:fileQueue.firstObject];
+    }
     return true;
 }
 
@@ -135,7 +115,7 @@ uploadAllFilesComplete: (nullable void (^)()) completeHandler
         [inputStream addPartWithName:@"key" string:file.key];
     }
     
-    [inputStream addPartWithName:@"token" string: accessToken ?: [[QiniuToken sharedQiniuToken] uploadToken]];
+    [inputStream addPartWithName:@"token" string: self.accessToken ?: [[QiniuToken sharedQiniuToken] uploadToken]];
     
     if (file.path) {
         [inputStream addPartWithName:@"file" path: file.path];
@@ -175,18 +155,19 @@ uploadAllFilesComplete: (nullable void (^)()) completeHandler
         [weakSelf uploadFile:fileIndex];
     } else {
         @synchronized (taskRefs) {
-            if (taskRefs.count == 0 && allCompleteHandler) {
+            if (taskRefs.count == 0 && self.allCompleteHandler) {
                 
+                [self.files removeAllObjects];
                 [fileQueue removeAllObjects];
                 [responsesData removeAllObjects];
                 _isRunning = NO;
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    allCompleteHandler();
+                    self.allCompleteHandler();
                     
-                    oneSucceededHandler = nil;
-                    oneFailedHandler = nil;
-                    oneProgressHandler = nil;
-                    allCompleteHandler = nil;
+                    self.oneSucceededHandler = nil;
+                    self.oneFailedHandler = nil;
+                    self.oneProgressHandler = nil;
+                    self.allCompleteHandler = nil;
                 });
             }
         }
@@ -243,9 +224,9 @@ uploadAllFilesComplete: (nullable void (^)()) completeHandler
     totalBytesSent:(int64_t)totalBytesSent
 totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend {
     NSString *taskIndex = task.taskDescription;
-    if (oneProgressHandler) {
+    if (self.oneProgressHandler) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            oneProgressHandler(taskIndex, bytesSent, totalBytesSent, totalBytesExpectedToSend);
+            self.oneProgressHandler(taskIndex, bytesSent, totalBytesSent, totalBytesExpectedToSend);
         });
     }
 }
@@ -264,9 +245,9 @@ totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend {
 {
     NSString  *fileIndex =  task.taskDescription;
     if(error) {
-        if (oneFailedHandler) {
+        if (self.oneFailedHandler) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                oneFailedHandler(fileIndex, error);
+                self.oneFailedHandler(fileIndex, error);
             });
         }
     } else {
@@ -274,16 +255,16 @@ totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend {
         NSData *data = responsesData[task.taskDescription];
         if (httpResponse.statusCode == 200 && data) {
             NSDictionary *response = [NSJSONSerialization JSONObjectWithData:data options:(NSJSONReadingAllowFragments) error:nil];
-            if (oneSucceededHandler) {
+            if (self.oneSucceededHandler) {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    oneSucceededHandler(fileIndex, response);
+                    self.oneSucceededHandler(fileIndex, response);
                 });
             }
         } else {
-            if (oneFailedHandler) {
+            if (self.oneFailedHandler) {
                 error = [NSError errorWithDomain:kQiniuUploadURL code:httpResponse.statusCode userInfo:@{ NSLocalizedDescriptionKey : NSLocalizedString([NSString stringWithUTF8String:[data bytes]], @"")}];
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    oneFailedHandler(fileIndex, error);
+                    self.oneFailedHandler(fileIndex, error);
                 });
             }
         }

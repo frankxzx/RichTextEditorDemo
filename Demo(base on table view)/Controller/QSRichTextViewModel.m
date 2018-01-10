@@ -9,6 +9,7 @@
 #import "QSRichTextViewModel.h"
 #import "QSRichTextController.h"
 #import "QSRichTextWordCell.h"
+@import AFNetworking;
 
 @interface QSRichTextViewModel()
 
@@ -54,7 +55,49 @@
     };
     
     switch (cellType) {
-        case QSRichTextCellTypeImage:
+        case QSRichTextCellTypeImage: {
+
+            //新生成的 textView 响应, 光标位置移动
+            [self becomeActiveWithModel:emptyLine];
+            [self.tableView qmui_scrollToBottom];
+            
+            NSString *imagePath = [[NSBundle mainBundle]pathForResource:@"test_image" ofType:@"jpeg"];
+            UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
+            UIImage *compressImage = [UIImage compressImage:image compressRatio:1 maxCompressRatio:0.8];
+            NSData *uploadData = UIImageJPEGRepresentation(compressImage, 1);
+            
+            model.uploadData = UIImageJPEGRepresentation(compressImage.qmui_grayImage, 1);
+            
+            if ([self isLastLineEmpty]) {
+                replaceLastLineWithEmptyTextLine();
+            } else {
+                addNewLineWithEmptyTextLine();
+            }
+            
+            QiniuFile *file = [[QiniuFile alloc]initWithFileData:uploadData];
+            NSString *uuID = [NSUUID UUID].UUIDString;
+            model.uploadID = uuID;
+            [QSArticleUploader sharedUploader].accessToken = @"Vxc1Zxa8jfgt-eu-zVy875_jIl7umwzaICxpW1v8:kg1HvDl3SMZs0fIqGwYDKAmD81s=:eyJzY29wZSI6InFzLXBsYXRmb3JtIiwiZGVhZGxpbmUiOjE1MTU1NzgxNTB9";
+            [[QSArticleUploader sharedUploader]insertUploadWithFile:file withFileIndex:uuID];
+            
+            [[QSArticleUploader sharedUploader] setOneSucceededHandler:^(NSString *fileIndex, NSDictionary * _Nonnull info) {
+                model.uploadData = uploadData;
+                QMUILog(@"success fileIndex: %@, info:%@",fileIndex, info);
+                [self updateCellAtIndexPath:[NSIndexPath indexPathForRow:[self.models indexOfObject:model] inSection:0]];
+            }];
+            
+            [[QSArticleUploader sharedUploader] setOneFailedHandler:^(NSString *fileIndex, NSError * _Nullable error) {
+                QMUILog(@"fail fileIndex: %@, error:%@",fileIndex, error);
+            }];
+            
+            [[QSArticleUploader sharedUploader] setOneProgressHandler:^(NSString *fileIndex, int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend) {
+                QMUILog(@"uploading fileIndex: %@, didSend byte: %lld, total byte: %lld",fileIndex, bytesSent, totalBytesSent);
+            }];
+            
+            [[QSArticleUploader sharedUploader]startUpload];
+            
+            break;
+        }
         case QSRichTextCellTypeVideo:
         case QSRichTextCellTypeImageCaption:
         {

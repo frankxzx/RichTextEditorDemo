@@ -40,7 +40,11 @@ typedef NS_ENUM(NSInteger, QSRichTextCellType)
 @property(nonatomic, assign) QSRichTextCellType cellType;
 @property(nonatomic, assign) CGFloat cellHeight;
 @property(nonatomic, weak) QSRichTextModel *captionModel;
+@property(nonatomic, copy) NSString *uploadID;
+@property(nonatomic, strong) NSData *uploadData;
+@property(nonatomic, copy) UIImage *uploadImage;
 
 -(instancetype)initWithCellType:(QSRichTextCellType)cellType;
+-(UIImage *)uploadImage;
 
 @end

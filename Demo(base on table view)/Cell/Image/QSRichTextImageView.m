@@ -47,6 +47,7 @@
         [self.closeButton addTarget:self action:@selector(deleteImage:) forControlEvents:UIControlEventTouchUpInside];
         
         self.imageView = [[UIImageView alloc]init];
+        [self.imageView setContentMode:UIViewContentModeScaleAspectFill];
         [self.imageView setUserInteractionEnabled:YES];
         [self addSubview:self.imageView];
         

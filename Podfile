@@ -18,6 +18,7 @@ target 'Demo(base on table view)' do
     pod 'IQKeyboardManager'
     pod 'QiniuUpload'
     pod 'UIImage+ImageCompress'
+    pod 'AFNetworking'
     
 end
 

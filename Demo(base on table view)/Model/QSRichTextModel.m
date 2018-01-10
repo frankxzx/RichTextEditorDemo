@@ -56,6 +56,14 @@ NSString *const QSRichTextLinkAttributedName = @"QSRichTextLinkAttributedName";
     }
 }
 
+-(UIImage *)uploadImage {
+    if (!_uploadImage) {
+        _uploadImage = [UIImage imageWithData:self.uploadData];
+       return _uploadImage;
+    }
+    return _uploadImage;
+}
+
 -(NSString *)stringByEncodingAsHTML {
     
     NSMutableAttributedString *(^applyStrikeThroughText)(NSMutableAttributedString *) = ^(NSMutableAttributedString *attributedText) {

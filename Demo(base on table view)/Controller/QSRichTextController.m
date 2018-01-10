@@ -90,7 +90,7 @@ CGFloat const editorMoreViewHeight = 200;
             break;
         
         case QSRichTextCellTypeImage:
-            ((QSRichTextImageCell *)cell).attchmentImage = [UIImage qmui_imageWithColor:[UIColor qmui_randomColor] size:CGSizeMake(SCREEN_WIDTH, SCREEN_HEIGHT / 4) cornerRadius:0];
+            ((QSRichTextImageCell *)cell).attchmentImage = model.uploadImage;
             ((QSRichTextImageCell *)cell).attchmentImageView.actionDelegate = self;
             break;
         
@@ -167,7 +167,7 @@ CGFloat const editorMoreViewHeight = 200;
         }
         case QSRichTextCellTypeImage:
             return [self.tableView qmui_heightForCellWithIdentifier:model.reuseID cacheByIndexPath:indexPath configuration:^(id cell) {
-                ((QSRichTextImageCell *)cell).attchmentImage = [UIImage qmui_imageWithColor:[UIColor qmui_randomColor] size:CGSizeMake(SCREEN_WIDTH, SCREEN_HEIGHT / 4) cornerRadius:0];
+                ((QSRichTextImageCell *)cell).attchmentImage = model.uploadImage;
             }];
             
         case QSRichTextCellTypeVideo:
@@ -370,6 +370,16 @@ CGFloat const editorMoreViewHeight = 200;
 
 -(void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
     self.isTableViewScrolling = NO;
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    self.isTableViewScrolling = NO;
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    if (!decelerate) {
+        self.isTableViewScrolling = NO;
+    }
 }
 
 #pragma mark -
