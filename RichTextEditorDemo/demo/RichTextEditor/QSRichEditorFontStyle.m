@@ -10,10 +10,6 @@
 #import <QMUIKit/QMUIKit.h>
 #import "QSRichTextAttributes.h"
 
-#define QSRichEditorPlaceholderColor UIColorGray
-#define QSRichEditorLargerColor UIColorBlack
-#define QSRichEditorNormalColor UIColorBlack
-
 NSString * const QSRichEditorTextStyleKey = @"QSRichEditorTextStyle";
 
 @implementation QSRichEditorFontStyle
@@ -42,15 +38,15 @@ NSString * const QSRichEditorTextStyleKey = @"QSRichEditorTextStyle";
         self.style = style;
         switch (style) {
             case QSRichEditorTextStylePlaceholder:
-                self.font = UIFontMake(15);
+                self.font = QSRichEditorPlaceholderFont;
                 self.textColor = QSRichEditorPlaceholderColor;
                 break;
             case QSRichEditorTextStyleNormal:
-                self.font = UIFontMake(16);
+                self.font = QSRichEditorNormalFont;
                 self.textColor = QSRichEditorNormalColor;
                 break;
             case QSRichEditorTextStyleLarger:
-                self.font = UIFontMake(20);
+                self.font = QSRichEditorLargerFont;
                 self.textColor = QSRichEditorLargerColor;
                 break;
         }

@@ -53,7 +53,7 @@ typedef NS_ENUM(NSUInteger, QSRichTextListStyleType) {
 
 -(void)closeMoreView;
 
--(void)updateStateWithTypingAttributes:(NSDictionary *)attributes;
+-(void)updateStateWithAttributedString:(NSAttributedString *)attributedText selectedRange:(NSRange)selectedRange;
 
 -(void)initEditorBarItems;
 

@@ -7,6 +7,7 @@
 //
 
 #import "NSAttributedString+qs.h"
+#import <QMUIKit/QMUIKit.h>
 
 @implementation NSAttributedString (qs)
 
@@ -64,6 +65,35 @@
     if (delegate) CFRelease(delegateRef);
     
     return atr;
+}
+
+-(BOOL)isBold {
+    UIFontDescriptor *fontDescriptor = self.yy_font.fontDescriptor;
+    UIFontDescriptorSymbolicTraits fontDescriptorSymbolicTraits = fontDescriptor.symbolicTraits;
+    BOOL isBold = (fontDescriptorSymbolicTraits & UIFontDescriptorTraitBold) != 0;
+    return isBold;
+}
+
+-(BOOL)isItalic {
+    return  CGAffineTransformEqualToTransform(self.yy_textGlyphTransform, YYTextCGAffineTransformMakeSkew(-0.3, 0));
+}
+
+-(BOOL)isStrikeThrough {
+    return self.yy_textStrikethrough.style == YYTextLineStyleSingle;
+}
+
+-(QSRichEditorTextStyle)qsStyle {
+    UIColor *color = self.yy_color;
+    UIFont *font = self.yy_font;
+    
+    if (color == QSRichEditorPlaceholderColor && font == QSRichEditorPlaceholderFont) {
+        return QSRichEditorTextStylePlaceholder;
+    } else if (color == QSRichEditorNormalColor && font == QSRichEditorNormalFont) {
+        return QSRichEditorTextStyleNormal;
+    } else if (color == QSRichEditorLargerColor && font == QSRichEditorLargerFont) {
+        return QSRichEditorTextStyleLarger;
+    }
+    return QSRichEditorTextStyleNormal;
 }
 
 @end

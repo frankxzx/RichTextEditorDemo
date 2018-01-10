@@ -22,6 +22,8 @@
 //插入新的行
 -(void)addNewLine:(QSRichTextCellType)cellType;
 
+-(void)addNewLine:(QSRichTextCellType)cellType atBeginIndexPath:(NSIndexPath *)indexPath;
+
 -(void)addNewLinesWithModels:(NSArray <QSRichTextModel *>*) models;
 
 //刷新某一行的高度

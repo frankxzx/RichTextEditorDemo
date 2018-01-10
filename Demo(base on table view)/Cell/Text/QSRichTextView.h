@@ -20,7 +20,6 @@
 @interface QSRichTextView : YYTextView
 
 @property (nonatomic,weak) id <QSRichTextViewDelegate> qs_delegate;
-@property(nonatomic, assign) BOOL shouldRejectSystemScroll;// 如果在 handleTextChanged: 里主动调整 contentOffset，则为了避免被系统的自动调整覆盖，会利用这个标记去屏蔽系统对 setContentOffset: 的调用
 
 - (void)updateTextStyle;
 

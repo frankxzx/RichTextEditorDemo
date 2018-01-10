@@ -11,6 +11,7 @@
 #import <YYText/YYText.h>
 #import "QSRichEditorFontStyle.h"
 #import "UIResponder+qs.h"
+#import "NSAttributedString+qs.h"
 
 @interface QSRichTextBar()
 
@@ -45,8 +46,8 @@
         self.orderedListButton = [UIBarButtonItem qs_setBarButtonItemWithImage:UIImageMake(@"toolbar_order") target:self action:@selector(setOrderedList:)];
         self.photoButton = [UIBarButtonItem qs_setBarButtonItemWithImage:UIImageMake(@"toolbar_image") target:self action:@selector(insertImage:)];
         self.blockquoteButton = [UIBarButtonItem qs_setBarButtonItemWithImage:UIImageMake(@"toolbar_blockquote")
-                                                                       selectedImage:[UIImageMake(@"toolbar_blockquote") qmui_imageWithTintColor:UIColorBlue]
-                                                                          target:self action:@selector(setBlockquote)];
+                                                                selectedImage:[UIImageMake(@"toolbar_blockquote") qmui_imageWithTintColor:UIColorBlue]
+                                                                       target:self action:@selector(setBlockquote)];
         self.moreButton = [UIBarButtonItem qs_setBarButtonItemWithImage:UIImageMake(@"toolbar_more") target:self action:@selector(openMoreView:)];
         self.textEditorCloseButton = [UIBarButtonItem qs_setBarButtonItemWithImage:UIImageMake(@"toolbar_close") target:self action:@selector(endTextEditor)];
         self.moreViewCloseButton = [UIBarButtonItem qs_setBarButtonItemWithImage:UIImageMake(@"icon_close") target:self action:@selector(closeMoreView)];
@@ -57,6 +58,7 @@
         
         [self setupTextCountItemWithCount:0];
         [self initEditorBarItems];
+        [self.beginTextEditorButton qs_setEnable:NO];
     }
     
     return self;
@@ -96,7 +98,7 @@
 -(void)beginTextEditor:(UIBarButtonItem *)sender {
     //先关闭 『更多』
     if ([self isTextEditor]) {
-        [self endTextEditor];
+        [self initEditorBarItems];
         return;
     }
     
@@ -105,10 +107,6 @@
                      self.italicButton,
                      self.strikeThroughButton,
                      self.textEditorCloseButton] animated:YES];
-}
-
--(void)endTextEditor {
-    [self initEditorBarItems];
 }
 
 -(void)editorMoreViewToolBarItems {
@@ -237,82 +235,60 @@
     }
 }
 
--(void)updateStateWithTypingAttributes:(NSDictionary *)attributes {
-    BOOL isBlod;
-    BOOL isItalic;
-    BOOL isStrikeThrough;
+-(void)updateStateWithAttributedString:(NSAttributedString *)attributedText selectedRange:(NSRange)selectedRange {
     
-    QSRichEditorFontStyle *fontStyle = attributes[@"QSRichEditorFontStyle"];
-    if (fontStyle) {
-        switch (fontStyle.style) {
-            case QSRichEditorTextStyleNormal:
-                self.fontStyleButton.image = UIImageMake(@"toolbar_font_style1").originalImage;
-                break;
-                
-            case QSRichEditorTextStylePlaceholder:
-                self.fontStyleButton.image = UIImageMake(@"toolbar_font_style2").originalImage;
-                break;
-                
-            case QSRichEditorTextStyleLarger:
-                self.fontStyleButton.image = UIImageMake(@"toolbar_font_style3").originalImage;
-                break;
-        }
+    // range length 为 0 禁止选中
+    [self.beginTextEditorButton qs_setEnable:selectedRange.length != 0];
+    
+    //选取选中样式
+    if (selectedRange.location > attributedText.length) { return; }
+    
+    NSAttributedString *selectedAttributedText;
+    if (selectedRange.location == attributedText.length) {
+        //当选中 range 为末尾时,取前一个字符
+        selectedAttributedText = [attributedText attributedSubstringFromRange:NSMakeRange(selectedRange.location-1, 1)];
+    } else if (selectedRange.length == 0) {
+        //当选中 range length 为 0 时,取后面一个字符
+        selectedAttributedText = [attributedText attributedSubstringFromRange:NSMakeRange(selectedRange.location, 1)];
     } else {
-        self.fontStyleButton.image = UIImageMake(@"toolbar_font_style1").originalImage;
+        //正常选中 range
+        selectedAttributedText = [attributedText attributedSubstringFromRange:selectedRange];
     }
     
-//    NSArray *styles = attributes[@"DTTextLists"];
-//    QSRichTextListStyleType *listStyle = styles.firstObject;
-//    if (listStyle) {
-//        switch (listStyle.type) {
-//            case QSRichTextListTypeNone:
-//                self.orderedListButton.image = UIImageMake(@"toolbar_order").originalImage;
-//                break;
-//
-//            case QSRichTextListTypeDecimal:
-//                self.orderedListButton.image = UIImageMake(@"toolbar_order_number").originalImage;
-//                break;
-//
-//            case QSRichTextListTypeCircle:
-//                self.orderedListButton.image = UIImageMake(@"toolbar_order_dot").originalImage;
-//                break;
-//
-//            default:
-//                break;
-//        }
-//        [self.photoButton qs_setEnable:NO];
-//    } else {
-//        self.orderedListButton.image = UIImageMake(@"toolbar_order").originalImage;
-//        [self.photoButton qs_setEnable:YES];
-//    }
+    BOOL isBold = [selectedAttributedText isBold];
+    BOOL isItalic = [selectedAttributedText isItalic];
+    BOOL isStrikeThrough = [selectedAttributedText isStrikeThrough];
     
-//    CTTextAlignment alignmanet = attributes.paragraphStyle.alignment;
-//    switch (alignmanet) {
-//        case kCTTextAlignmentLeft:
-//            self.alignButton.image = UIImageMake(@"toolbar_align_left").originalImage;
-//            break;
-//
-//        case kCTTextAlignmentRight:
-//            self.alignButton.image = UIImageMake(@"toolbar_align_right").originalImage;
-//            break;
-//
-//        case kCTTextAlignmentCenter:
-//            self.alignButton.image = UIImageMake(@"toolbar_align_center").originalImage;
-//            break;
-//        default: break;
-//    }
-    
-    [self.boldButton qs_setSelected:isBlod];
+    [self.boldButton qs_setSelected:isBold];
     [self.italicButton qs_setSelected:isItalic];
     [self.strikeThroughButton qs_setSelected:isStrikeThrough];
     
-//    UIResponder *currentFirstResponder = [UIResponder currentFirstResponder];
-//    if ([currentFirstResponder isKindOfClass:NSClassFromString(@"QSTextBlockView")]) {
-//        [self.alignButton qs_setEnable:NO];
-//    } else {
-//        [self.alignButton qs_setEnable:NO];
-//    }
+    QSRichEditorTextStyle textStyle = [selectedAttributedText qsStyle];
+    switch (textStyle) {
+        case QSRichEditorTextStyleNormal:
+            self.fontStyleButton.image = UIImageMake(@"toolbar_font_style1").originalImage;
+            break;
+            
+        case QSRichEditorTextStylePlaceholder:
+            self.fontStyleButton.image = UIImageMake(@"toolbar_font_style2").originalImage;
+            break;
+            
+        case QSRichEditorTextStyleLarger:
+            self.fontStyleButton.image = UIImageMake(@"toolbar_font_style3").originalImage;
+            break;
+    }
     
+    NSTextAlignment alignment = attributedText.yy_alignment;
+    if (alignment == NSTextAlignmentLeft) {
+        self.alignButton.image = UIImageMake(@"toolbar_align_center").originalImage;
+        self.alignButton.tag = NSTextAlignmentCenter;
+    } else if (alignment == NSTextAlignmentCenter) {
+        self.alignButton.image = UIImageMake(@"toolbar_align_right").originalImage;
+        self.alignButton.tag = NSTextAlignmentRight;
+    } else if (alignment == NSTextAlignmentRight) {
+        self.alignButton.image = UIImageMake(@"toolbar_align_left").originalImage;
+        self.alignButton.tag = NSTextAlignmentLeft;
+    }
 }
 
 -(void)setListType:(QSRichTextListStyleType)listType {

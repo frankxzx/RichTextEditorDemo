@@ -33,6 +33,7 @@ CGFloat const editorMoreViewHeight = 200;
 
 @property(nonatomic, strong) QSRichTextViewModel *viewModel;
 @property(nonatomic, strong) QSRichTextMoreView *editorMoreView;
+@property(nonatomic, assign) BOOL isTableViewScrolling;
 
 @end
 
@@ -240,6 +241,11 @@ CGFloat const editorMoreViewHeight = 200;
 }
 
 -(void)qsTextViewDidChanege:(QSRichTextView *)textView selectedRange:(NSRange)selectedRange {
+    
+    if (self.isTableViewScrolling) {
+        return;
+    }
+    
     NSIndexPath *indexPath = [self.tableView qmui_indexPathForRowAtView:textView];
     QSRichTextModel *model = self.models[indexPath.row];
     QSRichTextCellType cellType = model.cellType;
@@ -257,21 +263,29 @@ CGFloat const editorMoreViewHeight = 200;
         default:
             break;
     }
-//    //text block 里禁止插入图片
-//    [self.toolBar.photoButton qs_setEnable:cellType == QSRichTextCellTypeTextBlock];
-//    //text block 里禁止排序
-//    [self.toolBar.alignButton qs_setEnable:cellType == QSRichTextCellTypeTextBlock];
-    
-    NSAttributedString *attributedText = textView.attributedText;
-    NSDictionary *attributes = [attributedText attributesAtIndex:selectedRange.location effectiveRange:nil];
-    UIFont *font = attributes[NSFontAttributeName];
-    NSParagraphStyle *paragraph = attributes[NSParagraphStyleAttributeName];
-    
-    if (<#condition#>) {
-        <#statements#>
+
+    switch (cellType) {
+        case QSRichTextCellTypeListCellNone:
+            self.toolBar.orderedListButton.image = UIImageMake(@"toolbar_order").originalImage;
+            break;
+        case QSRichTextCellTypeListCellCircle:
+            self.toolBar.orderedListButton.image = UIImageMake(@"toolbar_order_number").originalImage;
+            break;
+        case QSRichTextCellTypeListCellNumber:
+            self.toolBar.orderedListButton.image = UIImageMake(@"toolbar_order_dot").originalImage;
+            break;
+        default:
+            break;
     }
     
+    //更新 toolBar 按钮的状态
+    [self.toolBar updateStateWithAttributedString:textView.attributedText selectedRange:selectedRange];
+    //确保 键盘每次被响应的时候 toolBar 是初始化的样式
+    if (textView == self.currentTextView && textView.inputAccessoryView) {
+        return;
+    }
     [textView setInputAccessoryView:self.toolBar];
+    [self richTextEditorCloseMoreView];
 }
 
 -(BOOL)qsTextViewShouldBeginEditing:(YYTextView *)textView {
@@ -324,9 +338,31 @@ CGFloat const editorMoreViewHeight = 200;
 -(void)qsTextView:(QSRichTextView *)textView newHeightAfterTextChanged:(CGFloat)newHeight {
     NSIndexPath *indexPath = [self.tableView qmui_indexPathForRowAtView:textView];
     if (indexPath) {
+        //换行时 去除上一行的 部分样式 （中划线 。。。）
+        NSRange range = NSMakeRange(textView.attributedText.length - 1, 1);
+        NSAttributedString *newLine = [textView.attributedText attributedSubstringFromRange:range];
+        if ([newLine.string isEqualToString:@"\n"]) {
+            NSMutableAttributedString *newAttributedText = [[NSMutableAttributedString alloc]initWithAttributedString:textView.attributedText];
+            NSAttributedString *replaceText = [[NSAttributedString alloc]initWithString:@"\n" attributes:[QSRichTextAttributes defaultAttributes]];
+            [newAttributedText replaceCharactersInRange:range withAttributedString:replaceText];
+            //防止死循环
+            textView.qs_delegate = nil;
+            textView.attributedText = newAttributedText;
+            textView.selectedRange = NSMakeRange(textView.attributedText.length, 0);
+            textView.qs_delegate = self;
+        }
         [self.viewModel updateLayoutAtIndexPath:indexPath withCellheight: newHeight];
         [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionNone animated:NO];
+        [self richTextEditorCloseMoreView];
     }
+}
+
+-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    self.isTableViewScrolling = YES;
+}
+
+-(void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
+    self.isTableViewScrolling = NO;
 }
 
 #pragma mark -
@@ -488,7 +524,9 @@ CGFloat const editorMoreViewHeight = 200;
 }
 
 -(void)insertPhoto {
-    [self.viewModel addNewLine:QSRichTextCellTypeImage];
+    NSIndexPath *currentIndexPath = [self.tableView qmui_indexPathForRowAtView:self.currentTextView];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:currentIndexPath.row inSection:0];
+    [self.viewModel addNewLine:QSRichTextCellTypeImage atBeginIndexPath:indexPath];
     [self richTextEditorCloseMoreView];
 }
 

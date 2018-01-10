@@ -8,6 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
+#define QSRichEditorPlaceholderColor UIColorGray
+#define QSRichEditorLargerColor UIColorBlack
+#define QSRichEditorNormalColor UIColorBlack
+
+#define QSRichEditorPlaceholderFont UIFontMake(15)
+#define QSRichEditorNormalFont UIFontMake(16)
+#define QSRichEditorLargerFont UIFontMake(20)
+
+
 typedef NS_OPTIONS(NSUInteger, QSRichEditorTextStyle) {
     QSRichEditorTextStylePlaceholder,
     QSRichEditorTextStyleNormal,

@@ -30,13 +30,7 @@
     if (self.text.length == 0 && [self.qs_delegate respondsToSelector:@selector(qsTextFieldDeleteBackward:)]) {
         [self.qs_delegate qsTextFieldDeleteBackward:self];
     }
-
     [super deleteBackward];
 }
-
-//-(BOOL)becomeFirstResponder {
-//
-//    [super becomeFirstResponder];
-//}
 
 @end

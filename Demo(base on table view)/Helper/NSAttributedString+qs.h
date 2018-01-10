@@ -7,6 +7,7 @@
 //
 
 #import <YYText/YYText.h>
+#import "QSRichEditorFontStyle.h"
 
 @interface NSAttributedString (qs)
 
@@ -18,5 +19,8 @@
                                                      userInfo:(NSDictionary *)userInfo;
 
 -(BOOL)isItalic;
+-(BOOL)isBold;
+-(BOOL)isStrikeThrough;
+-(QSRichEditorTextStyle)qsStyle;
 
 @end

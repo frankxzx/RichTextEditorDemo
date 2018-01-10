@@ -10,7 +10,7 @@
 #import "QSRichTextMoreView.h"
 #import "QSRichTextAttributes.h"
 
-@interface QSRichTextWordCell () <YYTextViewDelegate, QSRichTextEditorFormat>
+@interface QSRichTextWordCell ()
 
 @end
 
@@ -27,19 +27,6 @@
     [super makeUI];
     self.textView.typingAttributes = [QSRichTextAttributes defaultAttributes];
 }
-
-//-(void)richTextEditorOpenMoreView {
-//    NSInteger wordCount = [self.textView.attributedText yy_plainTextForRange:self.textView.attributedText.yy_rangeOfAll].length;
-//    [self.toolBar setupTextCountItemWithCount:wordCount];
-//    self.textView.inputView = self.editorMoreView;
-//    [self.textView reloadInputViews];
-//}
-//
-//-(void)richTextEditorCloseMoreView {
-//    [self.toolBar initEditorBarItems];
-//    self.textView.inputView = nil;
-//    [self.textView reloadInputViews];
-//}
 
 - (void)setBodyTextStyleWithPlaceholder:(BOOL)isFirstLine {
     self.textView.placeholderTextColor = UIColorGrayLighten;

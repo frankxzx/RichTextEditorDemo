@@ -31,12 +31,16 @@
 //当插入图片，图片注释，视频，分隔符，代码块时默认添加空的一行
 -(void)addNewLine:(QSRichTextCellType)cellType {
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.models.count - 1 inSection:0];
+    [self addNewLine:(QSRichTextCellType)cellType atBeginIndexPath:indexPath];
+}
+
+-(void)addNewLine:(QSRichTextCellType)cellType atBeginIndexPath:(NSIndexPath *)indexPath {
     QSRichTextModel *model = [[QSRichTextModel alloc]initWithCellType:cellType];
     QSRichTextModel *emptyLine = [[QSRichTextModel alloc]initWithCellType:QSRichTextCellTypeText];
     
     //正常插两行
     void (^addNewLineWithEmptyTextLine)(void) = ^{
-         [self addNewLinesWithModels:@[model, emptyLine]];
+        [self addNewLinesWithModels:@[model, emptyLine] atBeginIndexPath:indexPath];
     };
     
     //当上一行文本行 还没来得及输入内容时，直接将其替换
@@ -78,8 +82,8 @@
         {
             QSRichTextView *textView = self.viewController.currentTextView;
             if (textView) {
-              NSIndexPath *indexPath = [self.tableView qmui_indexPathForRowAtView:textView];
-              QSRichTextModel *currentModel = self.models[indexPath.row];
+                NSIndexPath *indexPath = [self.tableView qmui_indexPathForRowAtView:textView];
+                QSRichTextModel *currentModel = self.models[indexPath.row];
                 switch (currentModel.cellType) {
                     case QSRichTextCellTypeText:
                         currentModel.cellType = QSRichTextCellTypeTextBlock;
@@ -134,12 +138,12 @@
             }
             break;
         }
-                
+            
         case QSRichTextCellTypeText:
         case QSRichTextCellTypeTitle:
         case QSRichTextCellTypeCover:
             [self addNewLinesWithModels:@[model]];
-        break;
+            break;
     }
 }
 
@@ -152,9 +156,10 @@
 }
 
 //在指定的索引插入新的行
--(void)addNewLinesWithModels:(NSArray <QSRichTextModel *>*) models atBeginIndexPath:(NSIndexPath *)indexPath {
+-(void)addNewLinesWithModels:(NSArray <QSRichTextModel *>*)models atBeginIndexPath:(NSIndexPath *)indexPath {
     NSArray <NSIndexPath *>*indexPaths = [self insertIndexPathsAtIndexPath:indexPath count:models.count];
-    [self.models addObjectsFromArray:models];
+    NSRange range = NSMakeRange(indexPaths.firstObject.row, indexPaths.count);
+    [self.models insertObjects:models atIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
     UITableView *tableView = self.viewController.tableView;
     [tableView beginUpdates];
     [tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
@@ -237,10 +242,12 @@
 }
 
 -(void)becomeActiveAtIndexPath:(NSIndexPath *)indexPath {
-    QSRichTextWordCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-    cell.textView.inputAccessoryView = self.viewController.toolBar;
-    cell.textView.selectedRange = NSMakeRange(cell.textView.attributedText.length, 0);
-    [cell becomeFirstResponder];
+    QSRichTextCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    if ([cell isKindOfClass:[QSRichTextBaseWordCell class]]) {
+        ((QSRichTextBaseWordCell *)cell).textView.inputAccessoryView = self.viewController.toolBar;
+        ((QSRichTextBaseWordCell *)cell).textView.selectedRange = NSMakeRange(((QSRichTextBaseWordCell *)cell).textView.attributedText.length, 0);
+        [cell becomeFirstResponder];
+    }
 }
 
 -(NSArray<QSRichTextModel *> *)models {
