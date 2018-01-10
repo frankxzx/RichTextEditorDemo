@@ -183,6 +183,13 @@ CGFloat const editorMoreViewHeight = 200;
     }
 }
 
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    QSRichTextCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    if ([cell isMemberOfClass:[QSRichTextAddCoverCell class]]) {
+        
+    }
+}
+
 //-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
 //    NSIndexPath *currentTextViewIndexPath = [self.tableView qmui_indexPathForRowAtView:self.currentTextView];
 //    if ([currentTextViewIndexPath isEqual:indexPath]) {

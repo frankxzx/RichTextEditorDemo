@@ -16,6 +16,7 @@ target 'Demo(base on table view)' do
     pod 'YYText'
     pod 'ZFPlayer'
     pod 'IQKeyboardManager'
+    pod 'QiniuUpload'
     
 end
 
