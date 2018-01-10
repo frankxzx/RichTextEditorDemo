@@ -23,6 +23,7 @@
 		014B87452004847B00A94E28 /* QSRichTextCodeBlockCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 014B87442004847B00A94E28 /* QSRichTextCodeBlockCell.m */; };
 		014B874A2005DB9B00A94E28 /* test_image.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 014B87492005DB9A00A94E28 /* test_image.jpeg */; };
 		014B874D2005DC1700A94E28 /* QSArticleUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = 014B874C2005DC1700A94E28 /* QSArticleUploader.m */; };
+		014B87512005E79700A94E28 /* OrderedDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 014B87502005E79700A94E28 /* OrderedDictionary.m */; };
 		015167DD1FE76B6D00F2F1C7 /* DTImageCaptionAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 015167DC1FE76B6D00F2F1C7 /* DTImageCaptionAttachment.m */; };
 		015168121FE8DC4A00F2F1C7 /* DTTextBlockAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 015168111FE8DC4A00F2F1C7 /* DTTextBlockAttachment.m */; };
 		015168151FE8E20100F2F1C7 /* NSString+YYAdd.m in Sources */ = {isa = PBXBuildFile; fileRef = 015168141FE8E20100F2F1C7 /* NSString+YYAdd.m */; };
@@ -112,6 +113,8 @@
 		014B87492005DB9A00A94E28 /* test_image.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = test_image.jpeg; sourceTree = "<group>"; };
 		014B874B2005DC1700A94E28 /* QSArticleUploader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSArticleUploader.h; sourceTree = "<group>"; };
 		014B874C2005DC1700A94E28 /* QSArticleUploader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSArticleUploader.m; sourceTree = "<group>"; };
+		014B874F2005E79700A94E28 /* OrderedDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderedDictionary.h; sourceTree = "<group>"; };
+		014B87502005E79700A94E28 /* OrderedDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderedDictionary.m; sourceTree = "<group>"; };
 		015167DB1FE76B6D00F2F1C7 /* DTImageCaptionAttachment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DTImageCaptionAttachment.h; sourceTree = "<group>"; };
 		015167DC1FE76B6D00F2F1C7 /* DTImageCaptionAttachment.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DTImageCaptionAttachment.m; sourceTree = "<group>"; };
 		015168101FE8DC4A00F2F1C7 /* DTTextBlockAttachment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DTTextBlockAttachment.h; sourceTree = "<group>"; };
@@ -351,6 +354,15 @@
 			path = Video;
 			sourceTree = "<group>";
 		};
+		014B874E2005E79700A94E28 /* OrderedDictionary */ = {
+			isa = PBXGroup;
+			children = (
+				014B874F2005E79700A94E28 /* OrderedDictionary.h */,
+				014B87502005E79700A94E28 /* OrderedDictionary.m */,
+			);
+			path = OrderedDictionary;
+			sourceTree = "<group>";
+		};
 		016CCCB11FD92905000493F7 = {
 			isa = PBXGroup;
 			children = (
@@ -402,6 +414,7 @@
 		01DC21BF1FF5D54200A7E5F3 /* Demo(base on table view) */ = {
 			isa = PBXGroup;
 			children = (
+				014B874E2005E79700A94E28 /* OrderedDictionary */,
 				014B87492005DB9A00A94E28 /* test_image.jpeg */,
 				01DC21C01FF5D54200A7E5F3 /* AppDelegate.h */,
 				01DC21C11FF5D54200A7E5F3 /* AppDelegate.m */,
@@ -631,6 +644,7 @@
 				"${BUILT_PRODUCTS_DIR}/ZFPlayer/ZFPlayer.framework",
 				"${BUILT_PRODUCTS_DIR}/IQKeyboardManager/IQKeyboardManager.framework",
 				"${BUILT_PRODUCTS_DIR}/QiniuUpload/QiniuUpload.framework",
+				"${BUILT_PRODUCTS_DIR}/UIImage+ImageCompress/UIImage_ImageCompress.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -640,6 +654,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZFPlayer.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManager.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/QiniuUpload.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UIImage_ImageCompress.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -791,6 +806,7 @@
 				012C95FF1FFB4D510003DACA /* QSRichTextVideoView.m in Sources */,
 				01DC21F81FF5EDA700A7E5F3 /* QSRichTextBar.m in Sources */,
 				01DC220B1FF60AC300A7E5F3 /* QSRichTextViewModel.m in Sources */,
+				014B87512005E79700A94E28 /* OrderedDictionary.m in Sources */,
 				012C96161FFE06C30003DACA /* QSRichTextHyperlink.m in Sources */,
 				01DC21F21FF5E63300A7E5F3 /* QSRichTextModel.m in Sources */,
 				01DC21DC1FF5D7C800A7E5F3 /* QSRichTextImageCell.m in Sources */,

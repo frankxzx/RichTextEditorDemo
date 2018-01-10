@@ -11,16 +11,21 @@
 #define kQiniuUploadURL @"https://upload.qbox.me"
 #define kQiniuTaskKey @"qiniuTaskKey"
 
-typedef void (^UploadOneFileSucceededHandler)(NSInteger index, NSDictionary * _Nonnull info);
-typedef void (^UploadOneFileFailedHandler)(NSInteger index, NSError * _Nullable error);
-typedef void (^UploadOneFileProgressHandler)(NSInteger index, int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend);
+typedef void (^UploadOneFileSucceededHandler)(NSString *fileIndex, NSDictionary * _Nonnull info);
+typedef void (^UploadOneFileFailedHandler)(NSString *fileIndex, NSError * _Nullable error);
+typedef void (^UploadOneFileProgressHandler)(NSString *fileIndex, int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend);
 typedef void (^UploadAllFilesCompleteHandler)(void);
+
+@interface QSArticleUploader ()
+
+@property(atomic, strong, readwrite) MutableOrderedDictionary <NSString *,QiniuFile *>* _Nonnull files;
+
+@end
 
 @implementation QSArticleUploader {
     NSString *accessToken;
-    NSMutableArray *fileQueue;
-    NSMutableArray *operations;
-    NSMutableDictionary *taskRefs;
+    NSMutableArray <NSString *>*fileQueue;
+    MutableOrderedDictionary <NSString *, NSURLSessionTask *> *taskRefs;
     NSMutableDictionary *responsesData;
     __weak QSArticleUploader *weakSelf;
     NSURLSession *defaultSession;
@@ -33,13 +38,12 @@ typedef void (^UploadAllFilesCompleteHandler)(void);
 - (id)init
 {
     if (self = [super init]) {
-        _files = [[NSMutableArray alloc] init];
+        _files = [[MutableOrderedDictionary alloc] init];
         _isRunning = NO;
         _maxConcurrentNumber = 1;
         
         fileQueue = [[NSMutableArray alloc] init];
-        operations = [[NSMutableArray alloc] init];
-        taskRefs = [[NSMutableDictionary alloc] init];
+        taskRefs = [[MutableOrderedDictionary alloc] init];
         responsesData = [[NSMutableDictionary alloc] init];
         
         weakSelf = self;
@@ -66,9 +70,9 @@ typedef void (^UploadAllFilesCompleteHandler)(void);
 }
 
 - (Boolean)startUpload:(NSString * _Nonnull)theAccessToken
-uploadOneFileSucceededHandler: (nullable void (^)(NSInteger index, NSDictionary * _Nonnull info)) successHandler
-uploadOneFileFailedHandler: (nullable void (^)(NSInteger index, NSError * _Nullable error)) failHandler
-uploadOneFileProgressHandler: (nullable void (^)(NSInteger index, int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend)) progressHandler
+uploadOneFileSucceededHandler: (nullable void (^)(NSString *fileIndex, NSDictionary * _Nonnull info)) successHandler
+uploadOneFileFailedHandler: (nullable void (^)(NSString *fileIndex, NSError * _Nullable error)) failHandler
+uploadOneFileProgressHandler: (nullable void (^)(NSString *fileIndex, int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend)) progressHandler
 uploadAllFilesComplete: (nullable void (^)()) completeHandler
 {
     accessToken = theAccessToken;
@@ -90,42 +94,41 @@ uploadAllFilesComplete: (nullable void (^)()) completeHandler
     return true;
 }
 
+//初始化队列
 - (void)createFileQueue {
     [fileQueue removeAllObjects];
-    
-    [self.files enumerateObjectsUsingBlock:
-     ^(NSString *string, NSUInteger index, BOOL *stop)
-     {
-         [fileQueue addObject:@(index)];
-     }];
+    [self.files enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull fileIndex, QiniuFile * _Nonnull obj, BOOL * _Nonnull stop) {
+        [fileQueue addObject:fileIndex];
+    }];
 }
 
-- (NSInteger)deFileQueue {
+//移出队列
+- (NSString *)deFileQueue {
     @synchronized (fileQueue) {
         if (fileQueue.count == 0) {
-            return 0;
+            return nil;
         }
-        NSNumber *fileIndex = [fileQueue firstObject];
+        NSString *fileIndex = [fileQueue firstObject];
         [fileQueue removeObjectAtIndex:0];
-        return fileIndex.intValue;
+        return fileIndex;
     }
 }
 
+//开始从队列中上传
 - (void)uploadQueue {
-    
     
     NSInteger poolSize = fileQueue.count < self.maxConcurrentNumber ? fileQueue.count : self.maxConcurrentNumber;
     
     for (NSUInteger i = 0; i < poolSize; i++) {
-        NSInteger fileIndex = [weakSelf deFileQueue];
+        NSString *fileIndex = [weakSelf deFileQueue];
         [self uploadFile:fileIndex];
     }
 }
 
-- (void)uploadFile:(NSInteger)fileIndex
+- (void)uploadFile:(NSString *)fileIndex
 {
     
-    QiniuFile *file = weakSelf.files[fileIndex];
+    QiniuFile *file = [weakSelf.files objectForKey:fileIndex];
     
     QiniuInputStream *inputStream = [[QiniuInputStream alloc] init];
     if (file.key) {
@@ -155,10 +158,10 @@ uploadAllFilesComplete: (nullable void (^)()) completeHandler
     [request setHTTPMethod:@"POST"];
     NSURLSessionTask * uploadTask = [defaultSession dataTaskWithRequest:request];
     
-    NSString *taskDescription = [NSString stringWithFormat:@"%ld", fileIndex];
+    NSString *taskDescription = [NSString stringWithFormat:@"%@", fileIndex];
     
     @synchronized (taskRefs) {
-        taskRefs[taskDescription] = uploadTask;
+        [taskRefs setObject:uploadTask forKey:taskDescription];
     }
     
     [uploadTask setTaskDescription:taskDescription];
@@ -167,8 +170,8 @@ uploadAllFilesComplete: (nullable void (^)()) completeHandler
 
 - (void)uploadComplete
 {
-    NSInteger fileIndex = [weakSelf deFileQueue];
-    if (fileIndex > 0) {
+    NSString *fileIndex = [weakSelf deFileQueue];
+    if (fileQueue.count > 0) {
         [weakSelf uploadFile:fileIndex];
     } else {
         @synchronized (taskRefs) {
@@ -196,6 +199,7 @@ uploadAllFilesComplete: (nullable void (^)()) completeHandler
     return YES;
 }
 
+//停止队列中的所有上传操作
 - (void)stopUpload
 {
     @synchronized (taskRefs) {
@@ -206,17 +210,39 @@ uploadAllFilesComplete: (nullable void (^)()) completeHandler
          }];
         [taskRefs removeAllObjects];
         [fileQueue removeAllObjects];
+        [self.files removeAllObjects];
         _isRunning = NO;
     }
 }
 
-#pragma NSURLSessionTaskDelegate
+//向队列中插入上传操作
+-(void)insertUploadWithFile:(QiniuFile *)file withFileIndex:(NSString *)fileIndex {
+    @synchronized (self.files) {
+        [self.files insertObject:file forKey:fileIndex atIndex:self.files.count];
+        [fileQueue addObject:fileIndex];
+    }
+}
 
+//移出队列传操作
+-(void)cancelUploadWithFileIndex:(NSString *)fileIndex {
+    @synchronized (taskRefs) {
+        NSInteger index = [self.files indexOfKey:fileIndex];
+        [self.files removeObjectForKey:fileIndex];
+        [fileQueue removeObject:fileIndex];
+        NSURLSessionTask *task = [taskRefs objectAtIndex:index];
+        [task suspend];
+        [task cancel];
+        [taskRefs removeObjectForKey:fileIndex];
+    }
+}
+
+#pragma NSURLSessionTaskDelegate
+//上传片段回调
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
    didSendBodyData:(int64_t)bytesSent
     totalBytesSent:(int64_t)totalBytesSent
-totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend{
-    NSInteger taskIndex = task.taskDescription.integerValue;
+totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend {
+    NSString *taskIndex = task.taskDescription;
     if (oneProgressHandler) {
         dispatch_async(dispatch_get_main_queue(), ^{
             oneProgressHandler(taskIndex, bytesSent, totalBytesSent, totalBytesExpectedToSend);
@@ -224,6 +250,7 @@ totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend{
     }
 }
 
+//上传回调
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
     didReceiveData:(NSData *)data
 {
@@ -232,9 +259,10 @@ totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend{
     }
 }
 
+//上传完成
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
 {
-    NSInteger fileIndex =  task.taskDescription.integerValue;
+    NSString  *fileIndex =  task.taskDescription;
     if(error) {
         if (oneFailedHandler) {
             dispatch_async(dispatch_get_main_queue(), ^{

@@ -17,6 +17,7 @@ target 'Demo(base on table view)' do
     pod 'ZFPlayer'
     pod 'IQKeyboardManager'
     pod 'QiniuUpload'
+    pod 'UIImage+ImageCompress'
     
 end
 

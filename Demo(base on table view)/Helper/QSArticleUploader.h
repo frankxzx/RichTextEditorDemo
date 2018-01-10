@@ -7,12 +7,13 @@
 //
 
 @import QiniuUpload;
+#import "OrderedDictionary.h"
 
 @interface QSArticleUploader : NSObject <NSURLSessionTaskDelegate, NSURLSessionDataDelegate>
 
 @property (assign, atomic) NSInteger maxConcurrentNumber;
 @property (assign, atomic, readonly) Boolean isRunning;
-@property (retain, atomic) NSArray * _Nonnull files;
+@property (strong, atomic, readonly) MutableOrderedDictionary <NSString *, QiniuFile *>* _Nonnull files; // 上传文件的 file对象 和 hash 索引
 
 
 + (id _Nullable)sharedUploader;
@@ -23,18 +24,18 @@
  *  @return Boolean if files were nil, it will return NO.
  */
 - (Boolean)startUpload:(NSString * _Nonnull)theAccessToken
-uploadOneFileSucceededHandler: (nullable void (^)(NSInteger index, NSDictionary * _Nonnull info)) successHandler
-uploadOneFileFailedHandler: (nullable void (^)(NSInteger index, NSError * _Nullable error)) failHandler
-uploadOneFileProgressHandler: (nullable void (^)(NSInteger index, int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend)) progressHandler
+uploadOneFileSucceededHandler: (nullable void (^)(NSString *fileIndex, NSDictionary * _Nonnull info)) successHandler
+uploadOneFileFailedHandler: (nullable void (^)(NSString *fileIndex, NSError * _Nullable error)) failHandler
+uploadOneFileProgressHandler: (nullable void (^)(NSString *fileIndex, int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend)) progressHandler
 uploadAllFilesComplete: (nullable void (^)()) completHandler;
 
 /**
  *  cancel uploading task at once.
  */
-- (BOOL)cancelAllUploadTask;
+-(BOOL)cancelAllUploadTask;
 
--(void)cancelUploadAtIndex:(NSUInteger)index;
+-(void)cancelUploadWithFileIndex:(NSString *)fileIndex;
 
--(void)insertUploadAtIndex:(NSUInteger)index;
+-(void)insertUploadWithFile:(QiniuFile *)file withFileIndex:(NSString *)fileIndex;
 
 @end
