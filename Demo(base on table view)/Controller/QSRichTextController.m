@@ -288,9 +288,9 @@ CGFloat const editorMoreViewHeight = 200;
     //更新 toolBar 按钮的状态
     [self.toolBar updateStateWithAttributedString:textView.attributedText selectedRange:selectedRange];
     //确保 键盘每次被响应的时候 toolBar 是初始化的样式
-    if (textView == self.currentTextView && textView.inputAccessoryView) {
-        return;
-    }
+//    if (textView == self.currentTextView && textView.inputAccessoryView) {
+//        return;
+//    }
     [textView setInputAccessoryView:self.toolBar];
     [self richTextEditorCloseMoreView];
 }
