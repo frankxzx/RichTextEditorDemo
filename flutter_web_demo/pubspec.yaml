@@ -1,0 +1,25 @@
+name: rich_text_editor_demo
+description: A Flutter web-based rich text editor demo
+version: 1.0.0+1
+publish_to: 'none'
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_quill: ^10.0.0
+  flutter_quill_extensions: ^10.0.0
+  file_picker: ^8.0.0
+  url_launcher: ^6.2.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
