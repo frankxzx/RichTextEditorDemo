@@ -36,6 +36,13 @@ class _RichTextEditorPageState extends State<RichTextEditorPage> {
   bool _isPreview = false;
 
   @override
+  void initState() {
+    super.initState();
+    // Add some sample content
+    _titleController.text = '富文本编辑器演示';
+  }
+
+  @override
   void dispose() {
     _controller.dispose();
     _titleController.dispose();
